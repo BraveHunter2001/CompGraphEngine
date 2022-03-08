@@ -25,15 +25,20 @@ namespace CompGraphEngine.Common
 
             ShaderProgramSource shaderProgramSource = ParserShader(filePath);
 
+            Console.WriteLine("Fragment:");
+            Console.WriteLine(shaderProgramSource.fragmentSource);
+            Console.WriteLine("Vertex:");
+            Console.WriteLine(shaderProgramSource.vertexSource);
+
             // load and compile vertex shader;
 
-            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
+            var vertexShader = GL.CreateShader(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader);
             GL.ShaderSource(vertexShader, shaderProgramSource.vertexSource);
             CompileShader(vertexShader);
 
             // load and compile fragment shader;
            
-            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+            var fragmentShader = GL.CreateShader(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader);
             GL.ShaderSource(fragmentShader, shaderProgramSource.fragmentSource);
             CompileShader(fragmentShader);
 
@@ -62,31 +67,41 @@ namespace CompGraphEngine.Common
                 _uniformLocations.Add(key, location);
             }
         }
-
+        private enum ShaderType
+        {
+            VertexShader, FragmentShader, None
+        }
         private static ShaderProgramSource ParserShader(string filePath)
         {
             ShaderProgramSource programSource;
+            ShaderType type = ShaderType.None;
+         
             programSource.vertexSource = "";
             programSource.fragmentSource = "";
 
             using (var stream = new StreamReader(filePath))
             {
                 string line;
+
                 while ((line = stream.ReadLine()) != null)
                 {
-                    if (line.Equals("#type fragment"))
-                    {
-                        while ((line = stream.ReadLine()) != null && !line.Equals("#type vertex"))
-                        {
-                            programSource.fragmentSource +=  line + "\n";
-                        }
-                    }
-
                     if (line.Equals("#type vertex"))
                     {
-                        while ((line = stream.ReadLine()) != null && !line.Equals("#type fragment"))
+                        type = ShaderType.VertexShader;
+                    }
+                    else if (line.Equals("#type fragment"))
+                    {
+                        type = ShaderType.FragmentShader;
+                    }
+                    else
+                    {
+                        if (type == ShaderType.VertexShader)
                         {
                             programSource.vertexSource += line + "\n";
+                        }
+                        else if (type == ShaderType.FragmentShader)
+                        {
+                            programSource.fragmentSource += line + "\n";
                         }
                     }
                 }
@@ -173,5 +188,7 @@ namespace CompGraphEngine.Common
             GL.UseProgram(Handle);
             GL.Uniform3(_uniformLocations[name], data);
         }
+
+
     }
 }
