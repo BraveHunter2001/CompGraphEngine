@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CompGraphEngine.Common
@@ -13,19 +14,27 @@ namespace CompGraphEngine.Common
     {
         public readonly int Handle;
         private Dictionary<string, int> _uniformLocations;
-
-        public Shader (string vertPath, string fragPath)
+        private struct ShaderProgramSource
         {
+            public string vertexSource;
+            public string fragmentSource;
+        }
+
+        public Shader (string filePath)
+        {
+
+            ShaderProgramSource shaderProgramSource = ParserShader(filePath);
+
             // load and compile vertex shader;
-            var shaderSource = File.ReadAllText (vertPath);
+
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            GL.ShaderSource(vertexShader, shaderSource);
+            GL.ShaderSource(vertexShader, shaderProgramSource.vertexSource);
             CompileShader(vertexShader);
 
             // load and compile fragment shader;
-            shaderSource = File.ReadAllText(fragPath);
+           
             var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragmentShader, shaderSource);
+            GL.ShaderSource(fragmentShader, shaderProgramSource.fragmentSource);
             CompileShader(fragmentShader);
 
             Handle = GL.CreateProgram();
@@ -54,6 +63,37 @@ namespace CompGraphEngine.Common
             }
         }
 
+        private static ShaderProgramSource ParserShader(string filePath)
+        {
+            ShaderProgramSource programSource;
+            programSource.vertexSource = "";
+            programSource.fragmentSource = "";
+
+            using (var stream = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = stream.ReadLine()) != null)
+                {
+                    if (line.Equals("#type fragment"))
+                    {
+                        while ((line = stream.ReadLine()) != null && !line.Equals("#type vertex"))
+                        {
+                            programSource.fragmentSource +=  line + "\n";
+                        }
+                    }
+
+                    if (line.Equals("#type vertex"))
+                    {
+                        while ((line = stream.ReadLine()) != null && !line.Equals("#type fragment"))
+                        {
+                            programSource.vertexSource += line + "\n";
+                        }
+                    }
+                }
+            }
+
+            return programSource;
+        }
         private static void CompileShader (int shader)
         {
             GL.CompileShader (shader);

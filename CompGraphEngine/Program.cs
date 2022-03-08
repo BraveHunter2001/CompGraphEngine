@@ -9,6 +9,8 @@ namespace CompGraphEngine
     {
         static void Main(string[] args)
         {
+
+
             var nativeWindowSettings = new NativeWindowSettings()
             {
                 Size = new Vector2i(800, 600),

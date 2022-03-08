@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,12 +9,24 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.7.1" />
   </ItemGroup>
 
+
+
+  <ItemGroup>
+    <Compile Update="Common\Shader.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
   <ItemGroup>
     <None Update="Shaders\shader.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Shaders\shader.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Shaders\shader.vert">
