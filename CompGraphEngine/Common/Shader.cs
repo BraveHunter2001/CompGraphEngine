@@ -85,6 +85,8 @@ namespace CompGraphEngine.Common
 
                 while ((line = stream.ReadLine()) != null)
                 {
+                    //TODO Delete empty strings in shader file
+
                     if (line.Equals("#type vertex"))
                     {
                         type = ShaderType.VertexShader;
