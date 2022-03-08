@@ -17,19 +17,15 @@
 
 
   <ItemGroup>
-    <Compile Update="Common\Shader.cs">
+    <Compile Update="Render\Shader.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
 
+
+
   <ItemGroup>
-    <None Update="Shaders\shader.frag">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\shader.glsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\shader.vert">
+    <None Update="Shaders\triangle.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
