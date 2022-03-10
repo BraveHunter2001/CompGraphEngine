@@ -16,7 +16,7 @@ namespace CompGraphEngine.Render
         protected float[] _vertices;
         //protected uint[] _indices;
 
-        protected VertexBuffer _vertexBuffer;
+        protected VertexBuffer<float> _vertexBuffer;
 
         protected int _vertexArrayObject;
         //private int _elementBufferObject;
@@ -38,7 +38,7 @@ namespace CompGraphEngine.Render
             _defaultShader = shader;
 
 
-            _vertexBuffer = new VertexBuffer(_vertices, _vertices.Length * sizeof(float));
+            _vertexBuffer = new VertexBuffer<float>(_vertices, _vertices.Length * sizeof(float));
             _defaultShader.Use();
 
             init();
