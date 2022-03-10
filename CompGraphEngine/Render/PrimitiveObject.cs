@@ -1,41 +1,59 @@
 ﻿using OpenTK.Graphics.OpenGL4;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompGraphEngine.Render
 {
     public abstract class PrimitiveObject
     {
-        private const int POSITION_SIZE = 3; // x y z
-        private const int COLOR_SIZE = 4; // r g b a
+        private int POSITION_SIZE;
+        private int COLOR_SIZE;
 
         private const int POSITION_OFFSET = 0;
-        private const int COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * sizeof(float);
-        private const int STRIDE = POSITION_SIZE + COLOR_SIZE;
-
-        private const int STRIDE_SIZE = ( POSITION_SIZE + COLOR_SIZE) * sizeof(float);
+        private int COLOR_OFFSET;
+        private int STRIDE;
+        private int STRIDE_SIZE;
 
 
         protected float[] _vertices;
         //protected uint[] _indices;
-        
-        private int _vertexBufferObject;
-        private int _vertexArrayObject;
+
+        protected VertexBuffer _vertexBuffer;
+
+        protected int _vertexArrayObject;
         //private int _elementBufferObject;
 
         private int countVertexes = 0;
-        protected Shader _defaultShader;
-      
+        private Shader _defaultShader;
+
+
+        public PrimitiveObject(int positionSize, int colorSize, float[] verts, Shader shader)
+        {
+            POSITION_SIZE = positionSize;
+            COLOR_SIZE = colorSize;
+            _vertices = verts;
+
+            COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * sizeof(float);
+            STRIDE = POSITION_SIZE + COLOR_SIZE;
+            STRIDE_SIZE = (POSITION_SIZE + COLOR_SIZE) * sizeof(float);
+
+            _defaultShader = shader;
+
+
+            _vertexBuffer = new VertexBuffer(_vertices, _vertices.Length * sizeof(float));
+            _defaultShader.Use();
+
+            init();
+
+        }
+        ~PrimitiveObject()
+        {
+            unload();
+        }
 
         public virtual void init()
         {
-            VBOInit();
+
             VAOInit();
 
-            _defaultShader.Use();
             countVertexes = _vertices.Length / STRIDE;
         }
         public virtual void render()
@@ -46,23 +64,12 @@ namespace CompGraphEngine.Render
         }
         public virtual void unload()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
-
-            GL.UseProgram(0);
-
-            GL.DeleteBuffer(_vertexBufferObject);
+            _vertexBuffer.UnBind();
             GL.DeleteVertexArray(_vertexArrayObject);
-
-            GL.DeleteProgram(_defaultShader.Handle);
+            
         }
 
-        private void VBOInit()
-        {
-            _vertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.DynamicDraw);
-        }
+        
 
         private void VAOInit()
         {

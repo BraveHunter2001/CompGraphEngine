@@ -3,10 +3,7 @@ using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+
 
 namespace CompGraphEngine.Render
 {
@@ -66,6 +63,12 @@ namespace CompGraphEngine.Render
 
                 _uniformLocations.Add(key, location);
             }
+        }
+
+        ~Shader()
+        {
+            GL.DeleteProgram(this.Handle);
+            
         }
         private enum ShaderType
         {

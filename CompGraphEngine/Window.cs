@@ -3,7 +3,6 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using System.Diagnostics;
 
 namespace CompGraphEngine
 {
@@ -14,8 +13,8 @@ namespace CompGraphEngine
         Triangle2D triangle2D_2;
         private readonly float[] _vertices =
         {
-             0.5f,  0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 1.0f, // Bottom-left vertex
-             0.5f,  -0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 1.0f,// Bottom-right vertex
+             0.5f,  0.5f, 0.0f, 0.7f, 0.5f, 1.0f, 1.0f, // Bottom-left vertex
+             0.5f,  -0.5f, 0.0f, 1.0f, 0.5f, 0.7f, 1.0f,// Bottom-right vertex
              -0.5f,  0.5f, 0.0f,  0.0f, 0.5f, 0.0f, 1.0f // Top vertex
         };
 
@@ -31,23 +30,19 @@ namespace CompGraphEngine
         {
             triangle2D = new Triangle2D(_vertices);
             triangle2D_2 = new Triangle2D(_vertices_2);
+
         }
 
         protected override void OnLoad()
         {
             base.OnLoad();
             GL.ClearColor(0f, 0f, 0f, 1.0f);
-
-            triangle2D.init();
-            triangle2D_2.init();
-
-            
         }
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-
             GL.Clear(ClearBufferMask.ColorBufferBit);
+
 
             triangle2D.render();
             triangle2D_2.render();
@@ -56,9 +51,9 @@ namespace CompGraphEngine
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            if ( KeyboardState.IsKeyDown(Keys.Escape))
+            if (KeyboardState.IsKeyDown(Keys.Escape))
             {
-                Close(); 
+                Close();
             }
             base.OnUpdateFrame(args);
         }
@@ -72,8 +67,14 @@ namespace CompGraphEngine
 
         protected override void OnUnload()
         {
-            triangle2D.unload();
-            triangle2D_2.unload();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            GL.BindVertexArray(0);
+
+            GL.UseProgram(0);
+
+            // triangle2D.unload();
+            // triangle2D_2.unload();
 
             base.OnUnload();
         }
