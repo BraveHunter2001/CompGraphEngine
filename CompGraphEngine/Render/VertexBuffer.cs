@@ -2,11 +2,11 @@
 
 namespace CompGraphEngine.Render
 {
-    public class VertexBuffer<T> where T : struct
+    public class VertexBuffer
     {
         private int id;
 
-        public VertexBuffer(T[] data, int size)
+        public VertexBuffer(float[] data, int size)
         {
             id = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, id);

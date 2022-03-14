@@ -4,44 +4,41 @@ namespace CompGraphEngine.Render
 {
     public abstract class PrimitiveObject
     {
-        private int POSITION_SIZE;
-        private int COLOR_SIZE;
-
-        private const int POSITION_OFFSET = 0;
-        private int COLOR_OFFSET;
-        private int STRIDE;
-        private int STRIDE_SIZE;
+       
 
 
         protected float[] _vertices;
         //protected uint[] _indices;
 
-        protected VertexBuffer<float> _vertexBuffer;
+        protected VertexBuffer _vertexBuffer;
 
-        protected int _vertexArrayObject;
+        protected VertexArray _vertexArray;
         //private int _elementBufferObject;
 
         private int countVertexes = 0;
         private Shader _defaultShader;
 
-
+        private VertexBufferLayout _layout;
+        
         public PrimitiveObject(int positionSize, int colorSize, float[] verts, Shader shader)
         {
-            POSITION_SIZE = positionSize;
-            COLOR_SIZE = colorSize;
+
             _vertices = verts;
-
-            COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * sizeof(float);
-            STRIDE = POSITION_SIZE + COLOR_SIZE;
-            STRIDE_SIZE = (POSITION_SIZE + COLOR_SIZE) * sizeof(float);
-
             _defaultShader = shader;
+            countVertexes = CountVertexes(positionSize, colorSize);
 
+            _vertexBuffer = new VertexBuffer(_vertices, _vertices.Length * sizeof(float));
+            _vertexArray = new VertexArray();
+            
+            _layout = new VertexBufferLayout();
+            _layout.Push<float>(positionSize);
+            _layout.Push<float>(colorSize);
 
-            _vertexBuffer = new VertexBuffer<float>(_vertices, _vertices.Length * sizeof(float));
+            _vertexArray.AddBuffer(ref _vertexBuffer, ref _layout);
+
             _defaultShader.Use();
 
-            init();
+            
 
         }
         ~PrimitiveObject()
@@ -49,46 +46,28 @@ namespace CompGraphEngine.Render
             unload();
         }
 
-        public virtual void init()
-        {
-
-            VAOInit();
-
-            countVertexes = _vertices.Length / STRIDE;
-        }
+       
         public virtual void render()
         {
             _defaultShader.Use();
-            GL.BindVertexArray(_vertexArrayObject);
+            _vertexArray.Bind();
+
             GL.DrawArrays(PrimitiveType.Triangles, 0, countVertexes);
         }
         public virtual void unload()
         {
             _vertexBuffer.UnBind();
-            GL.DeleteVertexArray(_vertexArrayObject);
+           _vertexArray.UnBind();
             
         }
 
-        
-
-        private void VAOInit()
+        private int CountVertexes(params int[] numbers)
         {
-            _vertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(_vertexArrayObject);
-
-            VAOPositionInit();
-            VAOColorInit();
+            int sum = 0;
+            for (int i = 0; i < numbers.Length; i++)
+                   sum = sum + numbers[i];
+            return sum;
         }
 
-        private void VAOPositionInit()
-        {
-            GL.VertexAttribPointer(0, POSITION_SIZE, VertexAttribPointerType.Float, false, STRIDE_SIZE, POSITION_OFFSET);
-            GL.EnableVertexAttribArray(0);
-        }
-        private void VAOColorInit()
-        {
-            GL.VertexAttribPointer(1, COLOR_SIZE, VertexAttribPointerType.Float, false, STRIDE_SIZE, COLOR_OFFSET);
-            GL.EnableVertexAttribArray(1);
-        }
     }
 }

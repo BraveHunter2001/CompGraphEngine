@@ -6,7 +6,7 @@ namespace CompGraphEngine.Render
     {
         private int id;
         private int count;
-        public IndexBuffer(float[] data, int count)
+        public IndexBuffer(int[] data, int count)
         {
             this.count = count;
             id = GL.GenBuffer();
