@@ -4,9 +4,9 @@ namespace CompGraphEngine.Render
 {
     internal class IndexBuffer
     {
-        private int id;
-        private int count;
-        public IndexBuffer(int[] data, int count)
+        private readonly int id;
+        private readonly int count = 0;
+        internal IndexBuffer( int[] data, int count)
         {
             this.count = count;
             id = GL.GenBuffer();
@@ -20,16 +20,16 @@ namespace CompGraphEngine.Render
             GL.DeleteBuffer(id);
         }
 
-        public void Bind()
+        internal void Bind()
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id);
         }
 
-        public void UnBind()
+        internal void UnBind()
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
-        public int GetCount() => count;
+        internal int GetCount() => count;
     }
 }

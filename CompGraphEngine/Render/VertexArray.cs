@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Render
 {
-    public class VertexArray
+    internal class VertexArray
     {
-        int id;
-        public VertexArray()
+       private readonly int id;
+        internal VertexArray()
         {
             id =  GL.GenVertexArray();
             
@@ -20,7 +20,7 @@ namespace CompGraphEngine.Render
             GL.DeleteVertexArray(id);
         }
 
-        public void AddBuffer(ref VertexBuffer vb,ref  VertexBufferLayout layout)
+        internal void AddBuffer(ref VertexBuffer vb,ref  VertexBufferLayout layout)
         {
             Bind();
             vb.Bind();
@@ -35,12 +35,12 @@ namespace CompGraphEngine.Render
             }
         }
 
-        public void Bind()
+        internal void Bind()
         {
             GL.BindVertexArray(id);
         }
 
-        public void UnBind()
+        internal void UnBind()
         {
             GL.BindVertexArray(0);
         }

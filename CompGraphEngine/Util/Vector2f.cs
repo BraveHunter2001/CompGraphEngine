@@ -11,6 +11,7 @@ namespace CompGraphEngine.Util
             X = x; Y = y; 
         }
 
+       
         public static Vector2f operator +(Vector2f v1, Vector2f v2)
         {
             return new Vector2f(v1.X + v2.X, v1.Y + v2.Y);

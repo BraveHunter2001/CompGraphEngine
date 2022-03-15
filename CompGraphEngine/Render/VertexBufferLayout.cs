@@ -4,11 +4,9 @@ using System.Collections.Generic;
 namespace CompGraphEngine.Render
 {
 
-
-
-    public class VertexBufferLayout
+    internal class VertexBufferLayout
     {
-        public struct VertexBufferElement
+        internal struct VertexBufferElement
         {
 
             public int count;
@@ -22,23 +20,11 @@ namespace CompGraphEngine.Render
                 this.normalized = normalize;
             }
         }
-        //private struct OpenGlTypeSize
-        //{
-        //    public int size;
-        //    public VertexAttribPointerType type;
 
-        //    public OpenGlTypeSize(int size, VertexAttribPointerType type)
-        //    {
-        //        this.size = size;
-        //        this.type = type;
-        //    }
+        internal List<VertexBufferElement> Elements { get; private set; } = new List<VertexBufferElement>();
+        internal int Stride { get; private set; } = 0;
 
-        //}
-
-        public List<VertexBufferElement> Elements { get; private set; } = new List<VertexBufferElement>();
-        public int Stride { get; private set; } = 0;
-
-        public void Push<T>(int count)
+        internal void Push<T>(int count)
         {
             VertexAttribPointerType typeSize = GetType<T>();
             VertexBufferElement vertexBufferElement = new VertexBufferElement(typeSize, count, false);
@@ -48,7 +34,7 @@ namespace CompGraphEngine.Render
             
         }
 
-        private VertexAttribPointerType GetType<T>()
+        private static VertexAttribPointerType GetType<T>()
         {
             
             System.Type typeG = typeof(T);
@@ -61,16 +47,16 @@ namespace CompGraphEngine.Render
 
         }
 
-        public static int GetSizeOpenGLType(VertexAttribPointerType type)
+        internal static int GetSizeOpenGLType(VertexAttribPointerType type)
         {
             switch (type)
             {
                 case VertexAttribPointerType.Int:
                     return sizeof(int);
-                    break;
+                   
                 case VertexAttribPointerType.Float:
                     return sizeof(float);
-                    break;
+                   
                default:
                     throw new System.Exception("Error type");
             }
