@@ -21,5 +21,10 @@ namespace CompGraphEngine.Util
         {
             return new Vector2f(v1.X - v2.X, v1.Y - v2.Y);
         }
+
+        public float[] ToArray()
+        {
+            return new float[] { X, Y };
+        }
     }
 }

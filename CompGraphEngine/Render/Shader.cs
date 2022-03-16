@@ -22,10 +22,10 @@ namespace CompGraphEngine.Render
 
             ShaderProgramSource shaderProgramSource = ParserShader(filePath);
 
-            Console.WriteLine("Fragment:");
-            Console.WriteLine(shaderProgramSource.fragmentSource);
-            Console.WriteLine("Vertex:");
-            Console.WriteLine(shaderProgramSource.vertexSource);
+            //Console.WriteLine("Fragment:");
+            //Console.WriteLine(shaderProgramSource.fragmentSource);
+            //Console.WriteLine("Vertex:");
+            //Console.WriteLine(shaderProgramSource.vertexSource);
 
             // load and compile vertex shader;
 

@@ -8,11 +8,12 @@ namespace CompGraphEngine.Render
 {
     public abstract class Figure
     {
-        private protected  VertexArray _vertexArray;
+        private protected VertexArray _vertexArray;
         private protected VertexBuffer _vertexBuffer;
         private protected IndexBuffer _indexBuffer;
         private protected VertexBufferLayout _layout;
         private protected Shader _shader;
+
 
         protected float[] _vertices; 
 

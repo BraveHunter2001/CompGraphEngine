@@ -24,10 +24,10 @@ namespace CompGraphEngine.Render
         internal List<VertexBufferElement> Elements { get; private set; } = new List<VertexBufferElement>();
         internal int Stride { get; private set; } = 0;
 
-        internal void Push<T>(int count)
+        internal void Push<T>(int count, bool isNormalized)
         {
             VertexAttribPointerType typeSize = GetType<T>();
-            VertexBufferElement vertexBufferElement = new VertexBufferElement(typeSize, count, false);
+            VertexBufferElement vertexBufferElement = new VertexBufferElement(typeSize, count, !isNormalized);
             Elements.Add(vertexBufferElement);
             Stride += GetSizeOpenGLType(typeSize) * count;
             
