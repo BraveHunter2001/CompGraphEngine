@@ -12,100 +12,42 @@ namespace CompGraphEngine.Render.Figure2D
         private protected Color Color { get; set; }  = Color.White;
 
         public Triangle(Vector3f point1, Vector3f point2, Vector3f point3)
-        {
-            float[] vert = new float[(_sizePosition + _sizeColor) * 3];
-            Vector4f color = new Vector4f(Color);
-            int shift = 0;
-
-            PointToArr(ref vert, point1, ref shift);
-            shift += _sizeColor;
-            PointToArr(ref vert, point2, ref shift);
-            shift += _sizeColor;
-            PointToArr(ref vert, point3, ref shift);
-
-            for (int i = 0; i < 3; i++)
-            {
-                
-                int s = (_sizePosition + _sizeColor) * i;
-
-                for (int j = 0;j <4;j++)
-                {
-                    int curr = (_sizeColor - 1 + j);
-                    vert[curr + s] = color.ToArray()[j];
-                }
-                    
-            }
-            _vertices = vert;
+        {    
+            _countVertex = 3;
+            float[][] posVerts = new float[_countVertex][];
+            posVerts[0] = point1.ToArray();
+            posVerts[1] = point2.ToArray();
+            posVerts[2] = point3.ToArray();
+            _vertices = toArrayFromPoints(posVerts, new Vector4f(Color), _sizePosition, _sizeColor);
             Init();
-
         }
-
         public Triangle(Vector3f point1, Vector3f point2, Vector3f point3, Color Color)
         {
-            float[] vert = new float[(_sizePosition + _sizeColor) * 3];
-            int shift = 0;
 
             this.Color = Color;
-
-            Vector4f color = new Vector4f(Color);
-            PointToArr(ref vert, point1, ref shift);
-            shift += _sizeColor;
-            PointToArr(ref vert, point2, ref shift);
-            shift += _sizeColor;
-            PointToArr(ref vert, point3, ref shift);
-
-            for (int i = 0; i < 3; i++)
-            {
-
-                int s = (_sizePosition + _sizeColor) * i;
-
-                for (int j = 0; j < 4; j++)
-                {
-                    int curr = (_sizeColor - 1 + j);
-                    vert[curr + s] = color.ToArray()[j];
-                }
-
-            }
-            _vertices = vert;
+            _countVertex = 3;
+            float[][] posVerts = new float[_countVertex][];
+            posVerts[0] = point1.ToArray();
+            posVerts[1] = point2.ToArray();
+            posVerts[2] = point3.ToArray();
+            _vertices = toArrayFromPoints(posVerts, new Vector4f(Color), _sizePosition, _sizeColor);
             Init();
 
         }
         public Triangle(Vector3f point1, Vector3f point2, Vector3f point3, Vector4f color)
         {
-            float[] vert = new float[(_sizePosition + _sizeColor) * 3];
-            int shift = 0;
+            _countVertex = 3;
+            float[][] posVerts = new float[_countVertex][];
+            posVerts[0] = point1.ToArray();
+            posVerts[1] = point2.ToArray();
+            posVerts[2] = point3.ToArray();
 
-            PointToArr(ref vert, point1, ref shift);
-            shift += _sizeColor;
-            PointToArr(ref vert, point2, ref shift);
-            shift += _sizeColor;
-            PointToArr(ref vert, point3, ref shift);
-
-            for (int i = 0; i < 3; i++)
-            {
-
-                int s = (_sizePosition + _sizeColor) * i;
-
-                for (int j = 0; j < 4; j++)
-                {
-                    int curr = (_sizeColor - 1 + j);
-                    vert[curr + s] = color.ToArray()[j];
-                }
-
-            }
-            _vertices = vert;
+            _vertices = toArrayFromPoints(posVerts, color, _sizePosition, _sizeColor);
             Init();
 
         }
 
-        private void PointToArr(ref float[] arr, Vector3f p,ref int shift)
-        {
-            for (int i = 0; i < p.ToArray().Length; i++)
-            {
-                arr[shift] = p.ToArray()[i];
-                shift++;
-            }
-        }
+       
 
         public Triangle(float[] vert)
         {

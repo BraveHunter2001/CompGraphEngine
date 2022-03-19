@@ -33,7 +33,7 @@ namespace CompGraphEngine.Util
 
         public float[] ToArray()
         {
-            return new float[] {x,y, z };
+            return new float[] {x,y, z};
         }
     }
 }
