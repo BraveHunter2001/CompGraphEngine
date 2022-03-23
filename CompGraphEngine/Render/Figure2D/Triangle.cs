@@ -1,4 +1,4 @@
-﻿using CompGraphEngine.Scene;
+﻿
 using CompGraphEngine.Util;
 using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
@@ -19,7 +19,7 @@ namespace CompGraphEngine.Render.Figure2D
             posVerts[1] = point2.ToArray();
             posVerts[2] = point3.ToArray();
             _vertices = toArrayFromPoints(posVerts, new Vector4f(Color), _sizePosition, _sizeColor);
-            Init();
+            
         }
         public Triangle(Vector3f point1, Vector3f point2, Vector3f point3, Color Color)
         {
@@ -30,8 +30,8 @@ namespace CompGraphEngine.Render.Figure2D
             posVerts[0] = point1.ToArray();
             posVerts[1] = point2.ToArray();
             posVerts[2] = point3.ToArray();
-            _vertices = toArrayFromPoints(posVerts, new Vector4f(Color), _sizePosition, _sizeColor);
-            Init();
+            _vertices = toArrayFromPoints( posVerts, new Vector4f(Color), _sizePosition, _sizeColor);
+           
 
         }
         public Triangle(Vector3f point1, Vector3f point2, Vector3f point3, Vector4f color)
@@ -43,7 +43,7 @@ namespace CompGraphEngine.Render.Figure2D
             posVerts[2] = point3.ToArray();
 
             _vertices = toArrayFromPoints(posVerts, color, _sizePosition, _sizeColor);
-            Init();
+            
 
         }
 
@@ -52,7 +52,7 @@ namespace CompGraphEngine.Render.Figure2D
         public Triangle(float[] vert)
         {
             _vertices = vert;
-            Init();
+            
         }
         public override void Init()
         {
@@ -63,7 +63,7 @@ namespace CompGraphEngine.Render.Figure2D
             _layout.Push<float>(_sizeColor, false);
             _vertexArray.AddBuffer(ref _vertexBuffer, ref _layout);
         }
-        internal override void Draw()
+        public override void Draw()
         {
             _shader.Use();
             _vertexArray.Bind();

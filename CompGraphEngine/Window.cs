@@ -1,50 +1,49 @@
 ﻿using CompGraphEngine.Render;
 using CompGraphEngine.Render.Figure2D;
+using CompGraphEngine.SceneF;
 using CompGraphEngine.Util;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-
 namespace CompGraphEngine
 {
     internal class Window : GameWindow
     {
+       
+        Scene scene;
         
         
-
-        Renderer _renderer;
-
-        
-        Line line;
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
 
+            
+
+
+            scene = new TestScene();
            
-
-            line = new Line(
-                 new Vector3f(0.5f, 0.5f, 0),
-                 new Vector3f(0f, 0f, 0));
-
-            _renderer = new Renderer();
+            
         }
 
         protected override void OnLoad()
         {
             base.OnLoad();
             GL.ClearColor(0f, 0f, 0f, 1.0f);
-
-
+            
+            scene.Init();
         }
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            
+
            
-            _renderer.Draw(line);
+
+            scene.Update();
+
+            this.Title =this.MousePosition.ToString();
 
             SwapBuffers();
         }

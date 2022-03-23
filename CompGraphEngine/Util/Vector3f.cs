@@ -1,4 +1,5 @@
 ﻿
+using CompGraphEngine.Engine;
 using System.Drawing;
 
 namespace CompGraphEngine.Util
@@ -33,7 +34,14 @@ namespace CompGraphEngine.Util
 
         public float[] ToArray()
         {
+            this.NormalizeCoord();
             return new float[] {x,y, z};
+        }
+
+        public void NormalizeCoord()
+        {
+            x = (x - Constants.Width) / Constants.Width;
+             y = (-1) * ((y- Constants.Height)/Constants.Height);
         }
     }
 }

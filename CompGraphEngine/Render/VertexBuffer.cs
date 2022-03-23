@@ -2,11 +2,11 @@
 
 namespace CompGraphEngine.Render
 {
-    internal class VertexBuffer
+    public class VertexBuffer
     {
         private readonly int id;
-        internal int CountVertex { get; private set; }
-        internal VertexBuffer(float[] data, int size)
+        public int CountVertex { get; private set; }
+        public VertexBuffer( float[] data, int size)
         {
             CountVertex = data.GetLength(0);
 
@@ -21,12 +21,12 @@ namespace CompGraphEngine.Render
             GL.DeleteBuffer(id);
         }
 
-        internal void Bind()
+        public void Bind()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, id);
         }
 
-        internal void UnBind()
+        public void UnBind()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }

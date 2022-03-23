@@ -30,5 +30,7 @@ namespace CompGraphEngine.Render
         {
             figure.Draw();
         }
+
+     
     }
 }

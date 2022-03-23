@@ -21,12 +21,12 @@ namespace CompGraphEngine.Render
         
         public virtual void Init()
         {
-            _vertexBuffer = new VertexBuffer(_vertices, _vertices.Length * sizeof(float));
+            _vertexBuffer = new VertexBuffer( _vertices, _vertices.Length * sizeof(float));
             _vertexArray = new VertexArray();
             _layout = new VertexBufferLayout();
         }
 
-        protected float[] toArrayFromPoints(float[][] posVerts, Vector4f color, int sizePosition, int sizeColor)
+        protected float[] toArrayFromPoints( float[][] posVerts, Vector4f color, int sizePosition, int sizeColor)
         {
             float[] vert = new float[(sizePosition + sizeColor) * 3];
 
@@ -52,7 +52,8 @@ namespace CompGraphEngine.Render
 
             return vert;
         }
-        internal virtual void Draw() { }
+        public abstract void Draw();
+       
 
     }
 }
