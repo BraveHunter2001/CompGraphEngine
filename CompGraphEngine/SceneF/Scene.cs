@@ -1,4 +1,5 @@
-﻿using CompGraphEngine.Render;
+﻿using CompGraphEngine.Engine;
+using CompGraphEngine.Render;
 
 using System.Collections.Generic;
 
@@ -8,36 +9,44 @@ namespace CompGraphEngine.SceneF
     public class Scene
     {
         private Renderer renderer  = new Renderer();
-        private List<Figure> Figures = new List<Figure>();
+        private List<GameObject> GameObjects = new List<GameObject>();
         public Scene() { }
-        public Scene(List<Figure> figure)
+        public Scene(List<GameObject> objects)
         {
             renderer = new Renderer();
-            foreach (Figure f in figure)
-                AddObjectToScene(f);
+            foreach (GameObject o in objects)
+                AddObjectToScene(o);
         }
 
         public virtual void Init()
         {
 
-            foreach(Figure f in Figures)
-                f.Init();
+            foreach(GameObject obj in GameObjects)
+                obj.Init();
         }
 
         public virtual void Update()
         {
-            foreach (Figure f in Figures)
-                renderer.Draw(f);
+
+            foreach (GameObject obj in GameObjects)
+                obj.Update();
         }
 
-        public void AddObjectToScene(Figure figure)
+        public void Render()
         {
-            Figures.Add(figure);
+            foreach (GameObject obj in GameObjects)
+                if (obj is IRenderable renderable)
+                    renderer.Draw(renderable);
         }
 
-        public void RemoveObjectFromScene(Figure figure)
+        public void AddObjectToScene(GameObject obj)
         {
-            Figures.Remove(figure);
+            GameObjects.Add(obj);
+        }
+
+        public void RemoveObjectFromScene(GameObject obj)
+        {
+            GameObjects.Remove(obj);
         }
     }
 }

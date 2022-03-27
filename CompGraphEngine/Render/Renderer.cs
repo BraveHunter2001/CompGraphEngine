@@ -26,9 +26,9 @@ namespace CompGraphEngine.Render
             GL.DrawElements(PrimitiveType.Triangles, ib.GetCount(),DrawElementsType.UnsignedInt, 0);
         }
 
-        public void Draw(Figure figure)
+        public void Draw(IRenderable renderable)
         {
-            figure.Draw();
+            renderable.Draw();
         }
 
      

@@ -1,26 +1,29 @@
-﻿using CompGraphEngine.Render.Figure2D;
-using CompGraphEngine.Util;
+﻿using CompGraphEngine.Engine;
+using CompGraphEngine.Engine.Figure2D;
+using OpenTK.Mathematics;
 
 namespace CompGraphEngine.SceneF
 {
     internal class TestScene : Scene
     {
-        Line line;
+        public Line line;
+        float x = 0.01f, y = 0.01f;
         public override void Init()
         {
             line = new Line(
-                 new Vector3f(0f, 0f, 0),
-                 new Vector3f(100f, 300f, 0));
+                 new Vector3(0f, 0f, 0),
+                 new Vector3(0.1f, 0f, 0));
             
             
             AddObjectToScene(line);
             base.Init();
         }
-
         public override void Update()
         {
-           // line.TestCoordsRedraws(300f, 300f);
+
             base.Update();
         }
+
+        
     }
 }

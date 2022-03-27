@@ -5,16 +5,16 @@ namespace CompGraphEngine.Render
     public class VertexBuffer
     {
         private readonly int id;
-        public int CountVertex { get; private set; }
+        public int CountVertex { get;private set; }
         public VertexBuffer( float[] data, int size)
         {
-            CountVertex = data.GetLength(0);
+            CountVertex = data.Length;
 
             id = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, id);
             GL.BufferData(BufferTarget.ArrayBuffer,
                 size,
-                data, BufferUsageHint.StaticDraw);
+                data, BufferUsageHint.DynamicDraw);
         }
         ~VertexBuffer()
         {

@@ -1,7 +1,4 @@
-﻿using CompGraphEngine.Render;
-using CompGraphEngine.Render.Figure2D;
-using CompGraphEngine.SceneF;
-using CompGraphEngine.Util;
+﻿using CompGraphEngine.SceneF;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -13,21 +10,20 @@ namespace CompGraphEngine
     {
        
         Scene scene;
-        
-        
+        public static Window window { get; private set; }  
+      
+
+
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
-
-            
-
-
+            window = this;
             scene = new TestScene();
-           
-            
         }
 
         protected override void OnLoad()
         {
+
+           
             base.OnLoad();
             GL.ClearColor(0f, 0f, 0f, 1.0f);
             
@@ -39,12 +35,12 @@ namespace CompGraphEngine
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
 
-           
 
-            scene.Update();
 
+
+            
             this.Title =this.MousePosition.ToString();
-
+            scene.Render();
             SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -53,6 +49,8 @@ namespace CompGraphEngine
             {
                 Close();
             }
+
+            scene.Update();
             base.OnUpdateFrame(args);
         }
 

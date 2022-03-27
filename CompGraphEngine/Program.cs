@@ -18,7 +18,7 @@ namespace CompGraphEngine
             {
                 Size = new Vector2i(Constants.Width, Constants.Height),
                 Title = "LearnOpenTK - Creating a Window",
-                // This is needed to run on macos
+                
                 Flags = ContextFlags.ForwardCompatible,
             };
 

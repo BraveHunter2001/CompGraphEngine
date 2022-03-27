@@ -34,6 +34,7 @@ namespace CompGraphEngine.Render
             
         }
 
+        //TODO Fuck this code
         private static VertexAttribPointerType GetType<T>()
         {
             
@@ -46,7 +47,7 @@ namespace CompGraphEngine.Render
             throw new System.Exception("Invalid type");
 
         }
-
+        //TODO Fuck this code
         internal static int GetSizeOpenGLType(VertexAttribPointerType type)
         {
             switch (type)

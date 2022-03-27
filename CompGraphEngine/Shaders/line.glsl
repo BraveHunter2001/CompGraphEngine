@@ -4,11 +4,13 @@
 layout(location = 0) in vec3 aPosition;
 layout(location = 1) in vec4 aColor;
 
+uniform vec2 MoveTo;
+
 out vec4 fColor;
 void main(void)
 {
      fColor = aColor;
-     gl_Position = vec4(aPosition, 1.0); 
+     gl_Position = vec4(aPosition + vec3(MoveTo, 0.0), 1.0); 
 }
 
 #type fragment

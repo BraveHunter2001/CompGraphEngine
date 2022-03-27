@@ -19,8 +19,25 @@ namespace CompGraphEngine.Render
         {
             GL.DeleteVertexArray(id);
         }
+        /// <summary>
+        /// Add layout into buffer without offset
+        /// </summary>
+        /// <param name="layout"></param>
+        internal void AddLayout(ref VertexBuffer vb, ref VertexBufferLayout layout, int index)
+        {
+            Bind();
+            vb.Bind();
+           
+                var elem = layout.Elements[0];
+                GL.VertexAttribPointer(index, elem.count, elem.type, elem.normalized, 0, 0);
+                GL.EnableVertexAttribArray(index);
+                
 
-        internal void AddBuffer(ref VertexBuffer vb,ref  VertexBufferLayout layout)
+            vb.UnBind();
+            UnBind();
+        }
+
+        internal void AddLayouts(ref VertexBuffer vb,ref  VertexBufferLayout layout)
         {
             Bind();
             vb.Bind();

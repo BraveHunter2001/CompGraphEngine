@@ -193,7 +193,11 @@ namespace CompGraphEngine.Render
             GL.UseProgram(Handle);
             GL.Uniform3(_uniformLocations[name], data);
         }
-
+        public void SetVector2(string name, Vector2 data)
+        {
+            GL.UseProgram(Handle);
+            GL.Uniform2(_uniformLocations[name], data);
+        }
 
     }
 }
