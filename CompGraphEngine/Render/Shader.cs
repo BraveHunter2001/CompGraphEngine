@@ -140,6 +140,10 @@ namespace CompGraphEngine.Render
         {
             GL.UseProgram(Handle);
         }
+        public void Unuse()
+        {
+            GL.UseProgram(0);
+        }
 
         public int GetAttribLocation(string attribName)
         {

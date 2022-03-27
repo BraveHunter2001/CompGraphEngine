@@ -25,6 +25,9 @@
 
 
   <ItemGroup>
+    <None Update="Shaders\circle.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shaders\line.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

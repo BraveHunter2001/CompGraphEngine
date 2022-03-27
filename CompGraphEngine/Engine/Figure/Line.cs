@@ -43,10 +43,27 @@ namespace CompGraphEngine.Engine.Figure
         {
             this.point1 = point1;
             this.point2 = point2;
-
            
         }
+        public Line(Vector3 point1, Vector3 point2, Color4 color)
+        {
+            this.point1 = point1;
+            this.point2 = point2;
+            this.color = color;
+        }
         public override void Init()
+        {
+            FillCoordsVertex();
+            FillColorsVertex();
+
+            
+
+            _shader = new Shader("Shaders/line.glsl");
+
+            base.Init();
+        }
+
+        void FillCoordsVertex()
         {
             _vertPoints = new float[2, 3];
             for (int i = 0; i < 3; i++)
@@ -55,14 +72,16 @@ namespace CompGraphEngine.Engine.Figure
                 _vertPoints[1, i] = point2[i];
             }
 
+        }
+
+        void FillColorsVertex()
+        {
             _vertColors = new float[2, 4];
             for (int i = 0; i < 4; i++)
             {
                 _vertColors[0, i] = ((Vector4)color)[i];
                 _vertColors[1, i] = ((Vector4)color)[i];
             }
-
-            base.Init();
         }
 
         public void Draw()
@@ -70,9 +89,10 @@ namespace CompGraphEngine.Engine.Figure
             _shader.Use();
             _vertexArray.Bind();
 
-            GL.Enable(EnableCap.LineSmooth);
+          GL.Enable(EnableCap.LineSmooth);
             GL.DrawArrays(PrimitiveType.Lines, 0, _vertPoints.GetLength(0));
-            GL.Disable(EnableCap.LineSmooth);
+           GL.Disable(EnableCap.LineSmooth);
+            
         }
         public override void Update()
         {

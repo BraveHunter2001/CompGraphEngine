@@ -30,6 +30,8 @@ namespace CompGraphEngine.Render
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
+        internal int GetId() => id;
+
         internal int GetCount() => count;
     }
 }

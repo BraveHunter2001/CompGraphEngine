@@ -22,6 +22,8 @@ namespace CompGraphEngine.Engine.Figure
 
         protected VertexBufferLayout _layoutPos;
         protected VertexBufferLayout _layoutCol;
+
+        
         public override void Init()
         {
             _pointBuffer = new VertexBuffer(Make1DArray(_vertPoints), sizeof(float) * _vertPoints.Length);
@@ -30,13 +32,14 @@ namespace CompGraphEngine.Engine.Figure
             _layoutPos = new VertexBufferLayout();
             _layoutCol = new VertexBufferLayout();
 
-            _shader = new Shader("Shaders/line.glsl");
+            
 
             _layoutPos.Push<float>(_vertPoints.GetLength(1), true);
             _layoutCol.Push<float>(_vertColors.GetLength(1), true);
 
             _vertexArray.AddLayout(ref _pointBuffer, ref _layoutPos, 0);
             _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
+            IsInited = true;
         }
 
         public override void Update()
@@ -59,6 +62,8 @@ namespace CompGraphEngine.Engine.Figure
             }
             return res;
         }
+
+        
 
     }
 }

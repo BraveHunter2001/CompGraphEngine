@@ -7,15 +7,17 @@ namespace CompGraphEngine.SceneF
     internal class TestScene : Scene
     {
         Line line;
+        Circle circle;
         
         public override void Init()
         {
             line = new Line(
                  new Vector3(0f, 0f, 0),
-                 new Vector3(0.1f, 0.5f, 0));
+                 new Vector3(0.1f, 0.5f, 0), Color4.Aquamarine);
 
-
+            circle = new Circle(new Vector3(0f, 0f, 0f), 0.1f, Color4.White);
             AddObjectToScene(line);
+            AddObjectToScene(circle);
             base.Init();
         }
         public override void Update()

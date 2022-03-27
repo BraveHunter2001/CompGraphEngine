@@ -22,20 +22,22 @@ namespace CompGraphEngine.SceneF
         {
 
             foreach(GameObject obj in GameObjects)
-                obj.Init();
+                if(!obj.IsInited)
+                    obj.Init();
         }
 
         public virtual void Update()
         {
 
             foreach (GameObject obj in GameObjects)
-                obj.Update();
+                if (obj.IsInited)
+                    obj.Update();
         }
 
         public void Render()
         {
             foreach (GameObject obj in GameObjects)
-                if (obj is IRenderable renderable)
+                if (obj.IsInited && obj is IRenderable renderable)
                     renderer.Draw(renderable);
         }
 
