@@ -8,8 +8,8 @@ namespace CompGraphEngine.Engine
 {
     internal static class Constants
     {
-        public static readonly int Height = 600;
-        public static readonly int Width = 800;
+        public static int Height = 600;
+        public static int Width = 800;
 
     }
 }

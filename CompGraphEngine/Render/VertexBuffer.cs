@@ -31,6 +31,11 @@ namespace CompGraphEngine.Render
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-       
+        public void BufferSubData(float[] data)
+        {
+            Bind();
+            GL.BufferSubData<float>(BufferTarget.ArrayBuffer, System.IntPtr.Zero, data.Length*sizeof(float), data);
+            UnBind();
+        }
     }
 }

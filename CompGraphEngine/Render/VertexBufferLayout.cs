@@ -35,7 +35,7 @@ namespace CompGraphEngine.Render
         }
 
         //TODO Fuck this code
-        private static VertexAttribPointerType GetType<T>()
+        private static VertexAttribPointerType GetType<T>() 
         {
             
             System.Type typeG = typeof(T);

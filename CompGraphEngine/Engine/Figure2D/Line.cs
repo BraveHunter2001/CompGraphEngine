@@ -18,6 +18,7 @@ namespace CompGraphEngine.Engine.Figure2D
 
         VertexBufferLayout _layoutPos;
         VertexBufferLayout _layoutCol;
+        bool _isInited = false;
         public Line(float[,] vertPoints, float[,] vertColors) 
         {
             _vertPoints = vertPoints;
@@ -41,23 +42,26 @@ namespace CompGraphEngine.Engine.Figure2D
                 _vertColors[0, i] = ((Vector4)color)[i];
                 _vertColors[1, i] = ((Vector4)color)[i];
             }
+           Init();
         }
         public override void Init()
         {
             
-            _pointBuffer = new VertexBuffer(Make1DArray(_vertPoints), sizeof(float)* _vertPoints.Length);
-            _colorBuffer = new VertexBuffer(Make1DArray(_vertColors), sizeof(float) * _vertColors.Length);
-            _vertexArray = new VertexArray();
-            _layoutPos = new VertexBufferLayout();
-            _layoutCol = new VertexBufferLayout();
+                _pointBuffer = new VertexBuffer(Make1DArray(_vertPoints), sizeof(float) * _vertPoints.Length);
+                _colorBuffer = new VertexBuffer(Make1DArray(_vertColors), sizeof(float) * _vertColors.Length);
+                _vertexArray = new VertexArray();
+                _layoutPos = new VertexBufferLayout();
+                _layoutCol = new VertexBufferLayout();
 
-            _shader = new Shader("Shaders/line.glsl");
+                _shader = new Shader("Shaders/line.glsl");
 
-            _layoutPos.Push<float>(_vertPoints.GetLength(1), true);
-            _layoutCol.Push<float>(_vertColors.GetLength(1), true);
+                _layoutPos.Push<float>(_vertPoints.GetLength(1), true);
+                _layoutCol.Push<float>(_vertColors.GetLength(1), true);
 
-            _vertexArray.AddLayout(ref _pointBuffer, ref _layoutPos, 0);
-            _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
+                _vertexArray.AddLayout(ref _pointBuffer, ref _layoutPos, 0);
+                _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
+                
+            
         }
 
         public void Draw()
@@ -70,6 +74,16 @@ namespace CompGraphEngine.Engine.Figure2D
         }
         public override void Update() { }
         
+
+        public void PointToMouse(Vector3 currPoint)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                
+                _vertPoints[1, i] = currPoint[i];
+            }
+            _pointBuffer.BufferSubData(Make1DArray(_vertPoints));
+        }
 
         private float[] Make1DArray(float[,] arr)
         {
