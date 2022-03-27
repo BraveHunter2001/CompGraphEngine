@@ -4,16 +4,16 @@ using System.Collections.Generic;
 namespace CompGraphEngine.Render
 {
 
-    internal class VertexBufferLayout
+    public class VertexBufferLayout
     {
-        internal struct VertexBufferElement
+        public struct VertexBufferElement
         {
 
             public int count;
             public VertexAttribPointerType type;
             public bool normalized;
 
-            internal VertexBufferElement(VertexAttribPointerType type, int count, bool normalize)
+            public VertexBufferElement(VertexAttribPointerType type, int count, bool normalize)
             {
                 this.count = count;
                 this.type = type;
@@ -21,10 +21,10 @@ namespace CompGraphEngine.Render
             }
         }
 
-        internal List<VertexBufferElement> Elements { get; private set; } = new List<VertexBufferElement>();
-        internal int Stride { get; private set; } = 0;
+        public List<VertexBufferElement> Elements { get; private set; } = new List<VertexBufferElement>();
+        public int Stride { get; private set; } = 0;
 
-        internal void Push<T>(int count, bool isNormalized) where T : struct
+        public void Push<T>(int count, bool isNormalized) where T : struct
         {
             VertexAttribPointerType typeSize = GetType<T>();
             VertexBufferElement vertexBufferElement = new VertexBufferElement(typeSize, count, !isNormalized);
