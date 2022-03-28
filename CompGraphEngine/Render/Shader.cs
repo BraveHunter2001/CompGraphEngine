@@ -132,7 +132,8 @@ namespace CompGraphEngine.Render
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out var code);
             if (code != (int)All.True)
             {
-                throw new Exception($"Error occure whilst linking Program({program})");
+                var log = GL.GetProgramInfoLog(program);
+                throw new Exception($"Error occure whilst linking Program({program})\n\n{log}");
             }
         }
 

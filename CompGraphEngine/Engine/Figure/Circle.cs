@@ -38,7 +38,7 @@ namespace CompGraphEngine.Engine.Figure
            
 
             _shader = new Shader("Shaders/circle.glsl");
-            _shader.SetVector2("uResolution", Window.window.Size);
+           //_shader.SetVector2("uResolution", Window.window.Size);
             base.Init();
         }
 

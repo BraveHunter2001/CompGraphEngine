@@ -15,7 +15,7 @@ namespace CompGraphEngine.SceneF
                  new Vector3(0f, 0f, 0),
                  new Vector3(0.1f, 0.5f, 0), Color4.Aquamarine);
 
-            circle = new Circle(new Vector3(0f, 0f, 0f), 0.1f, Color4.White);
+            circle = new Circle(new Vector3(0f, 0f, 0f), 0.5f);
             AddObjectToScene(line);
             AddObjectToScene(circle);
             base.Init();
