@@ -8,7 +8,8 @@ namespace CompGraphEngine.SceneF
     {
         Line line;
         Circle circle;
-        
+        float x = 0;
+        float y = 0;
         public override void Init()
         {
             line = new Line(
@@ -16,18 +17,20 @@ namespace CompGraphEngine.SceneF
                  new Vector3(0f, 400f, 0), Color4.Aquamarine);
 
             circle = new Circle(new Vector3(0f, 0f, 0f),1f);
+            circle.Transform.Scale = new Vector3(40f, 40f, 1f);
+           circle.Transform.Translate(0,0,0);
+           
             AddObjectToScene(line);
            AddObjectToScene(circle);
             base.Init();
         }
         public override void Update()
         {
-            //float x =  (Window.window.MousePosition.X - Window.window.Size.X/2);
-           // float y = (-1) * (Window.window.MousePosition.Y -  Window.window.Size.Y/2);
-
-            //line.Point2 = new Vector3(x,y, 0);
-           
             
+
+           circle.Transform.Position = new Vector3((float)MathHelper.Cos(x), (float)MathHelper.Sin(x), 0);
+
+            x += 0.01f;
             base.Update();
         }
 

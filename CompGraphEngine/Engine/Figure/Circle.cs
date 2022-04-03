@@ -9,26 +9,33 @@ namespace CompGraphEngine.Engine.Figure
     {
         int[] _indices = { 0, 1, 3, 1, 2, 3 };
         IndexBuffer _indexBuffer;
+        Matrix4 MVP;
 
-
-        Vector3 center;
-        float radius;
+        // this fucking local data
+        // shit dont touch this 
+        Vector3 center = Vector3.Zero;
+        float radius = 1;
         Color4 color = new Color4(255, 255, 255, 255);
-        float thickness;
-        public Vector3 Center{ get => center; set => center = value; }
-        public float Radius { get => radius; set => radius = value; }
+        float thickness = 1;
+        
         public float Thickness { get => thickness; set => thickness = value; }
+
+        public Circle(Transform transform)
+        {
+            Transform = transform;
+            transform.Position = center;
+        }
 
         public Circle(Vector3 center, float radius = 1, float thickness = 1)
         {
-            this.radius = radius;
-            this.center = center;
+            Transform = new Transform();
+            Transform.Position = center;
             this.thickness = thickness;
         }
         public Circle(Vector3 center, float radius, Color4 color, float thickness = 1)
         {
-            this.radius = radius;
-            this.center = center;
+            Transform = new Transform();
+            Transform.Position = center;
             this.color = color;
             this.thickness = thickness;
         }
@@ -39,26 +46,12 @@ namespace CompGraphEngine.Engine.Figure
             FillColorsVertex();
             _indexBuffer = new IndexBuffer(_indices, _indices.Length);
 
-           
 
             _shader = new Shader("Shaders/circle.glsl");
 
-            Matrix4 Model = Matrix4.Identity;
-            Matrix4 transl = Matrix4.CreateTranslation(0f, 0f, 0);
-            transl.Transpose();
-            Model = transl * Model;
-            Model = Matrix4.CreateScale(40f) * Model;
-            Model = Matrix4.CreateRotationZ(0)* Model;
-            
 
-            Matrix4 Projection = Matrix4.CreateOrthographic(800, 600, 0f, 1000f);
 
-            Matrix4 View = Matrix4.LookAt(new Vector3(0f,0f,10f),
-                new Vector3(0f,0,0),
-                new Vector3(0,1,0));
-            
-            Matrix4 MVP =Projection* View* Model;
-            _shader.SetMatrix4("aMVP", MVP);
+      
             _shader.SetFloat("aThickness",thickness);
 
             base.Init();
@@ -101,9 +94,23 @@ namespace CompGraphEngine.Engine.Figure
                 _vertColors[3, i] = ((Vector4)color)[i];
             }
         }
+        public override void Update()
+        {
+            base.Update();
+        }
 
         public void Draw()
         {
+            Matrix4 Projection = Matrix4.CreateOrthographic(800, 600, 0f, 1000f);
+
+            Matrix4 View = Matrix4.LookAt(new Vector3(0f, 0f, 10f),
+                new Vector3(0f, 0, 0),
+                new Vector3(0, 1, 0));
+
+            MVP = Projection * View * Transform.Model;
+
+            _shader.SetMatrix4("aMVP", MVP);
+
             _shader.Use();
             _vertexArray.Bind();
             _indexBuffer.Bind();

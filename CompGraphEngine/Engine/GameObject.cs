@@ -9,8 +9,11 @@ namespace CompGraphEngine.Engine
     public abstract class GameObject
     {
         public bool IsInited { get; set; }
+        public Transform Transform { get; set; }
+       
         public abstract void Init();
         public abstract void Update();
+        
         
     }
 }
