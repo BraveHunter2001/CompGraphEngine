@@ -17,7 +17,7 @@ namespace CompGraphEngine.Engine.Figure
         public Vector3 Center{ get => center; set => center = value; }
         public float Radius { get => radius; set => radius = value; }
 
-        public Circle(Vector3 center, float radius)
+        public Circle(Vector3 center, float radius = 1)
         {
             this.radius = radius;
             this.center = center;
@@ -38,7 +38,25 @@ namespace CompGraphEngine.Engine.Figure
            
 
             _shader = new Shader("Shaders/circle.glsl");
-           //_shader.SetVector2("uResolution", Window.window.Size);
+
+            Matrix4 Model = Matrix4.Identity;
+            Matrix4 transl = Matrix4.CreateTranslation(0f, 0f, 0);
+            transl.Transpose();
+            Model = transl * Model;
+            Model = Matrix4.CreateScale(40f) * Model;
+            Model = Matrix4.CreateRotationZ(0)* Model;
+            
+
+            Matrix4 Projection = Matrix4.CreateOrthographic(800, 600, 0f, 1000f);
+
+            Matrix4 View = Matrix4.LookAt(new Vector3(0f,0f,10f),
+                new Vector3(0f,0,0),
+                new Vector3(0,1,0));
+            
+            Matrix4 MVP =Projection* View* Model;
+            _shader.SetMatrix4("aMVP", MVP);
+            _shader.SetVector2("aResolution", new Vector2(Constants.Width, Constants.Height));
+
             base.Init();
         }
 

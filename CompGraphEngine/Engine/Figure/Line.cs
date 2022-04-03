@@ -59,7 +59,9 @@ namespace CompGraphEngine.Engine.Figure
             
 
             _shader = new Shader("Shaders/line.glsl");
-
+            
+            Matrix4 ortho = Matrix4.CreateOrthographic(Window.window.Size.X, Window.window.Size.Y, -1f, 1f);
+            _shader.SetMatrix4("aMVP",ortho);
             base.Init();
         }
 

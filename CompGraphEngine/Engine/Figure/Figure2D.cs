@@ -1,9 +1,4 @@
 ﻿using CompGraphEngine.Render;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompGraphEngine.Engine.Figure
 {
@@ -23,7 +18,7 @@ namespace CompGraphEngine.Engine.Figure
         protected VertexBufferLayout _layoutPos;
         protected VertexBufferLayout _layoutCol;
 
-        
+
         public override void Init()
         {
             _pointBuffer = new VertexBuffer(Make1DArray(_vertPoints), sizeof(float) * _vertPoints.Length);
@@ -31,8 +26,9 @@ namespace CompGraphEngine.Engine.Figure
             _vertexArray = new VertexArray();
             _layoutPos = new VertexBufferLayout();
             _layoutCol = new VertexBufferLayout();
+          
 
-            
+
 
             _layoutPos.Push<float>(_vertPoints.GetLength(1), true);
             _layoutCol.Push<float>(_vertColors.GetLength(1), true);
@@ -44,7 +40,7 @@ namespace CompGraphEngine.Engine.Figure
 
         public override void Update()
         {
-            _pointBuffer.BufferSubData(Make1DArray(_vertPoints));
+           // _pointBuffer.BufferSubData(Make1DArray(_vertPoints));
             _pointBuffer.BufferSubData(Make1DArray(_vertColors));
         }
 
@@ -63,7 +59,7 @@ namespace CompGraphEngine.Engine.Figure
             return res;
         }
 
-        
+
 
     }
 }
