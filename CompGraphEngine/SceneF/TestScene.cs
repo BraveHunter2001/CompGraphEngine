@@ -25,10 +25,11 @@ namespace CompGraphEngine.SceneF
         public override void Update()
         {
             
-
-           circle.Transform.Position = new Vector3((float)MathHelper.Cos(x), (float)MathHelper.Sin(x), 0);
-            circle.Thickness = (float)MathHelper.Abs(MathHelper.Sin(x));
-            x += 0.01f;
+            x = (-1)*(Constants.Width/2 - Window.window.MousePosition.X);
+            y = Constants.Height/2 - Window.window.MousePosition.Y;
+            System.Console.WriteLine($"X: {x} Y: {y}");
+           
+            
             base.Update();
         }
 

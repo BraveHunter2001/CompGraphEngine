@@ -12,7 +12,7 @@ namespace CompGraphEngine.Engine.Figure
         Matrix4 MVP;
 
         // this fucking local data
-        // shit dont touch this 
+        // dont touch this shit
         Vector3 center = Vector3.Zero;
         float radius = 1;
         Color4 color = new Color4(255, 255, 255, 255);
@@ -44,15 +44,12 @@ namespace CompGraphEngine.Engine.Figure
         {
             FillCoordsVertex();
             FillColorsVertex();
+
             _indexBuffer = new IndexBuffer(_indices, _indices.Length);
 
 
             _shader = new Shader("Shaders/circle.glsl");
 
-
-
-      
-            
 
             base.Init();
         }
@@ -94,6 +91,7 @@ namespace CompGraphEngine.Engine.Figure
                 _vertColors[3, i] = ((Vector4)color)[i];
             }
         }
+
         public override void Update()
         {
             base.Update();
