@@ -52,7 +52,7 @@ namespace CompGraphEngine.Engine.Figure
 
 
       
-            _shader.SetFloat("aThickness",thickness);
+            
 
             base.Init();
         }
@@ -110,6 +110,7 @@ namespace CompGraphEngine.Engine.Figure
             MVP = Projection * View * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
+            _shader.SetFloat("aThickness",thickness);
 
             _shader.Use();
             _vertexArray.Bind();
