@@ -38,10 +38,10 @@ namespace CompGraphEngine.Engine
         {
             get { return scale; }
             set { scale = value;
-                model = Matrix4.CreateScale(scale.X, scale.Y, scale.Z) * model;
+                Scaling(value);
             }
         }
-        public Matrix4 Model { get { return TranslateMatrix * model; } private set { model = value; } }
+        public Matrix4 Model { get { return TranslateMatrix * ScaleMatrix * model; } private set { model = value; } }
         
 
         public Transform()
@@ -82,8 +82,13 @@ namespace CompGraphEngine.Engine
             TranslateMatrix.M24 = pos.Y;
             TranslateMatrix.M34 = pos.Z;
         }
-        
-        
+
+        private void Scaling(Vector3 scale)
+        {
+            ScaleMatrix.M11 = scale.X;
+            ScaleMatrix.M22 = scale.Y;
+            ScaleMatrix.M33 = scale.Z;
+        }
 
     }
 }

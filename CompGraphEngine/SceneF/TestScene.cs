@@ -10,6 +10,7 @@ namespace CompGraphEngine.SceneF
         Circle circle;
         float x = 0;
         float y = 0;
+        float scY = 0;
         public override void Init()
         {
            
@@ -27,9 +28,12 @@ namespace CompGraphEngine.SceneF
             
             x = (-1)*(Constants.Width/2 - Window.window.MousePosition.X);
             y = Constants.Height/2 - Window.window.MousePosition.Y;
-            System.Console.WriteLine($"X: {x} Y: {y}");
            
-            
+            scY = Window.window.MouseState.Scroll.Y;
+            System.Console.WriteLine($"X: {x} Y: {y}| DeltaScrolls  Y: {scY}");
+           
+            circle.Transform.Position = new Vector3(x,y,0);
+            circle.Transform.Scale = new Vector3(scY,scY,0);
             base.Update();
         }
 
