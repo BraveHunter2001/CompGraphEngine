@@ -14,19 +14,23 @@ namespace CompGraphEngine.Engine.Figure
         Vector3 center;
         float radius;
         Color4 color = new Color4(255, 255, 255, 255);
+        float thickness;
         public Vector3 Center{ get => center; set => center = value; }
         public float Radius { get => radius; set => radius = value; }
+        public float Thickness { get => thickness; set => thickness = value; }
 
-        public Circle(Vector3 center, float radius = 1)
+        public Circle(Vector3 center, float radius = 1, float thickness = 1)
         {
             this.radius = radius;
             this.center = center;
+            this.thickness = thickness;
         }
-        public Circle(Vector3 center, float radius, Color4 color)
+        public Circle(Vector3 center, float radius, Color4 color, float thickness = 1)
         {
             this.radius = radius;
             this.center = center;
             this.color = color;
+            this.thickness = thickness;
         }
 
         public override void Init()
@@ -55,7 +59,7 @@ namespace CompGraphEngine.Engine.Figure
             
             Matrix4 MVP =Projection* View* Model;
             _shader.SetMatrix4("aMVP", MVP);
-            _shader.SetVector2("aResolution", new Vector2(Constants.Width, Constants.Height));
+            _shader.SetFloat("aThickness",thickness);
 
             base.Init();
         }

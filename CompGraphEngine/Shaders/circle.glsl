@@ -27,25 +27,23 @@ in vec3 fCoord;
 
 out vec4 outputColor;
 
-uniform vec2 aResolution;
+uniform float aThickness;
 
 
 void main()
 {
-    vec2 aRes = aResolution;
-    outputColor = fColor;
-    vec2 uv =  fCoord.xy ;
-    
-    //float aspect = aResolution.x / aResolution.y;
-   // uv.x *= aspect;
+   
+    vec2 uv =  fCoord.xy;
+   
+   
+    float dist = 1.0 - length(uv);
+    float fade = 0.05;
 
-    //float dist = length(uv);
-    //float fade = 0.005;
-    //float thickness = 0.1;
-    //vec3 col  = vec3(smoothstep(0.0,fade, dist));
-    //col *= vec3(1.0 - smoothstep(thickness,thickness - fade, dist));
-    outputColor.rg = uv + 0.5;
+    vec3 color = vec3(smoothstep(0.0,fade, dist));
+    color *= vec3(smoothstep(aThickness + fade, aThickness, dist));
 
+    outputColor= vec4(color, 1.0 );
+    outputColor.rgb *= fColor;
 
 }
 
