@@ -31,7 +31,7 @@
     <None Update="Shaders\line.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\triangle.glsl">
+    <None Update="Shaders\rectangle.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -9,7 +9,7 @@ namespace CompGraphEngine.Engine
 {
     public class Transform
     {
-        private Vector3 position;
+        private Vector4 position;
         private Vector3 rotation;
         private Vector3 scale;
 
@@ -17,10 +17,14 @@ namespace CompGraphEngine.Engine
         private Matrix4 TranslateMatrix;
         private Matrix4 ScaleMatrix;
 
+        private Matrix4 RotateXM;
+        private Matrix4 RotateYM;
+        private Matrix4 RotateZM;
+
         public Vector3 Position
         {
-            get { return position; }
-            set { position = value;
+            get { return position.Xyz; }
+            set { position.Xyz = value;
                 TranslatePosition(value);
             }
         }
@@ -29,9 +33,7 @@ namespace CompGraphEngine.Engine
             get { return rotation; }
             set { 
                 rotation = value;
-                model = Matrix4.CreateRotationX(this.rotation.X) * model;
-                model = Matrix4.CreateRotationY(this.rotation.Y) * model;
-                model = Matrix4.CreateRotationZ(this.rotation.Z) * model;
+               RotateVector(value);
             }
         }
         public Vector3 Scale
@@ -41,21 +43,43 @@ namespace CompGraphEngine.Engine
                 Scaling(value);
             }
         }
-        public Matrix4 Model { get { return TranslateMatrix * ScaleMatrix * model; } private set { model = value; } }
-        
+        public Matrix4 Model { get 
+            {
+                model = RotateZM * RotateYM * RotateXM * TranslateMatrix * ScaleMatrix * Matrix4.Identity;
+                Position = (model * position).Xyz;
+                return model;
+            } 
+            private set { model = value; } }
 
-        public Transform()
+        public Transform(Vector3 position, Vector3 scale, Vector3 rotation)
         {
-            position = new Vector3(0, 0, 0);
-            scale = new Vector3(1, 1, 1);
-            rotation = new Vector3(0, 0, 0);
-
-            model = Matrix4.Identity;
-            TranslateMatrix = Matrix4.CreateTranslation(position.X, position.Y, position.Z);
-            ScaleMatrix = Matrix4.CreateScale(scale.X, scale.Y, scale.Z);
+            this.position = new Vector4(position, 1.0f);
+            this.scale = scale;
+            this.rotation = rotation;
 
             
 
+            TranslateMatrix = Matrix4.CreateTranslation(this.position.X, this.position.Y, this.position.Z);
+            ScaleMatrix = Matrix4.CreateScale(this.scale.X, this.scale.Y, this.scale.Z);
+
+            RotateXM = Matrix4.CreateRotationX(this.rotation.X);
+            RotateYM = Matrix4.CreateRotationY(this.rotation.Y);
+            RotateZM = Matrix4.CreateRotationZ(this.rotation.Z);
+        }
+        public Transform()
+        {
+            this.position = new Vector4(0, 0, 0, 1);
+            this.scale = new Vector3(1, 1, 1);
+            this.rotation = new Vector3(0, 0, 0);
+
+           
+
+            TranslateMatrix = Matrix4.CreateTranslation(this.position.X, this.position.Y, this.position.Z);
+            ScaleMatrix = Matrix4.CreateScale(this.scale.X, this.scale.Y, this.scale.Z);
+
+            RotateXM = Matrix4.CreateRotationX(this.rotation.X);
+            RotateYM = Matrix4.CreateRotationY(this.rotation.Y);
+            RotateZM = Matrix4.CreateRotationZ(this.rotation.Z);
         }
 
         public void Translate(float x = 0, float y = 0, float z = 0)
@@ -67,13 +91,49 @@ namespace CompGraphEngine.Engine
             Position += translation;
             
         }
-        public void Rotate(float x = 0, float y = 0, float z = 0)
+        private void Rotate(float x = 0, float y = 0, float z = 0)
         {
-            Rotate(new Vector3(x,y,z));
+           // Rotate(new Vector3(x,y,z));
         }
-        public void Rotate(Vector3 rotation)
+        private void RotateVector(Vector3 rotation)
         {
-           
+            this.rotation = rotation;
+            RotateX(rotation.X);
+            RotateY(rotation.Y);
+            RotateZ(rotation.Z);
+        }
+
+        private void RotateX(float angle)
+        {
+            double radRadian = MathHelper.DegreesToRadians(angle);
+
+            RotateXM.M22 = (float)MathHelper.Cos(radRadian);
+            RotateXM.M23 = -(float)MathHelper.Sin(radRadian);
+            RotateXM.M32 = (float)MathHelper.Sin(radRadian);
+            RotateXM.M33 = (float)MathHelper.Cos(radRadian);
+
+        }
+
+        private void RotateY(float angle)
+        {
+            double radRadian = MathHelper.DegreesToRadians(angle);
+
+            RotateYM.M11 = (float)MathHelper.Cos(radRadian);
+            RotateYM.M13 = (float)MathHelper.Sin(radRadian);
+            RotateYM.M31 = -(float)MathHelper.Sin(radRadian);
+            RotateYM.M33 = (float)MathHelper.Cos(radRadian);
+
+        }
+
+        private void RotateZ(float angle)
+        {
+            double radRadian = MathHelper.DegreesToRadians(angle);
+
+            RotateZM.M11 = (float)MathHelper.Cos(radRadian);
+            RotateZM.M12 = -(float)MathHelper.Sin(radRadian);
+            RotateZM.M21 = (float)MathHelper.Sin(radRadian);
+            RotateZM.M22 = (float)MathHelper.Cos(radRadian);
+
         }
 
         private void TranslatePosition(Vector3 pos)
@@ -89,6 +149,7 @@ namespace CompGraphEngine.Engine
             ScaleMatrix.M22 = scale.Y;
             ScaleMatrix.M33 = scale.Z;
         }
+
 
     }
 }

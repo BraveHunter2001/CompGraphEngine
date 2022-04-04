@@ -14,7 +14,7 @@ namespace CompGraphEngine.Engine.Figure
         // this fucking local data
         // dont touch this shit
         Vector3 center = Vector3.Zero;
-        float radius = 1;
+        float radius = 1f;
         Color4 color = new Color4(255, 255, 255, 255);
         float thickness = 1;
         
@@ -32,7 +32,7 @@ namespace CompGraphEngine.Engine.Figure
             Transform.Position = center;
             this.thickness = thickness;
         }
-        public Circle(Vector3 center, float radius, Color4 color, float thickness = 1)
+        public Circle(Vector3 center, Color4 color, float radius = 1, float thickness = 1)
         {
             Transform = new Transform();
             Transform.Position = center;
@@ -47,8 +47,7 @@ namespace CompGraphEngine.Engine.Figure
 
             _indexBuffer = new IndexBuffer(_indices, _indices.Length);
 
-
-            _shader = new Shader("Shaders/circle.glsl");
+            _shader = new Shader("Shaders/rectangle.glsl");
 
 
             base.Init();
@@ -99,11 +98,21 @@ namespace CompGraphEngine.Engine.Figure
 
         public void Draw()
         {
-            Matrix4 Projection = Matrix4.CreateOrthographic(800, 600, 0f, 1000f);
+            //Matrix4 Projection = Matrix4.CreatePerspectiveFieldOfView(
+            //        MathHelper.DegreesToRadians(90),
+            //    Constants.Width / Constants.Height,
+            //    0.1f, 1000.0f);
+           
+            Matrix4 Projection = Matrix4.CreateOrthographic(Constants.Width, Constants.Height, 0.1f, 1000);
 
-            Matrix4 View = Matrix4.LookAt(new Vector3(0f, 0f, 10f),
-                new Vector3(0f, 0, 0),
-                new Vector3(0, 1, 0));
+            Vector3 camPos = new Vector3(0f, 0f, -1f);
+            Vector3 Front= new Vector3(0f, 0f, -1f);
+            Vector3 camUp = new Vector3(0f, 1f, 0f);
+            Matrix4 View = Matrix4.LookAt(camPos,
+                camPos + Front,
+                camUp);
+
+            
 
             MVP = Projection * View * Transform.Model;
 

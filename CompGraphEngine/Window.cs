@@ -8,7 +8,8 @@ namespace CompGraphEngine
 {
     internal class Window : GameWindow
     {
-       
+        public float DeltaTime;
+        private float LastFrame;
         Scene scene;
         public static Window window { get; private set; }  
       
@@ -34,10 +35,6 @@ namespace CompGraphEngine
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-
-
-
-
             
             this.Title =this.MousePosition.ToString();
             scene.Render();
@@ -45,6 +42,9 @@ namespace CompGraphEngine
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
+            float curTime = (float)window.UpdateTime;
+            DeltaTime = curTime  - LastFrame;
+            LastFrame = curTime;
 
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {

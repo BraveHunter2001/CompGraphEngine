@@ -39,6 +39,7 @@ namespace CompGraphEngine.SceneF
             foreach (GameObject obj in GameObjects)
                 if (obj.IsInited && obj is IRenderable renderable)
                     renderer.Draw(renderable);
+            
         }
 
         public void AddObjectToScene(GameObject obj)

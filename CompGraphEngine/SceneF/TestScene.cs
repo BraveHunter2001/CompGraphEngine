@@ -16,11 +16,12 @@ namespace CompGraphEngine.SceneF
            
 
             circle = new Circle(new Vector3(0f, 0f, 0f),1f);
-            circle.Transform.Scale = new Vector3(40f, 40f, 1f);
-           circle.Transform.Translate(0,0,0);
+            circle.Transform.Scale = new Vector3(50f,50f,0f);
+            circle.Transform.Rotation = new Vector3(0f, 0 ,0);
            
            
-           AddObjectToScene(circle);
+            AddObjectToScene(circle);
+            AddObjectToScene(new Circle(new Vector3(0, 0, 0),Color4.Red));
             base.Init();
         }
         public override void Update()
@@ -30,10 +31,12 @@ namespace CompGraphEngine.SceneF
             y = Constants.Height/2 - Window.window.MousePosition.Y;
            
             scY = Window.window.MouseState.Scroll.Y;
-            System.Console.WriteLine($"X: {x} Y: {y}| DeltaScrolls  Y: {scY}");
+           System.Console.WriteLine($"POS{circle.Transform.Position}");
            
             circle.Transform.Position = new Vector3(x,y,0);
-            circle.Transform.Scale = new Vector3(scY,scY,0);
+            //circle.Transform.Scale = new Vector3(scY,scY,0);
+            circle.Transform.Rotation = new Vector3(scY, scY, 0);
+
             base.Update();
         }
 
