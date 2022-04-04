@@ -45,7 +45,7 @@ namespace CompGraphEngine.Engine
         }
         public Matrix4 Model { get 
             {
-                model = RotateZM * RotateYM * RotateXM * TranslateMatrix * ScaleMatrix * Matrix4.Identity;
+                model = TranslateMatrix * ScaleMatrix * RotateZM * RotateYM * RotateXM * Matrix4.Identity;
                 Position = (model * position).Xyz;
                 return model;
             } 

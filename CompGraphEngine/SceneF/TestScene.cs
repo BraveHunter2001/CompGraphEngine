@@ -32,9 +32,9 @@ namespace CompGraphEngine.SceneF
            
             scY = Window.window.MouseState.Scroll.Y;
            System.Console.WriteLine($"POS{circle.Transform.Position}");
-           
+            
             circle.Transform.Position = new Vector3(x,y,0);
-            //circle.Transform.Scale = new Vector3(scY,scY,0);
+            circle.Transform.Scale = new Vector3(scY,scY,0);
             circle.Transform.Rotation = new Vector3(scY, scY, 0);
 
             base.Update();
