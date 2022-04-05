@@ -99,22 +99,25 @@ namespace CompGraphEngine.Engine.Figure
         public void Draw()
         {
             //Matrix4 Projection = Matrix4.CreatePerspectiveFieldOfView(
-            //        MathHelper.DegreesToRadians(90),
+            //        MathHelper.DegreesToRadians(45.0f),
             //    Constants.Width / Constants.Height,
-            //    0.1f, 1000.0f);
-           
+            //    0.1f, 100.0f);
+
+            //Matrix4 p = Matrix4.CreatePerspectiveOffCenter
+
             Matrix4 Projection = Matrix4.CreateOrthographic(Constants.Width, Constants.Height, 0.1f, 1000);
 
-            Vector3 camPos = new Vector3(0f, 0f, -1f);
+            Vector3 camPos = new Vector3(0f, 0f, 100);
             Vector3 Front= new Vector3(0f, 0f, -1f);
             Vector3 camUp = new Vector3(0f, 1f, 0f);
             Matrix4 View = Matrix4.LookAt(camPos,
                 camPos + Front,
                 camUp);
 
-            
-
-            MVP = Projection * View * Transform.Model;
+            Projection.Transpose();
+            View.Transpose();
+        
+            MVP = Projection* View * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
             _shader.SetFloat("aThickness",thickness);

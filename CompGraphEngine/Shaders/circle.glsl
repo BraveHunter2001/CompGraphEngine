@@ -37,7 +37,7 @@ void main()
    
    
     float dist = 1.0 - length(uv);
-    float fade = 0.05;
+    float fade = 0.005;
 
     vec3 color = vec3(smoothstep(0.0,fade, dist));
     color *= vec3(smoothstep(aThickness + fade, aThickness, dist));

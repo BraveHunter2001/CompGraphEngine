@@ -45,8 +45,8 @@ namespace CompGraphEngine.Engine
         }
         public Matrix4 Model { get 
             {
-                model = TranslateMatrix * ScaleMatrix * RotateZM * RotateYM * RotateXM * Matrix4.Identity;
-                Position = (model * position).Xyz;
+                model =  TranslateMatrix * RotateZM * RotateYM * RotateXM *  ScaleMatrix * Matrix4.Identity;
+                
                 return model;
             } 
             private set { model = value; } }
@@ -57,14 +57,17 @@ namespace CompGraphEngine.Engine
             this.scale = scale;
             this.rotation = rotation;
 
-            
 
-            TranslateMatrix = Matrix4.CreateTranslation(this.position.X, this.position.Y, this.position.Z);
-            ScaleMatrix = Matrix4.CreateScale(this.scale.X, this.scale.Y, this.scale.Z);
+            TranslateMatrix = Matrix4.Identity;
+            ScaleMatrix = Matrix4.Identity;
 
-            RotateXM = Matrix4.CreateRotationX(this.rotation.X);
-            RotateYM = Matrix4.CreateRotationY(this.rotation.Y);
-            RotateZM = Matrix4.CreateRotationZ(this.rotation.Z);
+            RotateXM = Matrix4.Identity;
+            RotateYM = Matrix4.Identity;
+            RotateZM = Matrix4.Identity;
+
+            TranslatePosition(this.position.Xyz);
+            Scaling(this.scale);
+            RotateVector(this.rotation);
         }
         public Transform()
         {
@@ -72,14 +75,14 @@ namespace CompGraphEngine.Engine
             this.scale = new Vector3(1, 1, 1);
             this.rotation = new Vector3(0, 0, 0);
 
-           
 
-            TranslateMatrix = Matrix4.CreateTranslation(this.position.X, this.position.Y, this.position.Z);
-            ScaleMatrix = Matrix4.CreateScale(this.scale.X, this.scale.Y, this.scale.Z);
 
-            RotateXM = Matrix4.CreateRotationX(this.rotation.X);
-            RotateYM = Matrix4.CreateRotationY(this.rotation.Y);
-            RotateZM = Matrix4.CreateRotationZ(this.rotation.Z);
+            TranslateMatrix = Matrix4.Identity;
+            ScaleMatrix = Matrix4.Identity;
+
+            RotateXM = Matrix4.Identity;
+            RotateYM = Matrix4.Identity;
+            RotateZM = Matrix4.Identity;
         }
 
         public void Translate(float x = 0, float y = 0, float z = 0)
@@ -141,8 +144,10 @@ namespace CompGraphEngine.Engine
             TranslateMatrix.M14 = pos.X;
             TranslateMatrix.M24 = pos.Y;
             TranslateMatrix.M34 = pos.Z;
+            //TranslateMatrix.Transpose();
         }
 
+       
         private void Scaling(Vector3 scale)
         {
             ScaleMatrix.M11 = scale.X;
