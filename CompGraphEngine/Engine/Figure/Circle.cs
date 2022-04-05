@@ -98,14 +98,14 @@ namespace CompGraphEngine.Engine.Figure
 
         public void Draw()
         {
-            //Matrix4 Projection = Matrix4.CreatePerspectiveFieldOfView(
-            //        MathHelper.DegreesToRadians(45.0f),
-            //    Constants.Width / Constants.Height,
-            //    0.1f, 100.0f);
+            Matrix4 Projection = Matrix4.CreatePerspectiveFieldOfView(
+                    MathHelper.DegreesToRadians(45.0f),
+                Constants.Width / Constants.Height,
+                0.1f, 1000.0f);
 
             //Matrix4 p = Matrix4.CreatePerspectiveOffCenter
 
-            Matrix4 Projection = Matrix4.CreateOrthographic(Constants.Width, Constants.Height, 0.1f, 1000);
+            // Matrix4 Projection = Matrix4.CreateOrthographic(Constants.Width, Constants.Height, 0.1f, 1000);
 
             Vector3 camPos = new Vector3(0f, 0f, 100);
             Vector3 Front= new Vector3(0f, 0f, -1f);
