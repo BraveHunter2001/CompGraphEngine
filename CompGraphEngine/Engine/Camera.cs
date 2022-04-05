@@ -95,7 +95,7 @@ namespace CompGraphEngine.Engine
             Projection.Transpose();
             return Projection;
         }
-        public void updateCumeraVectors()
+        private void updateCumeraVectors()
         {
             Vector3 front = new Vector3();
             front.X = (float)MathHelper.Cos(MathHelper.DegreesToRadians(yaw)) 
@@ -109,6 +109,19 @@ namespace CompGraphEngine.Engine
 
             Right = Vector3.Cross(Front, WorldUp).Normalized();
             Up = Vector3.Cross(Right, Front).Normalized();
+        }
+
+        public void ProcessKeyboard(CameraMovement direction, float deltaTime)
+        {
+            float velocity = Speed * deltaTime;
+            if (direction == CameraMovement.FORWARD)
+                Position += Front * velocity;
+            if (direction == CameraMovement.BACKWARD)
+                Position -= Front * velocity;
+            if (direction == CameraMovement.LEFT)
+                Position -= Right * velocity;
+            if (direction == CameraMovement.RIGHT)
+                Position += Right * velocity;
         }
     }
 }

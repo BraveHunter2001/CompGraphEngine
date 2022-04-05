@@ -47,7 +47,7 @@ namespace CompGraphEngine.Engine.Figure
 
             _indexBuffer = new IndexBuffer(_indices, _indices.Length);
 
-            _shader = new Shader("Shaders/rectangle.glsl");
+            _shader = new Shader("Shaders/circle.glsl");
 
 
             base.Init();
