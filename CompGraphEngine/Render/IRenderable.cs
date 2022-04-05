@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CompGraphEngine.Engine;
+
 
 namespace CompGraphEngine.Render
 {
     public interface IRenderable
     {
-        public void Draw();
+        public void Draw(Camera camera);
     }
 }

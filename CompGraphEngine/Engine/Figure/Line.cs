@@ -86,7 +86,7 @@ namespace CompGraphEngine.Engine.Figure
             }
         }
 
-        public void Draw()
+        public void Draw(Camera camera) // todo delete this shit
         {
             _shader.Use();
             _vertexArray.Bind();

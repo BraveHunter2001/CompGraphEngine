@@ -10,6 +10,7 @@ namespace CompGraphEngine.SceneF
     {
         private Renderer renderer  = new Renderer();
         private List<GameObject> GameObjects = new List<GameObject>();
+        public Camera Camera { get; set; } = new Camera();
         public Scene() { }
         public Scene(List<GameObject> objects)
         {
@@ -32,13 +33,14 @@ namespace CompGraphEngine.SceneF
             foreach (GameObject obj in GameObjects)
                 if (obj.IsInited)
                     obj.Update();
+            //Camera.updateCumeraVectors();
         }
 
         public void Render()
         {
             foreach (GameObject obj in GameObjects)
                 if (obj.IsInited && obj is IRenderable renderable)
-                    renderer.Draw(renderable);
+                    renderer.Draw(renderable, Camera);
             
         }
 

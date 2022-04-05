@@ -1,10 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL4;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using CompGraphEngine.Engine;
+using OpenTK.Graphics.OpenGL4;
 namespace CompGraphEngine.Render
 {
     public class Renderer
@@ -26,9 +21,9 @@ namespace CompGraphEngine.Render
             GL.DrawElements(PrimitiveType.Triangles, ib.GetCount(),DrawElementsType.UnsignedInt, 0);
         }
 
-        public void Draw(IRenderable renderable)
+        public void Draw(IRenderable renderable, Camera camera)
         {
-            renderable.Draw();
+            renderable.Draw(camera);
         }
 
      
