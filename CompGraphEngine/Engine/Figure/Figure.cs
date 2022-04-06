@@ -2,7 +2,7 @@
 
 namespace CompGraphEngine.Engine.Figure
 {
-    public class Figure2D : GameObject
+    public class Figure : GameObject
     {
 
         protected float[,] _vertPoints;

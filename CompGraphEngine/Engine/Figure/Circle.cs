@@ -5,7 +5,7 @@ using System;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    public class Circle : Figure2D, IRenderable
+    public class Circle : Figure, IRenderable
     {
         int[] _indices = { 0, 1, 3, 1, 2, 3 };
         IndexBuffer _indexBuffer;
@@ -91,10 +91,6 @@ namespace CompGraphEngine.Engine.Figure
             }
         }
 
-        public override void Update()
-        {
-            base.Update();
-        }
 
         public void Draw(Camera camera)
         {

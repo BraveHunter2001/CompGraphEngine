@@ -5,7 +5,7 @@ using OpenTK.Mathematics;
 namespace CompGraphEngine.Engine.Figure
 
 {
-    public class Line : Figure2D, IRenderable
+    public class Line : Figure, IRenderable
     {
         private Vector3 point1;
         private Vector3 point2;

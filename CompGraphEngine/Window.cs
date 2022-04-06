@@ -26,14 +26,16 @@ namespace CompGraphEngine
 
            
             base.OnLoad();
+            
             GL.ClearColor(0f, 0f, 0f, 1.0f);
+            GL.Enable(EnableCap.DepthTest);
             
             scene.Init();
         }
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear( ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
 
             
             this.Title =this.MousePosition.ToString();

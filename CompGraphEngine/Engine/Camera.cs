@@ -41,8 +41,8 @@ namespace CompGraphEngine.Engine
             { 
                 if (value > ZOOM)
                     zoom = ZOOM;
-                else if ( value < 0)
-                    zoom = 0;
+                else if ( value < 1)
+                    zoom = 1.0f;
                 else
                     zoom = value;
             }
@@ -54,14 +54,13 @@ namespace CompGraphEngine.Engine
             {
                 
                     pitch = value;
-                //updateCumeraVectors();
+                
             }
         }
         public float Yaw 
         {
             get { return yaw; }
-            set { yaw = value; //updateCumeraVectors();
-                               }
+            set { yaw = value;}
         }
 
         public Camera()
