@@ -28,28 +28,11 @@ in vec3 fCoord;
 out vec4 outputColor;
 
 
-
-
 void main()
 {
-   
+
     vec2 uv =  fCoord.xy;
-
-    float gridSize = 10.0;
-    // width of a line on the screen plus a little bit for AA
-    float width = (gridSize * 1.2);
-
-    // chop up into grid
-    uv = fract(uv * gridSize);
-    // abs version
-    float grid = max(
-        1.0 - abs((uv.y - 0.5) / width),
-        1.0 - abs((uv.x - 0.5) / width)
-    );
-
-    
-    outputColor = vec4(grid, grid, grid, 1.0);
-    
+    outputColor = vec4(uv, 1.0, 1.0);
 
 }
 

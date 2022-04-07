@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Engine.Figure
 {
+
     internal class Surface : Figure, IRenderable
     {
 
 
-        int[] _indices;
+        int[] _indexes;
         IndexBuffer _indexBuffer;
         Matrix4 MVP;
+
         Color4 color = Color4.Red;
 
         public Surface()
@@ -24,56 +26,65 @@ namespace CompGraphEngine.Engine.Figure
         }
         public override void Init()
         {
-            int quadrVector = 3;
-            FillCoordsVertex(quadrVector, quadrVector);
-            FillColorsVertex(quadrVector, quadrVector);
-            _indices = new int[(quadrVector * quadrVector) * 6];
-            for (int i = 0; i < (quadrVector - 1) * (quadrVector - 1); i++)
-            {
-                GenerateIndices(i);
-            }
-             // rect = (row - 1) * (col -1)
-        
+            int row = 4, col = 4;
+            FillCoordsVertex(row - 1, col - 1);
+            FillColorsVertex(row - 1, col - 1);
+
+            GenerateIndices(row, col);
 
 
-            _indexBuffer = new IndexBuffer(_indices, _indices.Length);
+            _indexBuffer = new IndexBuffer(_indexes, _indexes.Length);
             _shader = new Shader("Shaders/surface.glsl");
             base.Init();
         }
 
-        private void GenerateIndices( int index)
+        // this shit
+        private void GenerateIndices(int row, int col)
         {
-            int offsetArrayIndex = 6 * index;
-            int offset = 4 * index;
+            
 
-            // 3, 2, 0, 0, 2, 1        7, 6, 4, 4, 6, 5
-            // Triangle 1
-            _indices[offsetArrayIndex] = offset + 3;
-            _indices[offsetArrayIndex + 1] = offset + 2;
-            _indices[offsetArrayIndex + 2] = offset + 0;
+            List<int> indexes = new List<int>();
+            
+            int t = -1;
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int j = 0; j < col - 1; j++)
+                {
+                    indexes.Add(i * col + j);
+                    indexes.Add(i * col + (j + 1) );
+                    indexes.Add((i + 1) * col + j );
 
-            // Triangle 2
-            _indices[offsetArrayIndex + 3] = offset + 0;
-            _indices[offsetArrayIndex + 4] = offset + 2;
-            _indices[offsetArrayIndex + 5] = offset + 1;
+                    indexes.Add((i + 1) * col + j );
+                    indexes.Add(i * col + (j + 1) );
+                    indexes.Add((i + 1) * col + (j + 1) );
+
+
+                    //_indexes[++t] = i*col + j;
+                    //_indexes[++t] = i*col + (j + 1);
+                    //_indexes[++t] = (i+1)*col + j;
+
+                    //_indexes[++t] = (i + 1)*col + j;
+                    //_indexes[++t] = i * col + (j + 1);
+                    //_indexes[++t] = (i+1) * col + (j + 1);
+                }
+            }
+
+            _indexes = indexes.ToArray();
         }
 
         void FillCoordsVertex(int countRowVert,int  countColVert)
         {
             _vertPoints = new float[countRowVert * countColVert, 3];
-            float offset = 0.0f;
-            int count = 0;
             for (int i = 0; i < countRowVert; i++)
             {
                 for (int j = 0; j < countColVert; j++)
                 {
-                    _vertPoints[count, 0] = new Random().Next(-100, 100) * 0.01f;
-                    _vertPoints[count, 1] = new Random().Next(-100, 100) * 0.01f;
-                    _vertPoints[count, 2] = new Random().Next(-100, 100) * 0.01f;
-                    offset += 0.1f * (countColVert + 1);
-                    count++;
+                    _vertPoints[i + j, 0] = new Random().Next(-100, 100) * 0.01f;
+                    _vertPoints[i + j, 1] = new Random().Next(-100, 100) * 0.01f;
+                    _vertPoints[i + j, 2] = new Random().Next(-100, 100) * 0.01f;
+                    
                 }
-                offset += 0.1f * (countRowVert + 1);
+               
             }
 
         }

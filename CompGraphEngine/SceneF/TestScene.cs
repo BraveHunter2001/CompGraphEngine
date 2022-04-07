@@ -10,15 +10,17 @@ namespace CompGraphEngine.SceneF
         Circle circle;
         Surface surface;
         float radius;
+        float t = 0;
         float x = 0, y = 0;
         public override void Init()
         {
         
             Camera = new Camera();
             Camera.Position = new Vector3(0f, 0, 50);
-            Camera.Speed = 1000f;
+            Camera.Speed = 10f;
+
             surface = new Surface();
-            surface.Transform.Scale = new Vector3(30, 30, 30);
+            surface.Transform.Scale = new Vector3(5, 5, 5);
 
             //circle = new Circle(new Vector3(0f, 0f, 0f), 1f);
             //circle.Transform.Position = new Vector3(0f, 0f, 0f);
@@ -38,11 +40,12 @@ namespace CompGraphEngine.SceneF
             radius = Window.window.MouseState.Scroll.Y;
 
             System.Console.WriteLine($"{Camera.Position} {Camera.Yaw}");
-            Camera.Yaw = -90 + radius;
+           Camera.Yaw = -90 + (-1) * radius;
+           
 
+            
 
-
-
+            t += 0.01f;
             moveCam();
             base.Update();
         }
@@ -50,22 +53,22 @@ namespace CompGraphEngine.SceneF
         void moveCam()
         {
             var state = Window.window.KeyboardState;
-            if (state.IsKeyPressed(Keys.W))
+            if (state.IsKeyDown(Keys.W))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.FORWARD, (float)Window.window.UpdateTime);
                 System.Console.WriteLine("Pressed W");
             }
-            if (state.IsKeyPressed(Keys.A))
+            if (state.IsKeyDown(Keys.A))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.LEFT, (float)Window.window.UpdateTime);
                 System.Console.WriteLine("Pressed A");
             }
-            if (state.IsKeyPressed(Keys.S))
+            if (state.IsKeyDown(Keys.S))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.BACKWARD, (float)Window.window.UpdateTime);
                 System.Console.WriteLine("Pressed S");
             }
-            if (state.IsKeyPressed(Keys.D))
+            if (state.IsKeyDown(Keys.D))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.RIGHT, (float)Window.window.UpdateTime);
                 System.Console.WriteLine("Pressed D");
