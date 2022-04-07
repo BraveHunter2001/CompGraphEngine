@@ -9,7 +9,7 @@ namespace CompGraphEngine.Engine.Figure
     {
         private Vector3 point1;
         private Vector3 point2;
-
+        Matrix4 MVP;
         Color4 color = new Color4(255, 255, 255, 255);
         public Vector3 Point1
         {
@@ -41,12 +41,14 @@ namespace CompGraphEngine.Engine.Figure
 
         public Line(Vector3 point1, Vector3 point2)
         {
+            Transform = new Transform();
             this.point1 = point1;
             this.point2 = point2;
            
         }
         public Line(Vector3 point1, Vector3 point2, Color4 color)
         {
+            Transform = new Transform();
             this.point1 = point1;
             this.point2 = point2;
             this.color = color;
@@ -60,8 +62,7 @@ namespace CompGraphEngine.Engine.Figure
 
             _shader = new Shader("Shaders/line.glsl");
             
-            Matrix4 ortho = Matrix4.CreateOrthographic(Window.window.Size.X, Window.window.Size.Y, -1f, 1f);
-            _shader.SetMatrix4("aMVP",ortho);
+            
             base.Init();
         }
 
@@ -88,6 +89,10 @@ namespace CompGraphEngine.Engine.Figure
 
         public void Draw(Camera camera) // todo delete this shit
         {
+
+            MVP = camera.GetProjection() * camera.GetViewMatrix() * Transform.Model;
+            _shader.SetMatrix4("aMVP", MVP);
+
             _shader.Use();
             _vertexArray.Bind();
 

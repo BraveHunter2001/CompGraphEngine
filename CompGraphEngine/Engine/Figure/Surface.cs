@@ -17,6 +17,7 @@ namespace CompGraphEngine.Engine.Figure
         int[] _indexes;
         IndexBuffer _indexBuffer;
         Matrix4 MVP;
+        float x = 0;
 
         Color4 color = Color4.Red;
 
@@ -26,9 +27,9 @@ namespace CompGraphEngine.Engine.Figure
         }
         public override void Init()
         {
-            int row = 4, col = 4;
-            FillCoordsVertex(row - 1, col - 1);
-            FillColorsVertex(row - 1, col - 1);
+            int row = 6, col = 6;
+            FillCoordsVertex(row, col);
+            FillColorsVertex(row, col);
 
             GenerateIndices(row, col);
 
@@ -56,7 +57,7 @@ namespace CompGraphEngine.Engine.Figure
 
                     indexes.Add((i + 1) * col + j );
                     indexes.Add(i * col + (j + 1) );
-                    indexes.Add((i + 1) * col + (j + 1) );
+                    indexes.Add((i + 1) * col + (j + 1));
 
 
                     //_indexes[++t] = i*col + j;
@@ -70,19 +71,21 @@ namespace CompGraphEngine.Engine.Figure
             }
 
             _indexes = indexes.ToArray();
+          
         }
 
         void FillCoordsVertex(int countRowVert,int  countColVert)
         {
             _vertPoints = new float[countRowVert * countColVert, 3];
+            int t = 0; 
             for (int i = 0; i < countRowVert; i++)
             {
                 for (int j = 0; j < countColVert; j++)
                 {
-                    _vertPoints[i + j, 0] = new Random().Next(-100, 100) * 0.01f;
-                    _vertPoints[i + j, 1] = new Random().Next(-100, 100) * 0.01f;
-                    _vertPoints[i + j, 2] = new Random().Next(-100, 100) * 0.01f;
-                    
+                    _vertPoints[t, 0] = i * 1.0f;
+                    _vertPoints[t, 1] =  1;
+                    _vertPoints[t, 2] = j * 1.0f;
+                    t++;
                 }
                
             }
@@ -112,10 +115,12 @@ namespace CompGraphEngine.Engine.Figure
             MVP = camera.GetProjection() * camera.GetViewMatrix() * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
+            _shader.SetVector2("aRes", Window.window.Size);
+            _shader.SetFloat("vTime", x);
             _shader.Use();
             _vertexArray.Bind();
             _indexBuffer.Bind();
-
+            x++;
             GL.DrawElements(PrimitiveType.Triangles, _indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
         }
     }

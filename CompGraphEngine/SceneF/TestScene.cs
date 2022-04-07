@@ -14,13 +14,17 @@ namespace CompGraphEngine.SceneF
         float x = 0, y = 0;
         public override void Init()
         {
-        
+            //AddObjectToScene(new Line(new Vector3(0, 0, 0), new Vector3(1000, 0, 0), Color4.Red));
+           // AddObjectToScene(new Line(new Vector3(0, 0, 0), new Vector3(0, 1000, 0), Color4.Yellow));
+            //AddObjectToScene(new Line(new Vector3(0, 0, 0), new Vector3(0, 0, 1000), Color4.Blue));
+
             Camera = new Camera();
             Camera.Position = new Vector3(0f, 0, 50);
             Camera.Speed = 10f;
 
             surface = new Surface();
-            surface.Transform.Scale = new Vector3(5, 5, 5);
+            surface.Transform.Scale = new Vector3(5f, 5f, 5f);
+            surface.Transform.Rotation = new Vector3(10, 0, 0);
 
             //circle = new Circle(new Vector3(0f, 0f, 0f), 1f);
             //circle.Transform.Position = new Vector3(0f, 0f, 0f);
@@ -39,13 +43,12 @@ namespace CompGraphEngine.SceneF
 
             radius = Window.window.MouseState.Scroll.Y;
 
-            System.Console.WriteLine($"{Camera.Position} {Camera.Yaw}");
-           Camera.Yaw = -90 + (-1) * radius;
-           
+            //System.Console.WriteLine($"{Camera.Position} {Camera.Yaw}");
+           //Camera.Pitch = radius;
+            Camera.Yaw = -90  + radius;
+
 
             
-
-            t += 0.01f;
             moveCam();
             base.Update();
         }
