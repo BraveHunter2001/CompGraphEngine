@@ -29,7 +29,7 @@ namespace CompGraphEngine
             
             GL.ClearColor(0f, 0f, 0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
-            
+            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             scene.Init();
         }
         protected override void OnRenderFrame(FrameEventArgs args)

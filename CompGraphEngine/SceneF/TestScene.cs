@@ -8,6 +8,7 @@ namespace CompGraphEngine.SceneF
     {
 
         Circle circle;
+        Surface surface;
         float radius;
         float x = 0, y = 0;
         public override void Init()
@@ -16,15 +17,18 @@ namespace CompGraphEngine.SceneF
             Camera = new Camera();
             Camera.Position = new Vector3(0f, 0, 50);
             Camera.Speed = 1000f;
+            surface = new Surface();
+            surface.Transform.Scale = new Vector3(30, 30, 30);
 
-            circle = new Circle(new Vector3(0f, 0f, 0f), 1f);
-            circle.Transform.Position = new Vector3(0f, 0f, 0f);
-            circle.Transform.Scale = new Vector3(5f, 5f, 5f);
-            circle.Transform.Rotation = new Vector3(0f, 50, 0);
+            //circle = new Circle(new Vector3(0f, 0f, 0f), 1f);
+            //circle.Transform.Position = new Vector3(0f, 0f, 0f);
+            //circle.Transform.Scale = new Vector3(5f, 5f, 5f);
+            //circle.Transform.Rotation = new Vector3(0f, 50, 0);
 
 
-            AddObjectToScene(circle);
-            AddObjectToScene(new Circle(new Vector3(0, 0, 1), Color4.Yellow));
+            //AddObjectToScene(circle);
+            //AddObjectToScene(new Circle(new Vector3(0, 0, 1), Color4.Yellow));
+            AddObjectToScene(surface);
 
             base.Init();
         }
@@ -34,7 +38,7 @@ namespace CompGraphEngine.SceneF
             radius = Window.window.MouseState.Scroll.Y;
 
             System.Console.WriteLine($"{Camera.Position} {Camera.Yaw}");
-            //Camera.Yaw = -90 / radius;
+            Camera.Yaw = -90 + radius;
 
 
 
