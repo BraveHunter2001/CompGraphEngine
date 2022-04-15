@@ -7,33 +7,27 @@ namespace CompGraphEngine.SceneF
     internal class TestScene : Scene
     {
 
-        Circle circle;
+       
         Surface surface;
-        float radius;
-        float t = 0;
+       
         float x = 0, y = 0;
+
+        public TestScene(Window window) : base(window)
+        {
+        }
+
         public override void Init()
         {
-            //AddObjectToScene(new Line(new Vector3(0, 0, 0), new Vector3(1000, 0, 0), Color4.Red));
-           // AddObjectToScene(new Line(new Vector3(0, 0, 0), new Vector3(0, 1000, 0), Color4.Yellow));
-            //AddObjectToScene(new Line(new Vector3(0, 0, 0), new Vector3(0, 0, 1000), Color4.Blue));
+           
 
             Camera = new Camera();
             Camera.Position = new Vector3(0f, 0, 50);
             Camera.Speed = 10f;
 
             surface = new Surface();
-            surface.Transform.Scale = new Vector3(5f, 5f, 5f);
+            surface.Transform.Scale = new Vector3(0.1f,0.1f, 0.1f);
             surface.Transform.Rotation = new Vector3(10, 0, 0);
 
-            //circle = new Circle(new Vector3(0f, 0f, 0f), 1f);
-            //circle.Transform.Position = new Vector3(0f, 0f, 0f);
-            //circle.Transform.Scale = new Vector3(5f, 5f, 5f);
-            //circle.Transform.Rotation = new Vector3(0f, 50, 0);
-
-
-            //AddObjectToScene(circle);
-            //AddObjectToScene(new Circle(new Vector3(0, 0, 1), Color4.Yellow));
             AddObjectToScene(surface);
 
             base.Init();
@@ -41,12 +35,13 @@ namespace CompGraphEngine.SceneF
         public override void Update()
         {
 
-            radius = Window.window.MouseState.Scroll.Y;
+            x = window.MouseState.X;
+            y = window.MouseState.Y;
 
-            //System.Console.WriteLine($"{Camera.Position} {Camera.Yaw}");
-           //Camera.Pitch = radius;
-            Camera.Yaw = -90  + radius;
+          Camera.Yaw =  -90 + x / 10f;
+          Camera.Pitch = (-1) * y / 10f;
 
+            //surface.Transform.Rotation += new Vector3(0.1f, 0, 0);
 
             
             moveCam();
@@ -55,25 +50,25 @@ namespace CompGraphEngine.SceneF
 
         void moveCam()
         {
-            var state = Window.window.KeyboardState;
+            var state = window.KeyboardState;
             if (state.IsKeyDown(Keys.W))
             {
-                Camera.ProcessKeyboard(Camera.CameraMovement.FORWARD, (float)Window.window.UpdateTime);
+                Camera.ProcessKeyboard(Camera.CameraMovement.FORWARD, (float)window.UpdateTime);
                 System.Console.WriteLine("Pressed W");
             }
             if (state.IsKeyDown(Keys.A))
             {
-                Camera.ProcessKeyboard(Camera.CameraMovement.LEFT, (float)Window.window.UpdateTime);
+                Camera.ProcessKeyboard(Camera.CameraMovement.LEFT, (float)window.UpdateTime);
                 System.Console.WriteLine("Pressed A");
             }
             if (state.IsKeyDown(Keys.S))
             {
-                Camera.ProcessKeyboard(Camera.CameraMovement.BACKWARD, (float)Window.window.UpdateTime);
+                Camera.ProcessKeyboard(Camera.CameraMovement.BACKWARD, (float)window.UpdateTime);
                 System.Console.WriteLine("Pressed S");
             }
             if (state.IsKeyDown(Keys.D))
             {
-                Camera.ProcessKeyboard(Camera.CameraMovement.RIGHT, (float)Window.window.UpdateTime);
+                Camera.ProcessKeyboard(Camera.CameraMovement.RIGHT, (float)window.UpdateTime);
                 System.Console.WriteLine("Pressed D");
             }
 

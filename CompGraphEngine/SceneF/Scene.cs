@@ -8,12 +8,15 @@ namespace CompGraphEngine.SceneF
 {
     public class Scene
     {
+        public readonly Window window;
+
         private Renderer renderer  = new Renderer();
         private List<GameObject> GameObjects = new List<GameObject>();
         public Camera Camera { get; set; } = new Camera();
-        public Scene() { }
-        public Scene(List<GameObject> objects)
+        public Scene(Window window) { this.window = window; }
+        public Scene(Window window, List<GameObject> objects)
         {
+            this.window = window;
             renderer = new Renderer();
             foreach (GameObject o in objects)
                 AddObjectToScene(o);

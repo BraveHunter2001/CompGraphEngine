@@ -1,4 +1,5 @@
 ﻿using CompGraphEngine.Render;
+using System;
 
 namespace CompGraphEngine.Engine.Figure
 {
@@ -36,12 +37,15 @@ namespace CompGraphEngine.Engine.Figure
             _vertexArray.AddLayout(ref _pointBuffer, ref _layoutPos, 0);
             _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
             IsInited = true;
-        }
+
+            _vertPoints = null;
+            _vertColors = null;
+            GC.Collect();
+    }
 
         public override void Update()
         {
-           // _pointBuffer.BufferSubData(Make1DArray(_vertPoints));
-            _pointBuffer.BufferSubData(Make1DArray(_vertColors));
+           
         }
 
         private float[] Make1DArray(float[,] arr)

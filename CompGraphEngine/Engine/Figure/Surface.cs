@@ -17,8 +17,7 @@ namespace CompGraphEngine.Engine.Figure
         int[] _indexes;
         IndexBuffer _indexBuffer;
         Matrix4 MVP;
-        float x = 0;
-
+        
         Color4 color = Color4.Red;
 
         public Surface()
@@ -27,7 +26,7 @@ namespace CompGraphEngine.Engine.Figure
         }
         public override void Init()
         {
-            int row = 6, col = 6;
+            int row = 1000, col = 1000;
             FillCoordsVertex(row, col);
             FillColorsVertex(row, col);
 
@@ -36,7 +35,10 @@ namespace CompGraphEngine.Engine.Figure
 
             _indexBuffer = new IndexBuffer(_indexes, _indexes.Length);
             _shader = new Shader("Shaders/surface.glsl");
+
+            _indexes = null;
             base.Init();
+            
         }
 
         // this shit
@@ -83,7 +85,7 @@ namespace CompGraphEngine.Engine.Figure
                 for (int j = 0; j < countColVert; j++)
                 {
                     _vertPoints[t, 0] = i * 1.0f;
-                    _vertPoints[t, 1] =  1;
+                    _vertPoints[t, 1] = new Random().Next(-10, 100) * 0.01f; ;
                     _vertPoints[t, 2] = j * 1.0f;
                     t++;
                 }
@@ -115,12 +117,12 @@ namespace CompGraphEngine.Engine.Figure
             MVP = camera.GetProjection() * camera.GetViewMatrix() * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
-            _shader.SetVector2("aRes", Window.window.Size);
-            _shader.SetFloat("vTime", x);
+            
+            //_shader.SetFloat("vTime", (float)Window.window.UpdateTime);
             _shader.Use();
             _vertexArray.Bind();
             _indexBuffer.Bind();
-            x++;
+           
             GL.DrawElements(PrimitiveType.Triangles, _indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
         }
     }

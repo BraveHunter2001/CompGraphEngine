@@ -6,19 +6,21 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace CompGraphEngine
 {
-    internal class Window : GameWindow
+    public class Window : GameWindow
     {
-        public float DeltaTime;
-        private float LastFrame;
-        Scene scene;
-        public static Window window { get; private set; }  
       
-
+        Scene scene;
+       
+      
+        public Window GetWindow()
+        {
+            return this;
+        }
 
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
-            window = this;
-            scene = new TestScene();
+          
+            scene = new TestScene(this);
         }
 
         protected override void OnLoad()
@@ -29,7 +31,7 @@ namespace CompGraphEngine
             
             GL.ClearColor(0f, 0f, 0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
-            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             scene.Init();
         }
@@ -39,15 +41,13 @@ namespace CompGraphEngine
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
 
             
-            this.Title =this.MousePosition.ToString();
+            
             scene.Render();
             SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            float curTime = (float)window.UpdateTime;
-            DeltaTime = curTime  - LastFrame;
-            LastFrame = curTime;
+            this.Title = (1 / UpdateTime).ToString();
 
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {
