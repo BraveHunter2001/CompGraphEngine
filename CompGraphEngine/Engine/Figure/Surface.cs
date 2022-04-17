@@ -114,7 +114,7 @@ namespace CompGraphEngine.Engine.Figure
         }
         public void Draw(Camera camera)
         {
-            MVP = camera.GetProjection() * camera.GetViewMatrix() * Transform.Model;
+            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
             

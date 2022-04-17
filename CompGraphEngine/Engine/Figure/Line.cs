@@ -90,7 +90,7 @@ namespace CompGraphEngine.Engine.Figure
         public void Draw(Camera camera) // todo delete this shit
         {
 
-            MVP = camera.GetProjection() * camera.GetViewMatrix() * Transform.Model;
+            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
             _shader.SetMatrix4("aMVP", MVP);
 
             _shader.Use();

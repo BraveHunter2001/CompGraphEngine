@@ -96,7 +96,7 @@ namespace CompGraphEngine.Engine.Figure
         {
            
         
-            MVP = camera.GetProjection() * camera.GetViewMatrix() * Transform.Model;
+            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
             _shader.SetFloat("aThickness",thickness);
