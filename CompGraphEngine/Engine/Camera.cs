@@ -85,12 +85,19 @@ namespace CompGraphEngine.Engine
             return view;
         }
 
-        public Matrix4 GetProjection()
+        public Matrix4 GetProjection3D()
         {
             Matrix4 Projection = Matrix4.CreatePerspectiveFieldOfView(
                    MathHelper.DegreesToRadians(Zoom),
                Constants.Width / Constants.Height,
                0.1f, 1000.0f);
+            Projection.Transpose();
+            return Projection;
+        }
+
+        public Matrix4 GetProjection2D(float width, float height)
+        {
+            Matrix4 Projection = Matrix4.CreateOrthographic(width, height, 0.1f, 1000);
             Projection.Transpose();
             return Projection;
         }
