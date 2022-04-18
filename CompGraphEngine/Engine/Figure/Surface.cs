@@ -26,7 +26,7 @@ namespace CompGraphEngine.Engine.Figure
         }
         public override void Init()
         {
-            int row = 1000, col = 1000;
+            int row = 10, col = 10;
             FillCoordsVertex(row, col);
             FillColorsVertex(row, col);
 
@@ -79,17 +79,18 @@ namespace CompGraphEngine.Engine.Figure
         void FillCoordsVertex(int countRowVert,int  countColVert)
         {
             _vertPoints = new float[countRowVert * countColVert, 3];
-            int t = 0; 
+            int t = 0;
+            int si = 0;
             for (int i = 0; i < countRowVert; i++)
             {
                 for (int j = 0; j < countColVert; j++)
                 {
                     _vertPoints[t, 0] = i * 1.0f;
-                    _vertPoints[t, 1] = new Random().Next(-10, 100) * 0.01f; ;
+                    _vertPoints[t, 1] = (float)MathHelper.Sin(Math.PI / 8 * i) * (float)MathHelper.Sin(Math.PI / 8 * j) * 5f;
                     _vertPoints[t, 2] = j * 1.0f;
                     t++;
                 }
-               
+                si++;
             }
 
         }
@@ -112,13 +113,19 @@ namespace CompGraphEngine.Engine.Figure
             }
 
         }
+
+        public void updateTime(float time)
+        {
+            _shader.SetFloat("vTime", time);
+        }
+
         public void Draw(Camera camera)
         {
             MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
             
-            //_shader.SetFloat("vTime", (float)Window.window.UpdateTime);
+            
             _shader.Use();
             _vertexArray.Bind();
             _indexBuffer.Bind();

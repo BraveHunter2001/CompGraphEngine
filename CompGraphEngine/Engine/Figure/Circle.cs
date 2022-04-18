@@ -15,30 +15,25 @@ namespace CompGraphEngine.Engine.Figure
         // dont touch this shit
         Vector3 center = Vector3.Zero;
         float radius = 1f;
-        Color4 color = new Color4(255, 255, 255, 255);
+        Color4 color = Color4.Blue;
         float thickness = 1;
         
         public float Thickness { get => thickness; set => thickness = value; }
 
+        public Circle()
+        {
+            Transform = new Transform();
+        }
+        public Circle(Vector3 center)
+        {
+            Transform = new Transform();
+            Transform.Position = center;
+        }
         public Circle(Transform transform)
         {
             Transform = transform;
-            transform.Position = center;
         }
 
-        public Circle(Vector3 center, float radius = 1, float thickness = 1)
-        {
-            Transform = new Transform();
-            Transform.Position = center;
-            this.thickness = thickness;
-        }
-        public Circle(Vector3 center, Color4 color, float radius = 1, float thickness = 1)
-        {
-            Transform = new Transform();
-            Transform.Position = center;
-            this.color = color;
-            this.thickness = thickness;
-        }
 
         public override void Init()
         {

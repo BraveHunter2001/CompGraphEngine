@@ -9,8 +9,10 @@ namespace CompGraphEngine.SceneF
 
        
         Surface surface;
-       
-        float x = 0, y = 0;
+        Circle circle;
+        BSpline bSpline;
+
+        float x = 0, y = 0, t = 0;
 
         public TestScene(Window window) : base(window)
         {
@@ -18,17 +20,34 @@ namespace CompGraphEngine.SceneF
 
         public override void Init()
         {
-           
-
+            
             Camera = new Camera();
             Camera.Position = new Vector3(0f, 0, 50);
             Camera.Speed = 10f;
 
             surface = new Surface();
-            surface.Transform.Scale = new Vector3(0.1f,0.1f, 0.1f);
+            surface.Transform.Scale = new Vector3(2f);
             surface.Transform.Rotation = new Vector3(10, 0, 0);
 
-            AddObjectToScene(surface);
+            bSpline = new BSpline();
+            bSpline.Transform.Scale = new Vector3(1);
+
+            foreach( var cp in bSpline.ControlPoints)
+            {
+                cp.Transform.Scale = new Vector3(0.01f);
+                AddObjectToScene(cp);
+            }
+
+            AddObjectToScene(bSpline);
+
+            // circle = new Circle(new Transform());
+            // circle.Transform.Scale = new Vector3(10);
+
+             //AddObjectToScene(surface);
+            AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
+            AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
+            AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
+            // AddObjectToScene(circle);
 
             base.Init();
         }
@@ -41,9 +60,9 @@ namespace CompGraphEngine.SceneF
           Camera.Yaw =  -90 + x / 10f;
           Camera.Pitch = (-1) * y / 10f;
 
-            //surface.Transform.Rotation += new Vector3(0.1f, 0, 0);
-
             
+           // surface.updateTime(t % 360);
+            t += 0.01f;
             moveCam();
             base.Update();
         }

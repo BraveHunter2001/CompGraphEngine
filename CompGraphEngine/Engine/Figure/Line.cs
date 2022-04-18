@@ -96,19 +96,14 @@ namespace CompGraphEngine.Engine.Figure
             _shader.Use();
             _vertexArray.Bind();
 
-          GL.Enable(EnableCap.LineSmooth);
-            GL.DrawArrays(PrimitiveType.Lines, 0, _vertPoints.GetLength(0));
+            GL.Enable(EnableCap.LineSmooth);
+           GL.DrawArrays(PrimitiveType.Lines, 0, _vertPoints.GetLength(0));
            GL.Disable(EnableCap.LineSmooth);
             
         }
         public override void Update()
         {
-            //Update points
-            for (int i = 0; i < 3; i++)
-            {
-                _vertPoints[0, i] = point1[i];
-                _vertPoints[1, i] = point2[i];
-            }
+         
             
             
 

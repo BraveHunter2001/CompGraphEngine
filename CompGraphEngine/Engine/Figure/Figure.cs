@@ -31,16 +31,16 @@ namespace CompGraphEngine.Engine.Figure
 
 
 
-            _layoutPos.Push<float>(_vertPoints.GetLength(1), true);
-            _layoutCol.Push<float>(_vertColors.GetLength(1), true);
+            _layoutPos.Push<float>(_vertPoints.GetLength(1), false);
+            _layoutCol.Push<float>(_vertColors.GetLength(1), false);
 
             _vertexArray.AddLayout(ref _pointBuffer, ref _layoutPos, 0);
             _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
             IsInited = true;
 
-            _vertPoints = null;
-            _vertColors = null;
-            GC.Collect();
+           // _vertPoints = null;
+           // _vertColors = null;
+           // GC.Collect();
     }
 
         public override void Update()

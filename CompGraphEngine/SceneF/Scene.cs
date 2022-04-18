@@ -26,7 +26,7 @@ namespace CompGraphEngine.SceneF
         {
 
             foreach(GameObject obj in GameObjects)
-                if(!obj.IsInited)
+                if(obj != null && !obj.IsInited)
                     obj.Init();
         }
 
@@ -34,7 +34,7 @@ namespace CompGraphEngine.SceneF
         {
 
             foreach (GameObject obj in GameObjects)
-                if (obj.IsInited)
+                if (obj != null && obj.IsInited)
                     obj.Update();
             //Camera.updateCumeraVectors();
         }
@@ -42,7 +42,7 @@ namespace CompGraphEngine.SceneF
         public void Render()
         {
             foreach (GameObject obj in GameObjects)
-                if (obj.IsInited && obj is IRenderable renderable)
+                if (obj != null && obj.IsInited && obj is IRenderable renderable)
                     renderer.Draw(renderable, Camera);
             
         }
