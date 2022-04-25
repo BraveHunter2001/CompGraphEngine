@@ -1,41 +1,51 @@
 ﻿using CompGraphEngine.Engine;
 using CompGraphEngine.Engine.Figure;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace CompGraphEngine.SceneF
 {
-    internal class TestScene : Scene
+    internal class SurfaceScene : Scene
     {
-
-
-        Surface surface;
-        Circle circle;
-        BSpline bSpline;
-
-        float x = 0, y = 0, t = 0;
-
-        public TestScene(Window window) : base(window)
+        public SurfaceScene(Window window) : base(window)
         {
-            window.MouseDown += PressedMouse;
-            window.MouseUp += Realised;
         }
-
+        Surface surface;
+        float x, y, t;
         public override void Init()
         {
 
             Camera = new Camera();
-            Camera.Position = new Vector3(0f, 0, 0);
+            Camera.Position = new Vector3(0f, 0, 5);
             Camera.Speed = 10f;
 
+            surface = new Surface();
+            surface.Transform.Scale = new Vector3(2f);
+            surface.Transform.Rotation = new Vector3(10, 0, 0);
+
+            //bSpline = new BSpline();
+            //bSpline.Transform.Scale = new Vector3(1);
+
+            //foreach( var cp in bSpline.ControlPoints)
+            //{
+            //    cp.Transform.Scale = new Vector3(0.01f);
+            //    AddObjectToScene(cp);
+            //}
+
+            //AddObjectToScene(bSpline);
+
+
+             AddObjectToScene(surface);
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
 
-            circle = new Circle();
-            circle.Transform.Position = new Vector3(0, 0, 0);
-            AddObjectToScene(circle);
+            
 
             base.Init();
         }
@@ -45,15 +55,13 @@ namespace CompGraphEngine.SceneF
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
-            //Camera.Yaw =  -90 + x / 10f;
-            //Camera.Pitch = (-1) * y / 10f;
-            circle.Transform.Position = new Vector3(0,5 , 0);
+            Camera.Yaw =  -90 + x / 10f;
+            Camera.Pitch = (-1) * y / 10f;
 
-            System.Console.WriteLine(Renderer.GetWindowPosObj(circle, Camera));
-            System.Console.WriteLine(window.MouseState.Position);
-          
+           
+            surface.updateTime(t % 360);
 
-            //t += 0.001f;
+            t += 0.1f;
             moveCam();
             base.Update();
         }
@@ -84,28 +92,5 @@ namespace CompGraphEngine.SceneF
 
         }
 
-        void PressedMouse(MouseButtonEventArgs arg)
-        {
-
-            if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
-            {
-                 System.Console.WriteLine("Pressed");
-              
-
-
-                if (MathHelper.Abs(circle.Transform.Position.X - window.MouseState.Position.X) <= circle.Transform.Scale.X)
-                {
-                    System.Console.WriteLine("Popal");
-                }
-            }
-        }
-
-        void Realised(MouseButtonEventArgs arg)
-        {
-            if (arg.Action == InputAction.Release && arg.Button == MouseButton.Left)
-            {
-                // System.Console.WriteLine("Relize");
-            }
-        }
     }
 }

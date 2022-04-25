@@ -15,7 +15,9 @@ namespace CompGraphEngine.Engine.Figure
         List<int> Knots;
         public List<Circle> ControlPoints;
         List<List<float>> coefs;
-        int degree = 1, offset= 1000, controlSize= 10;
+
+        int degree = 3, offset= 1000, controlSize = 5;
+
         public BSpline()
         {
             Transform = new Transform();
@@ -46,7 +48,7 @@ namespace CompGraphEngine.Engine.Figure
             _vertexArray.Bind();
 
             GL.Enable(EnableCap.LineSmooth);
-            GL.DrawArrays(PrimitiveType.Lines, 0, _vertPoints.GetLength(0));
+            GL.DrawArrays(PrimitiveType.LineStrip, 0, _vertPoints.GetLength(0));
             GL.Disable(EnableCap.LineSmooth);
         }
 
@@ -89,8 +91,6 @@ namespace CompGraphEngine.Engine.Figure
 
 
         }
-
-
 
         private float GenerateN(int degree, int control, List<int> knots, float t)
         {

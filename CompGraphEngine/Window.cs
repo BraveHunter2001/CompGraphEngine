@@ -9,7 +9,7 @@ namespace CompGraphEngine
     public class Window : GameWindow
     {
       
-        Scene scene;
+        Scene scene, surface;
        
       
         public Window GetWindow()
@@ -21,6 +21,7 @@ namespace CompGraphEngine
         {
           
             scene = new TestScene(this);
+            surface = new SurfaceScene(this);
         }
 
         protected override void OnLoad()
@@ -31,9 +32,10 @@ namespace CompGraphEngine
             
             GL.ClearColor(0f, 0f, 0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
-            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+           // GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             scene.Init();
+            //surface.Init();
         }
         protected override void OnRenderFrame(FrameEventArgs args)
         {
@@ -41,20 +43,21 @@ namespace CompGraphEngine
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
 
             
-            
             scene.Render();
+            //surface.Render();
             SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             this.Title = (1 / UpdateTime).ToString();
+            //this.Title = MouseState.Position.ToString();
 
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {
                 Close();
             }
-
             scene.Update();
+           // surface.Update();
             base.OnUpdateFrame(args);
         }
 

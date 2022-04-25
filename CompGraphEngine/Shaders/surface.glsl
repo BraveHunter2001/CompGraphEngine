@@ -40,9 +40,10 @@ out vec4 outputColor;
 void main()
 {
 
-    vec2 uv =  fCoord.xz - 1;
+    vec2 uv =  fCoord.xz;
+    
 
-    outputColor = vec4(uv, 1.0, 1.0);
+    outputColor = vec4(uv, fCoord.y, 1.0);
 
 }
 

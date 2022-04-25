@@ -24,6 +24,7 @@ namespace CompGraphEngine.Engine.Figure
         {
             _pointBuffer = new VertexBuffer(Make1DArray(_vertPoints), sizeof(float) * _vertPoints.Length);
             _colorBuffer = new VertexBuffer(Make1DArray(_vertColors), sizeof(float) * _vertColors.Length);
+            
             _vertexArray = new VertexArray();
             _layoutPos = new VertexBufferLayout();
             _layoutCol = new VertexBufferLayout();

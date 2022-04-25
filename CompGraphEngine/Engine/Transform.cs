@@ -28,6 +28,15 @@ namespace CompGraphEngine.Engine
                 TranslatePosition(value);
             }
         }
+        public Vector4 PositionVec4
+        {
+            get { return position; }
+            set
+            {
+                position= value;
+                
+            }
+        }
         public Vector3 Rotation
         {
             get { return rotation; }

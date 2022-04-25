@@ -9,7 +9,7 @@ namespace CompGraphEngine.Engine.Figure
     {
         int[] _indices = { 0, 1, 3, 1, 2, 3 };
         IndexBuffer _indexBuffer;
-        Matrix4 MVP;
+        public Matrix4 MVP;
 
         // this fucking local data
         // dont touch this shit
