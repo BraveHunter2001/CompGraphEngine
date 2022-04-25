@@ -1,4 +1,6 @@
-﻿using OpenTK.Mathematics;
+﻿using CompGraphEngine.Render;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +9,150 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    internal class BSurface: Surface
+    internal class BSurface: Surface, IRenderable
     {
-        List<int> Knots;
-        public List<Circle> ControlPoints;
-        List<List<float>> coefs;
-        int degree = 3, offset = 1000, controlSize = 10;
+        int[] _indexes;
+        IndexBuffer _indexBuffer;
+        Matrix4 MVP;
+        Color4 color = Color4.Red;
+
+        List<int> KnotsT;
+        List<int> KnotsU;
+
+        public List<List<Circle>> ControlPoints;
+
+
+        public List<List<List<List<float>>>> coefs;
+
+
+
+
+
+        int degree = 3, offset = 10, controlSizeT = 5, controlSizeU = 5;
         public BSurface()
         {
             Transform = new Transform();
 
-            ControlPoints = GenerateRandomControlPoints(controlSize);
+            ControlPoints = GenerateRandomControlPoints();
 
-            Knots = GenerateKnots(degree, ControlPoints.Count);
-            coefs = GenerateCoef(controlSize, offset, degree, Knots);
+            KnotsT = GenerateKnots(degree, controlSizeT);
+            KnotsU = GenerateKnots(degree, controlSizeU);
+
+            coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
+
+            FillCoordsVertex();
+            FillColorsVertex();
+            GenerateIndices(KnotsT[degree + controlSizeT] * offset, KnotsU[degree + controlSizeU] * offset);
         }
+
+        public override void Init()
+        {
+            _indexBuffer = new IndexBuffer(_indexes, _indexes.Length);
+            _shader = new Shader("Shaders/surface.glsl");
+
+            _indexes = null;
+            base.Init();
+        }
+        public void Draw(Camera camera)
+        {
+            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
+
+            _shader.SetMatrix4("aMVP", MVP);
+
+
+            _shader.Use();
+            _vertexArray.Bind();
+            _indexBuffer.Bind();
+
+            GL.DrawElements(PrimitiveType.Triangles, _indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
+        }
+        private void GenerateIndices(int row, int col)
+        {
+
+
+            List<int> indexes = new List<int>();
+
+            int t = -1;
+            for (int i = 0; i < row-1; i++)
+            {
+                for (int j = 0; j < col-1; j++)
+                {
+                    indexes.Add(i * col + j);
+                    indexes.Add(i * col + (j + 1));
+                    indexes.Add((i + 1) * col + j);
+
+                    indexes.Add((i + 1) * col + j);
+                    indexes.Add(i * col + (j + 1));
+                    indexes.Add((i + 1) * col + (j + 1));
+
+
+                    //_indexes[++t] = i*col + j;
+                    //_indexes[++t] = i*col + (j + 1);
+                    //_indexes[++t] = (i+1)*col + j;
+
+                    //_indexes[++t] = (i + 1)*col + j;
+                    //_indexes[++t] = i * col + (j + 1);
+                    //_indexes[++t] = (i+1) * col + (j + 1);
+                }
+            }
+
+            _indexes = indexes.ToArray();
+
+        }
+
+        void FillCoordsVertex()
+        {
+            int size = KnotsT[degree + controlSizeT] * offset
+                * KnotsU[degree + controlSizeU] * offset;
+            _vertPoints = new float[size, 3];
+            int shift = 0;
+           
+            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset; t++)
+            {
+                for (int u = 0; u < KnotsU[degree + controlSizeU] * offset; u++)
+                {
+                    for (int controlT = 0; controlT < controlSizeT; controlT++)
+                    {
+                        for (int controlU = 0; controlU < controlSizeU; controlU++)
+                        {
+                            _vertPoints[shift, 0] += ControlPoints[controlT][controlU].Transform.Position.X
+                                * coefs[t][u][controlT][controlU];
+                            _vertPoints[shift, 1] += ControlPoints[controlT][controlU].Transform.Position.Y 
+                                * coefs[t][u][controlT][controlU];
+                            _vertPoints[shift, 2] += ControlPoints[controlT][controlU].Transform.Position.Z 
+                                * coefs[t][u][controlT][controlU];
+                            
+                        }
+                    }
+                    shift++;
+                }
+               
+            }
+
+        }
+        void FillColorsVertex()
+        {
+            int size = KnotsT[degree + controlSizeT] * offset
+                * KnotsU[degree + controlSizeU] * offset;
+            _vertColors = new float[size, 4];
+            int count = 0;
+
+            for (int i = 0; i < KnotsT[degree + controlSizeT] * offset; i++)
+            {
+                for (int j = 0; j < KnotsU[degree + controlSizeU] * offset; j++)
+                {
+                    _vertColors[count, 0] = color.R;
+                    _vertColors[count, 1] = color.G;
+                    _vertColors[count, 2] = color.B;
+                    _vertColors[count, 3] = color.A;
+                    count++;
+                }
+
+            }
+
+        }
+
+
         private float GenerateN(int degree, int control, List<int> knots, float t)
         {
             if (degree == 0)
@@ -57,37 +188,58 @@ namespace CompGraphEngine.Engine.Figure
             return knots;
         }
 
-        private List<List<float>> GenerateCoef(int controlSize, int offset, int degree, List<int> knots)
+        private List<List<List<List<float>>>> GenerateCoef(int controlSizeT, int controlSizeU,
+            int offset, int degree,
+            List<int> knotsT, List<int> knotsU)
         {
-            List<List<float>> res = new List<List<float>>();
+            List<List<List<List<float>>>> res = new List<List<List<List<float>>>>();
+            float coef = 0;
 
-            for (int t = 0; t < knots[degree + controlSize] * offset; ++t)
+            for (int t = 0; t < knotsT[degree + controlSizeT] * offset; ++t)
             {
-                List<float> coefForControls = new List<float>();
-                for (int control = 0; control < controlSize; ++control)
+                List<List<List<float>>> resKnotU = new List<List<List<float>>>();
+                for (int u = 0; u < knotsU[degree + controlSizeU] * offset; ++u)
                 {
-                    coefForControls.Add(GenerateN(degree, control, knots, t * 1.0f / offset));
+                    List<List<float>> resControlT = new List<List<float>>();
+                    for (int controlT = 0; controlT < controlSizeT; ++controlT)
+                    {
+                        List<float> r = new List<float>();
+                        for (int controlU = 0; controlU < controlSizeU; ++controlU)
+                        {
+                            coef = GenerateN(degree, controlT, knotsT, t * 1.0f / offset)
+                            * GenerateN(degree, controlU, knotsU, u * 1.0f / offset);
+                            r.Add(coef);
+                        }
+                        resControlT.Add(r);
+                    }
+                    resKnotU.Add(resControlT);
                 }
-                res.Add(coefForControls);
+                res.Add(resKnotU);
             }
 
             return res;
         }
 
-        private List<Circle> GenerateRandomControlPoints(int controlSize)
+        private List<List<Circle>> GenerateRandomControlPoints()
         {
-            List<Circle> res = new List<Circle>();
-            for (int i = 0; i < controlSize; ++i)
+            List<List<Circle>> res = new List<List<Circle>>();
+            for (int i = 0; i < controlSizeT; ++i)
             {
-                Vector3 center = new Vector3();
-                center.X = new Random().Next(0, 100) * 0.01f * i;
-                center.Y = new Random().Next(0, 100) * 0.01f * i;
-                center.Z = new Random().Next(0, 100) * 0.01f * i;
-                Circle c = new Circle(center);
+                List<Circle> resT = new List<Circle>();
+                for (int j = 0; j < controlSizeU; ++j)
+                {
+                    Vector3 center = new Vector3();
+                    center.X = new Random().Next(0, 100) * 0.01f * i;
+                    center.Y = new Random().Next(0, 10) * 0.01f * i;
+                    center.Z = new Random().Next(0, 100) * 0.01f * i;
+                    Circle c = new Circle(center);
 
-                res.Add(c);
+                    resT.Add(c);
+                }
+                res.Add(resT);
             }
             return res;
         }
+        
     }
 }

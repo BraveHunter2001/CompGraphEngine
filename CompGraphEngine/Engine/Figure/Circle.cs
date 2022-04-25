@@ -115,7 +115,7 @@ namespace CompGraphEngine.Engine.Figure
             //Vector2 pos2 = Helper.GetWindowPosObj(point2, cam);
             Vector2 pos3 = Helper.GetWindowPosObj(point3, cam);
             //Vector2 pos4 = Helper.GetWindowPosObj(point4, cam);
-            Console.WriteLine($"Left bot: {pos1}, Right top:{pos3}");
+           // Console.WriteLine($"Left bot: {pos1}, Right top:{pos3}");
 
             if (pos1.X <= xOnWindow && pos3.X >= xOnWindow && pos1.Y >= yOnWindow && pos3.Y <= yOnWindow)
                 return true;

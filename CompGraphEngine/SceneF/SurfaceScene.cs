@@ -15,7 +15,8 @@ namespace CompGraphEngine.SceneF
         public SurfaceScene(Window window) : base(window)
         {
         }
-        Surface surface;
+        //Surface surface;
+        BSurface surface;
         float x, y, t;
         public override void Init()
         {
@@ -24,10 +25,9 @@ namespace CompGraphEngine.SceneF
             Camera.Position = new Vector3(0f, 0, 5);
             Camera.Speed = 10f;
 
-            surface = new Surface();
-            surface.Transform.Scale = new Vector3(2f);
-            surface.Transform.Rotation = new Vector3(10, 0, 0);
+            surface = new BSurface();
 
+            surface.Transform.Scale = new Vector3(1);
             //bSpline = new BSpline();
             //bSpline.Transform.Scale = new Vector3(1);
 
@@ -39,7 +39,16 @@ namespace CompGraphEngine.SceneF
 
             //AddObjectToScene(bSpline);
 
+            foreach (var l in surface.ControlPoints)
+            {
+                foreach(var c in l)
+                {
+                    c.Transform.Scale = new Vector3(0.01f);
+                    AddObjectToScene(c);
+                }
+            }
 
+            surface.Transform.Scale = new Vector3(1, 1, 1);
              AddObjectToScene(surface);
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
@@ -59,9 +68,9 @@ namespace CompGraphEngine.SceneF
             Camera.Pitch = (-1) * y / 10f;
 
            
-            surface.updateTime(t % 360);
+            
 
-            t += 0.1f;
+            
             moveCam();
             base.Update();
         }

@@ -52,7 +52,11 @@ namespace CompGraphEngine.SceneF
             //System.Console.WriteLine(Renderer.GetWindowPosObj(circle, Camera));
             //System.Console.WriteLine(window.MouseState.Position);
 
-            
+            Vector3 def = new Vector3(window.MouseState.Delta) / 1000f;
+            def.Y *= -1;
+            circle.Transform.Translate(def);
+
+
             //t += 0.001f;
             moveCam();
             base.Update();
@@ -84,20 +88,20 @@ namespace CompGraphEngine.SceneF
 
         }
 
+
+        Vector2 lastMouse = new Vector2();
         void PressedMouse(MouseButtonEventArgs arg)
         {
               
             if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
             {
                  System.Console.WriteLine("Pressed");
-              
-                Vector2 m= window.MouseState.Position;
-                System.Console.WriteLine($"Mouse: {m}");
-
-                if (circle.isContain(m.X, m.Y, Camera))
+                Vector2 m = window.MouseState.Position;
+                if(circle.isContain(m.X, m.Y, Camera))
+                {
+                    lastMouse = m;
                     System.Console.WriteLine("Popal");
-                else
-                    System.Console.WriteLine("Nepopal");
+                }
             }
         }
 
@@ -105,7 +109,11 @@ namespace CompGraphEngine.SceneF
         {
             if (arg.Action == InputAction.Release && arg.Button == MouseButton.Left)
             {
-                // System.Console.WriteLine("Relize");
+                 System.Console.WriteLine("Relize");
+                Vector2 m = window.MouseState.Position;
+                Vector3 def = new Vector3(m - lastMouse) / 100f;
+                def.Y *= -1;
+                circle.Transform.Translate(def);
             }
         }
     }
