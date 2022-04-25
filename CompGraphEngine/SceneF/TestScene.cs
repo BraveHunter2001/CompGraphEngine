@@ -36,7 +36,7 @@ namespace CompGraphEngine.SceneF
             circle = new Circle();
             circle.Transform.Position = new Vector3(0, 0, 0);
             AddObjectToScene(circle);
-
+            System.Console.WriteLine(circle.Transform.Scale);
             base.Init();
         }
         public override void Update()
@@ -47,12 +47,12 @@ namespace CompGraphEngine.SceneF
 
             //Camera.Yaw =  -90 + x / 10f;
             //Camera.Pitch = (-1) * y / 10f;
-            circle.Transform.Position = new Vector3(0,5 , 0);
 
-            System.Console.WriteLine(Renderer.GetWindowPosObj(circle, Camera));
-            System.Console.WriteLine(window.MouseState.Position);
-          
 
+            //System.Console.WriteLine(Renderer.GetWindowPosObj(circle, Camera));
+            //System.Console.WriteLine(window.MouseState.Position);
+
+            
             //t += 0.001f;
             moveCam();
             base.Update();
@@ -86,17 +86,18 @@ namespace CompGraphEngine.SceneF
 
         void PressedMouse(MouseButtonEventArgs arg)
         {
-
+              
             if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
             {
                  System.Console.WriteLine("Pressed");
               
+                Vector2 m= window.MouseState.Position;
+                System.Console.WriteLine($"Mouse: {m}");
 
-
-                if (MathHelper.Abs(circle.Transform.Position.X - window.MouseState.Position.X) <= circle.Transform.Scale.X)
-                {
+                if (circle.isContain(m.X, m.Y, Camera))
                     System.Console.WriteLine("Popal");
-                }
+                else
+                    System.Console.WriteLine("Nepopal");
             }
         }
 

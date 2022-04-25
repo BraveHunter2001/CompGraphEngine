@@ -103,5 +103,23 @@ namespace CompGraphEngine.Engine.Figure
             GL.DrawElements(PrimitiveType.Triangles,_indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
            
         }
+
+        public bool isContain(float xOnWindow, float yOnWindow, Camera cam)
+        {
+            Vector3 point1 = new Vector3(center.X - radius, center.Y - radius, center.Z);
+            //Vector3 point2 = new Vector3(center.X - radius, center.Y + radius, center.Z);
+            Vector3 point3 = new Vector3(center.X + radius, center.Y + radius, center.Z);
+           // Vector3 point4 = new Vector3(center.X + radius, center.Y - radius, center.Z);
+
+            Vector2 pos1 = Helper.GetWindowPosObj(point1, cam);
+            //Vector2 pos2 = Helper.GetWindowPosObj(point2, cam);
+            Vector2 pos3 = Helper.GetWindowPosObj(point3, cam);
+            //Vector2 pos4 = Helper.GetWindowPosObj(point4, cam);
+            Console.WriteLine($"Left bot: {pos1}, Right top:{pos3}");
+
+            if (pos1.X <= xOnWindow && pos3.X >= xOnWindow && pos1.Y >= yOnWindow && pos3.Y <= yOnWindow)
+                return true;
+            return false;
+        }
     }
 }
