@@ -25,24 +25,28 @@ namespace CompGraphEngine.Engine.Figure
         public List<List<List<List<float>>>> coefs;
 
 
+        int degree = 3, controlSizeT = 5, controlSizeU = 5, offset = 0;
+        int shiftT = 0, shiftU = 0;
 
-
-
-        int degree = 3, offset = 10, controlSizeT = 10, controlSizeU = 10;
         public BSurface()
         {
             Transform = new Transform();
+
+            offset = controlSizeT * controlSizeU;
 
             ControlPoints = GenerateRandomControlPoints();
 
             KnotsT = GenerateKnots(degree, controlSizeT);
             KnotsU = GenerateKnots(degree, controlSizeU);
 
+            shiftT = KnotsT[0] * offset;
+            shiftU = KnotsU[0] * offset;
+
             coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
 
             FillCoordsVertex();
             FillColorsVertex();
-            GenerateIndices(KnotsT[degree + controlSizeT] * offset, KnotsU[degree + controlSizeU] * offset);
+            GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT, KnotsU[degree + controlSizeU] * offset - shiftU);
         }
 
         public override void Init()
@@ -73,9 +77,9 @@ namespace CompGraphEngine.Engine.Figure
             List<int> indexes = new List<int>();
 
             int t = -1;
-            for (int i = 0; i < row-2; i++)
+            for (int i = 0; i < row-1; i++)
             {
-                for (int j = 0; j < col-2; j++)
+                for (int j = 0; j < col-1; j++)
                 {
                     indexes.Add(i * col + j);
                     indexes.Add(i * col + (j + 1));
@@ -86,13 +90,7 @@ namespace CompGraphEngine.Engine.Figure
                     indexes.Add((i + 1) * col + (j + 1));
 
 
-                    //_indexes[++t] = i*col + j;
-                    //_indexes[++t] = i*col + (j + 1);
-                    //_indexes[++t] = (i+1)*col + j;
-
-                    //_indexes[++t] = (i + 1)*col + j;
-                    //_indexes[++t] = i * col + (j + 1);
-                    //_indexes[++t] = (i+1) * col + (j + 1);
+                    
                 }
             }
 
@@ -107,9 +105,9 @@ namespace CompGraphEngine.Engine.Figure
             _vertPoints = new float[size, 3];
             int shift = 0;
            
-            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset ; t++)
+            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset - shiftT; t++)
             {
-                for (int u = 0; u < KnotsU[degree + controlSizeU] * offset; u++)
+                for (int u = 0; u < KnotsU[degree + controlSizeU] * offset - shiftU; u++)
                 {
                     for (int controlT = 0; controlT < controlSizeT; controlT++)
                     {
@@ -195,10 +193,10 @@ namespace CompGraphEngine.Engine.Figure
             List<List<List<List<float>>>> res = new List<List<List<List<float>>>>();
             float coef = 0;
 
-            for (int t = 0; t < knotsT[degree + controlSizeT] * offset; ++t)
+            for (int t = shiftT; t < knotsT[degree + controlSizeT] * offset; ++t)
             {
                 List<List<List<float>>> resKnotU = new List<List<List<float>>>();
-                for (int u = 0; u < knotsU[degree + controlSizeU] * offset; ++u)
+                for (int u = shiftU; u < knotsU[degree + controlSizeU] * offset; ++u)
                 {
                     List<List<float>> resControlT = new List<List<float>>();
                     for (int controlT = 0; controlT < controlSizeT; ++controlT)
@@ -221,7 +219,7 @@ namespace CompGraphEngine.Engine.Figure
             return res;
         }
 
-        private List<List<Circle>> GenerateRandomControlPoints()
+        public List<List<Circle>> GenerateRandomControlPoints()
         {
             List<List<Circle>> res = new List<List<Circle>>();
             for (int i = 0; i < controlSizeT; ++i)
@@ -230,9 +228,9 @@ namespace CompGraphEngine.Engine.Figure
                 for (int j = 0; j < controlSizeU; ++j)
                 {
                     Vector3 center = new Vector3();
-                    center.X = new Random().Next(0, 100) * 0.1f * i + 1;
-                    center.Y = new Random().Next(1, 10) * i*j  *0.1f;
-                    center.Z = new Random().Next(0, 100) * 0.1f * j   +1;
+                    center.X =(i +1) * 5;
+                    center.Y = new Random().Next(-10, 10) ;
+                    center.Z =(j+1) * 5;
                     Circle c = new Circle(center);
 
                     resT.Add(c);

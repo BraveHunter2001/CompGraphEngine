@@ -28,16 +28,7 @@ namespace CompGraphEngine.SceneF
             surface = new BSurface();
 
             surface.Transform.Scale = new Vector3(1);
-            //bSpline = new BSpline();
-            //bSpline.Transform.Scale = new Vector3(1);
-
-            //foreach( var cp in bSpline.ControlPoints)
-            //{
-            //    cp.Transform.Scale = new Vector3(0.01f);
-            //    AddObjectToScene(cp);
-            //}
-
-            //AddObjectToScene(bSpline);
+            
 
             foreach (var l in surface.ControlPoints)
             {
