@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    internal class BSurface: Surface, IRenderable
+    internal class BSurface: Figure, IRenderable
     {
         int[] _indexes;
         IndexBuffer _indexBuffer;
@@ -28,7 +28,7 @@ namespace CompGraphEngine.Engine.Figure
 
 
 
-        int degree = 3, offset = 10, controlSizeT = 5, controlSizeU = 5;
+        int degree = 3, offset = 10, controlSizeT = 10, controlSizeU = 10;
         public BSurface()
         {
             Transform = new Transform();
@@ -73,9 +73,9 @@ namespace CompGraphEngine.Engine.Figure
             List<int> indexes = new List<int>();
 
             int t = -1;
-            for (int i = 0; i < row-1; i++)
+            for (int i = 0; i < row-2; i++)
             {
-                for (int j = 0; j < col-1; j++)
+                for (int j = 0; j < col-2; j++)
                 {
                     indexes.Add(i * col + j);
                     indexes.Add(i * col + (j + 1));
@@ -107,7 +107,7 @@ namespace CompGraphEngine.Engine.Figure
             _vertPoints = new float[size, 3];
             int shift = 0;
            
-            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset; t++)
+            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset ; t++)
             {
                 for (int u = 0; u < KnotsU[degree + controlSizeU] * offset; u++)
                 {
@@ -208,6 +208,7 @@ namespace CompGraphEngine.Engine.Figure
                         {
                             coef = GenerateN(degree, controlT, knotsT, t * 1.0f / offset)
                             * GenerateN(degree, controlU, knotsU, u * 1.0f / offset);
+
                             r.Add(coef);
                         }
                         resControlT.Add(r);
@@ -229,9 +230,9 @@ namespace CompGraphEngine.Engine.Figure
                 for (int j = 0; j < controlSizeU; ++j)
                 {
                     Vector3 center = new Vector3();
-                    center.X = new Random().Next(0, 100) * 0.01f * i;
-                    center.Y = new Random().Next(0, 10) * 0.01f * i;
-                    center.Z = new Random().Next(0, 100) * 0.01f * i;
+                    center.X = new Random().Next(0, 100) * 0.1f * i + 1;
+                    center.Y = new Random().Next(1, 10) * i*j  *0.1f;
+                    center.Z = new Random().Next(0, 100) * 0.1f * j   +1;
                     Circle c = new Circle(center);
 
                     resT.Add(c);

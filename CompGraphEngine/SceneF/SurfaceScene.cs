@@ -22,7 +22,7 @@ namespace CompGraphEngine.SceneF
         {
 
             Camera = new Camera();
-            Camera.Position = new Vector3(0f, 0, 5);
+            Camera.Position = new Vector3(20f, 20, 20);
             Camera.Speed = 10f;
 
             surface = new BSurface();
@@ -67,9 +67,8 @@ namespace CompGraphEngine.SceneF
             Camera.Yaw =  -90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
 
-           
-            
 
+            Console.WriteLine(Camera.Position);
             
             moveCam();
             base.Update();
