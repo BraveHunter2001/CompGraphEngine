@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,26 +15,61 @@ namespace CompGraphEngine.Engine.Figure
         int[] _indexes;
         IndexBuffer _indexBuffer;
         Matrix4 MVP;
-        Color4 color = Color4.Red;
+        Color4 color = Color4.White;
 
         List<int> KnotsT;
         List<int> KnotsU;
 
-        public List<List<Circle>> ControlPoints;
+        public readonly List<List<Circle>> ControlPoints;
 
 
-        public List<List<List<List<float>>>> coefs;
+        private List<List<List<List<float>>>> coefs;
 
 
-        int degree = 3, controlSizeT = 5, controlSizeU = 5, offset = 0;
-        int shiftT = 0, shiftU = 0;
+        private int degree = 1, controlSizeT = 8, controlSizeU = 4, offset = 0;
+        private int shiftT = 0, shiftU = 0;
+        public readonly ulong CountPoligons;
 
-        public BSurface()
+        public BSurface(int degree,int offest,  List<List<Circle>> ControlPoints)
         {
+            Stopwatch sp = new Stopwatch();
             Transform = new Transform();
+            this.degree = degree;
+            this.controlSizeT = ControlPoints.Count;
+            this.controlSizeU = ControlPoints[0].Count;
 
-            offset = controlSizeT * controlSizeU;
+            this.offset = offest;
 
+            this.ControlPoints = ControlPoints;
+
+            KnotsT = GenerateKnots(degree, controlSizeT);
+            KnotsU = GenerateKnots(degree, controlSizeU);
+
+            shiftT = KnotsT[0] * offset;
+            shiftU = KnotsU[0] * offset;
+            sp.Start();
+            coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
+            sp.Stop();
+            Console.WriteLine($"Generate Coef {sp.Elapsed.TotalMilliseconds}");
+
+            FillCoordsVertex();
+            FillColorsVertex();
+            GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT, KnotsU[degree + controlSizeU] * offset - shiftU);
+            CountPoligons = (ulong)((KnotsT[degree + controlSizeT] * offset - shiftT - 1) * (KnotsU[degree + controlSizeU] * offset - shiftU - 1)) * 2;
+
+
+        }
+
+        public BSurface(int degree, int controlSizeT, int controlSizeU, int offset)
+        {
+            Stopwatch sp = new Stopwatch();
+            Transform = new Transform();
+            this.degree = degree;
+            this.controlSizeT = controlSizeT;
+            this.controlSizeU = controlSizeU;
+
+            this.offset = offset;
+            sp.Start();
             ControlPoints = GenerateRandomControlPoints();
 
             KnotsT = GenerateKnots(degree, controlSizeT);
@@ -42,21 +78,32 @@ namespace CompGraphEngine.Engine.Figure
             shiftT = KnotsT[0] * offset;
             shiftU = KnotsU[0] * offset;
 
-            coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
+            
+            //coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
+            
 
             FillCoordsVertex();
             FillColorsVertex();
             GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT, KnotsU[degree + controlSizeU] * offset - shiftU);
+            CountPoligons = (ulong)((KnotsT[degree + controlSizeT] * offset - shiftT - 1) * (KnotsU[degree + controlSizeU] * offset - shiftU - 1)) * 2;
+            sp.Stop();
+            Console.WriteLine($"Generate time Surface {sp.Elapsed.TotalSeconds}");
         }
 
         public override void Init()
         {
+            
             _indexBuffer = new IndexBuffer(_indexes, _indexes.Length);
             _shader = new Shader("Shaders/surface.glsl");
 
             _indexes = null;
+            KnotsT = null;
+            KnotsU = null;
+            coefs = null;
             base.Init();
         }
+
+       
         public void Draw(Camera camera)
         {
             MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
@@ -104,7 +151,8 @@ namespace CompGraphEngine.Engine.Figure
                 * KnotsU[degree + controlSizeU] * offset;
             _vertPoints = new float[size, 3];
             int shift = 0;
-           
+            float coef = 0;
+            int p = 0;
             for (int t = 0; t < KnotsT[degree + controlSizeT] * offset - shiftT; t++)
             {
                 for (int u = 0; u < KnotsU[degree + controlSizeU] * offset - shiftU; u++)
@@ -113,13 +161,17 @@ namespace CompGraphEngine.Engine.Figure
                     {
                         for (int controlU = 0; controlU < controlSizeU; controlU++)
                         {
+                            coef= GenerateN(degree, controlT, KnotsT, (t + shiftT) * 1.0f / offset)
+                            * GenerateN(degree, controlU, KnotsU, (u + shiftU)* 1.0f / offset);
+
                             _vertPoints[shift, 0] += ControlPoints[controlT][controlU].Transform.Position.X
-                                * coefs[t][u][controlT][controlU];
+                                * coef;
                             _vertPoints[shift, 1] += ControlPoints[controlT][controlU].Transform.Position.Y 
-                                * coefs[t][u][controlT][controlU];
+                                * coef;
                             _vertPoints[shift, 2] += ControlPoints[controlT][controlU].Transform.Position.Z 
-                                * coefs[t][u][controlT][controlU];
-                            
+                                * coef;
+                            p++;
+                            Console.WriteLine($"Coef written: {coef} || {p}/ {size}");
                         }
                     }
                     shift++;
@@ -228,9 +280,9 @@ namespace CompGraphEngine.Engine.Figure
                 for (int j = 0; j < controlSizeU; ++j)
                 {
                     Vector3 center = new Vector3();
-                    center.X =(i +1) * 5;
+                    center.X =(j +1) * 5;
                     center.Y = new Random().Next(-10, 10) ;
-                    center.Z =(j+1) * 5;
+                    center.Z =(i+1) * 5;
                     Circle c = new Circle(center);
 
                     resT.Add(c);
@@ -239,6 +291,28 @@ namespace CompGraphEngine.Engine.Figure
             }
             return res;
         }
-        
+
+        public static List<List<Circle>> GeneratedPolygon(int controlSizeT, int controlSizeU)
+        {
+            List<List<Circle>> res = new List<List<Circle>>();
+
+            
+            for (int i = 0; i < controlSizeT; ++i)
+            {
+                List<Circle> resT = new List<Circle>();
+                for (int j = 0; j < controlSizeU; ++j)
+                {
+                    Vector3 center = new Vector3();
+                    center.X = (j) * 5;
+                    center.Y = (float)MathHelper.Sin(i)  * 5;
+                    center.Z = (float)MathHelper.Cos(i) * 5;
+                    Circle c = new Circle(center);
+
+                    resT.Add(c);
+                }
+                res.Add(resT);
+            }
+            return res;
+        }
     }
 }

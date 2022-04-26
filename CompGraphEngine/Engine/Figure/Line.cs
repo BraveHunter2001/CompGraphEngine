@@ -97,7 +97,7 @@ namespace CompGraphEngine.Engine.Figure
             _vertexArray.Bind();
 
             GL.Enable(EnableCap.LineSmooth);
-           GL.DrawArrays(PrimitiveType.Lines, 0, _vertPoints.GetLength(0));
+           GL.DrawArrays(PrimitiveType.Lines, 0, _pointBuffer.CountVertex);
            GL.Disable(EnableCap.LineSmooth);
             
         }

@@ -25,8 +25,8 @@ namespace CompGraphEngine.SceneF
             Camera.Position = new Vector3(20f, 20, 20);
             Camera.Speed = 10f;
 
-            surface = new BSurface();
-
+            surface = new BSurface(3, 10,10,1000);
+            Console.WriteLine($" Poligons: {surface.CountPoligons}");
             surface.Transform.Scale = new Vector3(1);
             
 
@@ -57,10 +57,10 @@ namespace CompGraphEngine.SceneF
 
             Camera.Yaw =  -90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
+            //surface.updateTime(t);
 
-
-            Console.WriteLine(Camera.Position);
-            
+            //Console.WriteLine(Camera.Position);
+           // t += 0.01f;
             moveCam();
             base.Update();
         }
@@ -71,22 +71,22 @@ namespace CompGraphEngine.SceneF
             if (state.IsKeyDown(Keys.W))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.FORWARD, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed W");
+                //System.Console.WriteLine("Pressed W");
             }
             if (state.IsKeyDown(Keys.A))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.LEFT, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed A");
+                //System.Console.WriteLine("Pressed A");
             }
             if (state.IsKeyDown(Keys.S))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.BACKWARD, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed S");
+                //System.Console.WriteLine("Pressed S");
             }
             if (state.IsKeyDown(Keys.D))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.RIGHT, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed D");
+                //System.Console.WriteLine("Pressed D");
             }
 
         }
