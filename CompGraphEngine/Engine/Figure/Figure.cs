@@ -39,9 +39,7 @@ namespace CompGraphEngine.Engine.Figure
             _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
             IsInited = true;
 
-            _vertPoints = null;
-            _vertColors = null;
-          
+           
             GC.Collect();
         }
 

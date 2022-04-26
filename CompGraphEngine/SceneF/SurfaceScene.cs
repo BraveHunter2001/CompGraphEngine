@@ -17,6 +17,7 @@ namespace CompGraphEngine.SceneF
         }
         //Surface surface;
         BSurface surface;
+      
         float x, y, t;
         public override void Init()
         {
@@ -25,10 +26,12 @@ namespace CompGraphEngine.SceneF
             Camera.Position = new Vector3(20f, 20, 20);
             Camera.Speed = 10f;
 
-            surface = new BSurface(3, 10,10,1000);
-            Console.WriteLine($" Poligons: {surface.CountPoligons}");
-            surface.Transform.Scale = new Vector3(1);
+            surface = new BSurface(3,100, 10,10);
+
+           
+
             
+
 
             foreach (var l in surface.ControlPoints)
             {
@@ -39,8 +42,10 @@ namespace CompGraphEngine.SceneF
                 }
             }
 
-            surface.Transform.Scale = new Vector3(1, 1, 1);
+            
              AddObjectToScene(surface);
+            
+
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
@@ -57,10 +62,10 @@ namespace CompGraphEngine.SceneF
 
             Camera.Yaw =  -90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
-            //surface.updateTime(t);
+            surface.updateTime(t);
 
             //Console.WriteLine(Camera.Position);
-           // t += 0.01f;
+            t += 0.01f;
             moveCam();
             base.Update();
         }

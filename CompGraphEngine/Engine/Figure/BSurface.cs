@@ -33,7 +33,9 @@ namespace CompGraphEngine.Engine.Figure
         public BSurface(int degree,int offest,  List<List<Circle>> ControlPoints)
         {
             Stopwatch sp = new Stopwatch();
+
             Transform = new Transform();
+
             this.degree = degree;
             this.controlSizeT = ControlPoints.Count;
             this.controlSizeU = ControlPoints[0].Count;
@@ -47,10 +49,7 @@ namespace CompGraphEngine.Engine.Figure
 
             shiftT = KnotsT[0] * offset;
             shiftU = KnotsU[0] * offset;
-            sp.Start();
-            coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
-            sp.Stop();
-            Console.WriteLine($"Generate Coef {sp.Elapsed.TotalMilliseconds}");
+         
 
             FillCoordsVertex();
             FillColorsVertex();
@@ -60,7 +59,7 @@ namespace CompGraphEngine.Engine.Figure
 
         }
 
-        public BSurface(int degree, int controlSizeT, int controlSizeU, int offset)
+        public BSurface(int degree, int offset, int controlSizeT, int controlSizeU)
         {
             Stopwatch sp = new Stopwatch();
             Transform = new Transform();
@@ -79,15 +78,16 @@ namespace CompGraphEngine.Engine.Figure
             shiftU = KnotsU[0] * offset;
 
             
-            //coefs = GenerateCoef(controlSizeT, controlSizeU, offset, degree, KnotsT, KnotsU);
-            
+          
 
             FillCoordsVertex();
             FillColorsVertex();
             GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT, KnotsU[degree + controlSizeU] * offset - shiftU);
+
             CountPoligons = (ulong)((KnotsT[degree + controlSizeT] * offset - shiftT - 1) * (KnotsU[degree + controlSizeU] * offset - shiftU - 1)) * 2;
             sp.Stop();
             Console.WriteLine($"Generate time Surface {sp.Elapsed.TotalSeconds}");
+            Console.WriteLine($"Count poliggons: {CountPoligons}");
         }
 
         public override void Init()
@@ -144,15 +144,19 @@ namespace CompGraphEngine.Engine.Figure
             _indexes = indexes.ToArray();
 
         }
+        public void updateTime(float dt)
+        {
+            _shader.SetFloat("vTime", dt);
 
+        }
         void FillCoordsVertex()
         {
-            int size = KnotsT[degree + controlSizeT] * offset
-                * KnotsU[degree + controlSizeU] * offset;
+            int size = (KnotsT[degree + controlSizeT] * offset - shiftT)
+                * (KnotsU[degree + controlSizeU] * offset -shiftU);
             _vertPoints = new float[size, 3];
             int shift = 0;
             float coef = 0;
-            int p = 0;
+            long p = 0;
             for (int t = 0; t < KnotsT[degree + controlSizeT] * offset - shiftT; t++)
             {
                 for (int u = 0; u < KnotsU[degree + controlSizeU] * offset - shiftU; u++)
@@ -171,9 +175,10 @@ namespace CompGraphEngine.Engine.Figure
                             _vertPoints[shift, 2] += ControlPoints[controlT][controlU].Transform.Position.Z 
                                 * coef;
                             p++;
-                            Console.WriteLine($"Coef written: {coef} || {p}/ {size}");
+                            
                         }
                     }
+                    Console.WriteLine($"Calc coef ({coef})| {p}/{size * controlSizeT * controlSizeU} ");
                     shift++;
                 }
                
@@ -182,14 +187,14 @@ namespace CompGraphEngine.Engine.Figure
         }
         void FillColorsVertex()
         {
-            int size = KnotsT[degree + controlSizeT] * offset
-                * KnotsU[degree + controlSizeU] * offset;
+            int size = (KnotsT[degree + controlSizeT] * offset - shiftT)
+                * (KnotsU[degree + controlSizeU] * offset - shiftU);
             _vertColors = new float[size, 4];
             int count = 0;
 
-            for (int i = 0; i < KnotsT[degree + controlSizeT] * offset; i++)
+            for (int i = 0; i < KnotsT[degree + controlSizeT] * offset - shiftT; i++)
             {
-                for (int j = 0; j < KnotsU[degree + controlSizeU] * offset; j++)
+                for (int j = 0; j < KnotsU[degree + controlSizeU] * offset - shiftU; j++)
                 {
                     _vertColors[count, 0] = color.R;
                     _vertColors[count, 1] = color.G;
