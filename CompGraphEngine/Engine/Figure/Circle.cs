@@ -15,7 +15,7 @@ namespace CompGraphEngine.Engine.Figure
         // dont touch this shit
         Vector3 center = Vector3.Zero;
         float radius = 1f;
-        Color4 color = Color4.Blue;
+        public Color4 color = Color4.Blue;
         float thickness = 1;
         
         public float Thickness { get => thickness; set => thickness = value; }

@@ -5,7 +5,7 @@ layout(location = 0) in vec3 aPosition;
 layout(location = 1) in vec4 aColor;
 
 uniform mat4 aMVP;
-uniform float vTime;
+//uniform float vTime;
 
 out vec4 fColor;
 out vec3 fCoord;
@@ -20,8 +20,8 @@ void main(void)
      fColor = aColor;
      fCoord = aPosition;
     
-    fCoord.y *= sin(vTime);
-    
+    //fCoord.y *= sin(vTime);
+    //fCoord.z *= cos(vTime);
     
      gl_Position = aMVP * vec4(fCoord, 1.0); 
 }
@@ -44,7 +44,7 @@ void main()
     vec2 uv =  fCoord.xz;
     
 
-    outputColor = vec4(fColor.xy, fCoord.y, 1.0);
+    outputColor = vec4(uv, fCoord.y, 1.0);
 
 }
 

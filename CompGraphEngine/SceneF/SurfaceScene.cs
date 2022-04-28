@@ -23,27 +23,27 @@ namespace CompGraphEngine.SceneF
         {
 
             Camera = new Camera();
-            Camera.Position = new Vector3(20f, 20, 20);
+            Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
 
-            surface = new BSurface(3,100, 10,10);
-
+            
+           
            
 
-            
-
-
+             surface = new BSurface(3, 10, BSurface.GeneratedPolygon(8, 10));
+          
             foreach (var l in surface.ControlPoints)
             {
-                foreach(var c in l)
+                foreach (var c in l)
                 {
-                    c.Transform.Scale = new Vector3(0.01f);
+                    //c.Transform.Scale = new Vector3(0.01f);
+                    c.color = Color4.Red;
+
                     AddObjectToScene(c);
                 }
             }
 
-            
-             AddObjectToScene(surface);
+            AddObjectToScene(surface);
             
 
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
@@ -60,9 +60,10 @@ namespace CompGraphEngine.SceneF
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
-            Camera.Yaw =  -90 + x / 10f;
+            Camera.Yaw =  90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
             surface.updateTime(t);
+           
 
             //Console.WriteLine(Camera.Position);
             t += 0.01f;

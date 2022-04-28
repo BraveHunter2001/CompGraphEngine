@@ -152,7 +152,7 @@ namespace CompGraphEngine.Engine.Figure
                 Vector3 center = new Vector3();
                 center.X = new Random().Next(0, 100) * 0.01f * i;
                 center.Y = new Random().Next(0, 100) * 0.01f * i;
-                center.Z = new Random().Next(0, 100) * 0.01f * i;
+                center.Z = 0;
                 Circle c = new Circle(center);
                 
                 res.Add(c);

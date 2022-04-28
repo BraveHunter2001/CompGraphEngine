@@ -53,7 +53,7 @@ namespace CompGraphEngine.Engine.Figure
 
             FillCoordsVertex();
             FillColorsVertex();
-            GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT, KnotsU[degree + controlSizeU] * offset - shiftU);
+            GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT  +1, KnotsU[degree + controlSizeU] * offset - shiftU  +1);
             CountPoligons = (ulong)((KnotsT[degree + controlSizeT] * offset - shiftT - 1) * (KnotsU[degree + controlSizeU] * offset - shiftU - 1)) * 2;
 
 
@@ -82,7 +82,7 @@ namespace CompGraphEngine.Engine.Figure
 
             FillCoordsVertex();
             FillColorsVertex();
-            GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT, KnotsU[degree + controlSizeU] * offset - shiftU);
+            GenerateIndices(KnotsT[degree + controlSizeT] * offset - shiftT +1 , KnotsU[degree + controlSizeU] * offset - shiftU +1);
 
             CountPoligons = (ulong)((KnotsT[degree + controlSizeT] * offset - shiftT - 1) * (KnotsU[degree + controlSizeU] * offset - shiftU - 1)) * 2;
             sp.Stop();
@@ -146,20 +146,20 @@ namespace CompGraphEngine.Engine.Figure
         }
         public void updateTime(float dt)
         {
-            _shader.SetFloat("vTime", dt);
+           // _shader.SetFloat("vTime", dt);
 
         }
         void FillCoordsVertex()
         {
-            int size = (KnotsT[degree + controlSizeT] * offset - shiftT)
-                * (KnotsU[degree + controlSizeU] * offset -shiftU);
+            int size = (KnotsT[degree + controlSizeT] * offset - shiftT  + 1)
+                * (KnotsU[degree + controlSizeU] * offset - shiftU  + 1);
             _vertPoints = new float[size, 3];
             int shift = 0;
             float coef = 0;
-            long p = 0;
-            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset - shiftT; t++)
+           
+            for (int t = 0; t < KnotsT[degree + controlSizeT] * offset - shiftT + 1; t++)
             {
-                for (int u = 0; u < KnotsU[degree + controlSizeU] * offset - shiftU; u++)
+                for (int u = 0; u < KnotsU[degree + controlSizeU] * offset - shiftU  + 1; u++)
                 {
                     for (int controlT = 0; controlT < controlSizeT; controlT++)
                     {
@@ -174,11 +174,11 @@ namespace CompGraphEngine.Engine.Figure
                                 * coef;
                             _vertPoints[shift, 2] += ControlPoints[controlT][controlU].Transform.Position.Z 
                                 * coef;
-                            p++;
+                          
                             
                         }
                     }
-                    Console.WriteLine($"Calc coef ({coef})| {p}/{size * controlSizeT * controlSizeU} ");
+                   // Console.WriteLine($"Calc coef ({coef})| {p}/{size * controlSizeT * controlSizeU} ");
                     shift++;
                 }
                
@@ -281,12 +281,14 @@ namespace CompGraphEngine.Engine.Figure
             List<List<Circle>> res = new List<List<Circle>>();
             for (int i = 0; i < controlSizeT; ++i)
             {
+                
+
                 List<Circle> resT = new List<Circle>();
                 for (int j = 0; j < controlSizeU; ++j)
                 {
                     Vector3 center = new Vector3();
                     center.X =(j +1) * 5;
-                    center.Y = new Random().Next(-10, 10) ;
+                    center.Y = new Random().Next(0, 10) * 0.1f;
                     center.Z =(i+1) * 5;
                     Circle c = new Circle(center);
 
@@ -300,23 +302,27 @@ namespace CompGraphEngine.Engine.Figure
         public static List<List<Circle>> GeneratedPolygon(int controlSizeT, int controlSizeU)
         {
             List<List<Circle>> res = new List<List<Circle>>();
-
+           List<Circle> first = new List<Circle>();
             
-            for (int i = 0; i < controlSizeT; ++i)
+            for (int i = 0; i < controlSizeT - 1; ++i)
             {
-                List<Circle> resT = new List<Circle>();
-                for (int j = 0; j < controlSizeU; ++j)
+                
+                    List<Circle> resT = new List<Circle>();
+                if (i == 0)
+                    first = resT;
+               for (int j = 0; j < controlSizeU; ++j)
                 {
                     Vector3 center = new Vector3();
                     center.X = (j) * 5;
-                    center.Y = (float)MathHelper.Sin(i)  * 5;
-                    center.Z = (float)MathHelper.Cos(i) * 5;
+                    center.Y = (float)MathHelper.Sin(i)  * 10 * new Random().Next(0, 10) * 0.1f;
+                    center.Z = (float)MathHelper.Sin(i + 90) * 10 * new Random().Next(0, 10) * 0.1f;
                     Circle c = new Circle(center);
 
                     resT.Add(c);
                 }
                 res.Add(resT);
             }
+            res.Add(first);
             return res;
         }
     }
