@@ -4,9 +4,6 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompGraphEngine.SceneF
 {
@@ -15,9 +12,10 @@ namespace CompGraphEngine.SceneF
         public SurfaceScene(Window window) : base(window)
         {
         }
-        //Surface surface;
+
         BSurface surface;
-      
+        BSurface surface1;
+
         float x, y, t;
         public override void Init()
         {
@@ -26,12 +24,23 @@ namespace CompGraphEngine.SceneF
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
 
-            
-           
+            List<Circle> controlPolygon = new List<Circle>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                Vector3 center = new Vector3();
+                center.X = 0;
+                center.Y = (float)MathHelper.Cos(i * MathHelper.Pi / 4);
+                center.Z = (float)MathHelper.Sin(i * MathHelper.Pi / 4);
+                Circle c = new Circle(center);
+
+                controlPolygon.Add(c);
+            }
+
+
+            surface = new BSurface(3,3, 10, BSurface.GeneratedPolygon(5, 5));
            
 
-             surface = new BSurface(3, 10, BSurface.GeneratedPolygon(8, 10));
-          
             foreach (var l in surface.ControlPoints)
             {
                 foreach (var c in l)
@@ -39,18 +48,19 @@ namespace CompGraphEngine.SceneF
                     //c.Transform.Scale = new Vector3(0.01f);
                     c.color = Color4.Red;
 
-                    AddObjectToScene(c);
+                    //AddObjectToScene(c);
                 }
             }
 
             AddObjectToScene(surface);
-            
+            AddObjectToScene(surface1);
+
 
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
 
-            
+
 
             base.Init();
         }
@@ -60,13 +70,14 @@ namespace CompGraphEngine.SceneF
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
-            Camera.Yaw =  90 + x / 10f;
+            Camera.Yaw = 90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
-            surface.updateTime(t);
-           
 
-            //Console.WriteLine(Camera.Position);
-            t += 0.01f;
+
+
+            surface.Transform.RotateWithShift( new Vector3(0,0,5), new Vector3(0, t, 0));
+
+            t += 1f;
             moveCam();
             base.Update();
         }
@@ -77,22 +88,22 @@ namespace CompGraphEngine.SceneF
             if (state.IsKeyDown(Keys.W))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.FORWARD, (float)window.UpdateTime);
-                //System.Console.WriteLine("Pressed W");
+
             }
             if (state.IsKeyDown(Keys.A))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.LEFT, (float)window.UpdateTime);
-                //System.Console.WriteLine("Pressed A");
+
             }
             if (state.IsKeyDown(Keys.S))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.BACKWARD, (float)window.UpdateTime);
-                //System.Console.WriteLine("Pressed S");
+
             }
             if (state.IsKeyDown(Keys.D))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.RIGHT, (float)window.UpdateTime);
-                //System.Console.WriteLine("Pressed D");
+
             }
 
         }

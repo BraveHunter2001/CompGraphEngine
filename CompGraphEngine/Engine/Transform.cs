@@ -42,7 +42,7 @@ namespace CompGraphEngine.Engine
             get { return rotation; }
             set { 
                 rotation = value;
-               RotateVector(value);
+               Rotate(value);
             }
         }
         public Vector3 Scale
@@ -54,11 +54,13 @@ namespace CompGraphEngine.Engine
         }
         public Matrix4 Model { get 
             {
-                model =  TranslateMatrix * RotateZM * RotateYM * RotateXM *  ScaleMatrix * Matrix4.Identity;
+
                 
                 return model;
             } 
             private set { model = value; } }
+
+        
 
         public Transform(Vector3 position, Vector3 scale, Vector3 rotation)
         {
@@ -76,7 +78,7 @@ namespace CompGraphEngine.Engine
 
             TranslatePosition(this.position.Xyz);
             Scaling(this.scale);
-            RotateVector(this.rotation);
+            Rotate(this.rotation);
         }
         public Transform()
         {
@@ -92,6 +94,7 @@ namespace CompGraphEngine.Engine
             RotateXM = Matrix4.Identity;
             RotateYM = Matrix4.Identity;
             RotateZM = Matrix4.Identity;
+            model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
         }
 
         public void Translate(float x = 0, float y = 0, float z = 0)
@@ -103,16 +106,38 @@ namespace CompGraphEngine.Engine
             Position += translation;
             
         }
-        private void Rotate(float x = 0, float y = 0, float z = 0)
+        public void Rotate(float x = 0, float y = 0, float z = 0)
         {
-           // Rotate(new Vector3(x,y,z));
+            Rotate(new Vector3(x,y,z));
         }
-        private void RotateVector(Vector3 rotation)
+        public void Rotate(Vector3 rotation)
         {
             this.rotation = rotation;
             RotateX(rotation.X);
             RotateY(rotation.Y);
             RotateZ(rotation.Z);
+            model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
+        }
+
+        /// <summary>
+        /// First translate by axis on vector. Next rotate on degrees vector
+        /// </summary>
+        /// <param name="rotation"> Vector degrees roation axis</param>
+        /// <param name="shift"> Vector translate axis</param>
+        public void RotateWithShift(Vector3 shift, Vector3 rotation)
+        {
+            Rotate(rotation);
+            TranslatePosition(shift);
+
+            model =  RotateZM * RotateYM * RotateXM *  TranslateMatrix * ScaleMatrix * Matrix4.Identity;
+        }
+       
+        private void Scaling(Vector3 scale)
+        {
+            ScaleMatrix.M11 = scale.X;
+            ScaleMatrix.M22 = scale.Y;
+            ScaleMatrix.M33 = scale.Z;
+            model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
         }
 
         private void RotateX(float angle)
@@ -154,15 +179,14 @@ namespace CompGraphEngine.Engine
             TranslateMatrix.M24 = pos.Y;
             TranslateMatrix.M34 = pos.Z;
             //TranslateMatrix.Transpose();
+            model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
         }
 
        
-        private void Scaling(Vector3 scale)
-        {
-            ScaleMatrix.M11 = scale.X;
-            ScaleMatrix.M22 = scale.Y;
-            ScaleMatrix.M33 = scale.Z;
-        }
+        
+
+
+        
 
 
     }
