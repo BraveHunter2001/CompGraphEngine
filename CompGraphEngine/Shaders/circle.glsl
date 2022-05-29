@@ -42,7 +42,9 @@ void main()
     color *= vec3(smoothstep(aThickness + fade, aThickness, dist));
 
     outputColor = vec4(color, 1.0 );
+    
     outputColor *= fColor;
-
+    if(outputColor.rgb == vec3(0,0,0))
+        discard;
 }
 

@@ -1,51 +1,44 @@
-﻿using CompGraphEngine.Render;
+﻿using CompGraphEngine.Render.OpenGLAPI;
+using OpenTK.Mathematics;
 using System;
 
-namespace CompGraphEngine.Engine.Figure
+namespace CompGraphEngine.Render
 {
-    public class Figure : GameObject
+    internal class RenderObject
     {
-
+        internal Matrix4 Model;
         protected float[,] _vertPoints;
         protected float[,] _vertColors;
+        
 
-        protected Shader _shader;
+        internal Shader _shader;
 
         protected VertexBuffer _pointBuffer;
         protected VertexBuffer _colorBuffer;
 
         protected VertexArray _vertexArray;
 
-        protected VertexBufferLayout _layoutPos;
-        protected VertexBufferLayout _layoutCol;
+        private VertexBufferLayout _layoutPos;
+        private VertexBufferLayout _layoutCol;
 
 
-        public override void Init()
+        public void Init()
         {
             _pointBuffer = new VertexBuffer(Make1DArray(_vertPoints), sizeof(float) * _vertPoints.Length);
             _colorBuffer = new VertexBuffer(Make1DArray(_vertColors), sizeof(float) * _vertColors.Length);
-            
+
             _vertexArray = new VertexArray();
             _layoutPos = new VertexBufferLayout();
             _layoutCol = new VertexBufferLayout();
-          
-
-
 
             _layoutPos.Push<float>(_vertPoints.GetLength(1), false);
             _layoutCol.Push<float>(_vertColors.GetLength(1), false);
 
             _vertexArray.AddLayout(ref _pointBuffer, ref _layoutPos, 0);
             _vertexArray.AddLayout(ref _colorBuffer, ref _layoutCol, 1);
-            IsInited = true;
+            
 
-           
             GC.Collect();
-        }
-
-        public override void Update()
-        {
-           
         }
 
         private float[] Make1DArray(float[,] arr)
@@ -62,8 +55,11 @@ namespace CompGraphEngine.Engine.Figure
             }
             return res;
         }
+        
+        internal void Draw()
+        {
 
-
+        }
 
     }
 }

@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CompGraphEngine.Render
+namespace CompGraphEngine.Render.OpenGLAPI
 {
     public class VertexArray
     {
-       private readonly int id;
+        private readonly int id;
         public VertexArray()
         {
-            id =  GL.GenVertexArray();
-            
+            id = GL.GenVertexArray();
+
         }
         ~VertexArray()
         {
@@ -27,23 +27,23 @@ namespace CompGraphEngine.Render
         {
             Bind();
             vb.Bind();
-           
-                var elem = layout.Elements[0];
-                GL.VertexAttribPointer(index, elem.count, elem.type, elem.normalized, 0, 0);
-                GL.EnableVertexAttribArray(index);
-                
+
+            var elem = layout.Elements[0];
+            GL.VertexAttribPointer(index, elem.count, elem.type, elem.normalized, 0, 0);
+            GL.EnableVertexAttribArray(index);
+
 
             vb.UnBind();
             UnBind();
         }
 
-        public void AddLayouts(ref VertexBuffer vb,ref  VertexBufferLayout layout)
+        public void AddLayouts(ref VertexBuffer vb, ref VertexBufferLayout layout)
         {
             Bind();
             vb.Bind();
             int offset = 0;
-            
-            for(int i = 0; i < layout.Elements.Count; i++)
+
+            for (int i = 0; i < layout.Elements.Count; i++)
             {
                 var elem = layout.Elements[i];
                 GL.VertexAttribPointer(i, elem.count, elem.type, elem.normalized, layout.Stride, offset);

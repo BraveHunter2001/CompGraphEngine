@@ -1,18 +1,18 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 
-namespace CompGraphEngine.Render
+namespace CompGraphEngine.Render.OpenGLAPI
 {
     internal class IndexBuffer
     {
         private readonly int id;
         private readonly int count = 0;
-        internal IndexBuffer( int[] data, int count)
+        internal IndexBuffer(int[] data, int count)
         {
             this.count = count;
             id = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id);
             GL.BufferData(BufferTarget.ElementArrayBuffer,
-                count  * sizeof(int),
+                count * sizeof(int),
                 data, BufferUsageHint.StaticDraw);
         }
         ~IndexBuffer()

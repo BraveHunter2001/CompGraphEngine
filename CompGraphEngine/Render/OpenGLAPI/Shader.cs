@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
-namespace CompGraphEngine.Render
+namespace CompGraphEngine.Render.OpenGLAPI
 {
     public class Shader
     {
@@ -17,7 +17,7 @@ namespace CompGraphEngine.Render
             public string fragmentSource;
         }
 
-        public Shader (string filePath)
+        public Shader(string filePath)
         {
 
             ShaderProgramSource shaderProgramSource = ParserShader(filePath);
@@ -34,7 +34,7 @@ namespace CompGraphEngine.Render
             CompileShader(vertexShader);
 
             // load and compile fragment shader;
-           
+
             var fragmentShader = GL.CreateShader(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader);
             GL.ShaderSource(fragmentShader, shaderProgramSource.fragmentSource);
             CompileShader(fragmentShader);
@@ -67,8 +67,8 @@ namespace CompGraphEngine.Render
 
         ~Shader()
         {
-            GL.DeleteProgram(this.Handle);
-            
+            GL.DeleteProgram(Handle);
+
         }
         private enum ShaderType
         {
@@ -78,7 +78,7 @@ namespace CompGraphEngine.Render
         {
             ShaderProgramSource programSource;
             ShaderType type = ShaderType.None;
-         
+
             programSource.vertexSource = "";
             programSource.fragmentSource = "";
 
@@ -114,20 +114,20 @@ namespace CompGraphEngine.Render
 
             return programSource;
         }
-        private static void CompileShader (int shader)
+        private static void CompileShader(int shader)
         {
-            GL.CompileShader (shader);
+            GL.CompileShader(shader);
             GL.GetShader(shader, ShaderParameter.CompileStatus, out var code);
-            if (code != (int) All.True)
+            if (code != (int)All.True)
             {
                 var infoLog = GL.GetShaderInfoLog(shader);
-                throw new Exception($" Error occured whilst compiling Shader({shader})\n\n{infoLog}");   
+                throw new Exception($" Error occured whilst compiling Shader({shader})\n\n{infoLog}");
             }
         }
 
         private static void LinkProgram(int program)
         {
-            GL.LinkProgram (program);
+            GL.LinkProgram(program);
 
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out var code);
             if (code != (int)All.True)
