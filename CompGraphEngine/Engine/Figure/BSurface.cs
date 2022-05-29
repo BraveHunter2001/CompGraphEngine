@@ -1,5 +1,4 @@
 ﻿using CompGraphEngine.Render;
-using CompGraphEngine.Render.OpenGLAPI;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
@@ -8,7 +7,7 @@ using System.Diagnostics;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    internal class BSurface : Figure
+    internal class BSurface : Figure, IRenderable
     {
         int[] _indexes;
         IndexBuffer _indexBuffer;

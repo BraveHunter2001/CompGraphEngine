@@ -17,7 +17,7 @@
 
 
   <ItemGroup>
-    <Compile Update="Render\OpenGLAPI\Shader.cs">
+    <Compile Update="Render\Shader.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>

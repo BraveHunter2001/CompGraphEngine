@@ -58,7 +58,9 @@ namespace CompGraphEngine.Engine
                 
                 return model;
             } 
-            private set { model = value; } } 
+            private set { model = value; } }
+
+        
 
         public Transform(Vector3 position, Vector3 scale, Vector3 rotation)
         {
@@ -117,6 +119,11 @@ namespace CompGraphEngine.Engine
             model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
         }
 
+        /// <summary>
+        /// First translate by axis on vector. Next rotate on degrees vector
+        /// </summary>
+        /// <param name="rotation"> Vector degrees roation axis</param>
+        /// <param name="shift"> Vector translate axis</param>
         public void RotateWithShift(Vector3 shift, Vector3 rotation)
         {
             Rotate(rotation);

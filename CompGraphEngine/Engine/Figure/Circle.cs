@@ -1,5 +1,4 @@
 ﻿using CompGraphEngine.Render;
-using CompGraphEngine.Render.OpenGLAPI;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;

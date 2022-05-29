@@ -32,9 +32,7 @@ namespace CompGraphEngine
             
             GL.ClearColor(0f, 0f, 0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+           GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             //scene.Init();
             surface.Init();

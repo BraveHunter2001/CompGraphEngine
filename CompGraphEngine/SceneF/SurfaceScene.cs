@@ -2,6 +2,7 @@
 using CompGraphEngine.Engine.Figure;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
 using System.Collections.Generic;
 
 namespace CompGraphEngine.SceneF
@@ -18,7 +19,7 @@ namespace CompGraphEngine.SceneF
         float x, y, t;
         public override void Init()
         {
-            
+
             Camera = new Camera();
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
@@ -37,7 +38,7 @@ namespace CompGraphEngine.SceneF
             }
 
 
-            surface = new BSurface(3,3, 10, BSurface.GeneratedPolygon(5,10));
+            surface = new BSurface(3,3, 10, BSurface.GeneratedPolygon(5, 5));
            
 
             foreach (var l in surface.ControlPoints)
@@ -47,7 +48,7 @@ namespace CompGraphEngine.SceneF
                     //c.Transform.Scale = new Vector3(0.01f);
                     c.color = Color4.Red;
 
-                    AddObjectToScene(c);
+                    //AddObjectToScene(c);
                 }
             }
 
@@ -72,9 +73,9 @@ namespace CompGraphEngine.SceneF
             Camera.Yaw = 90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
 
-           
 
-            //surface.Transform.RotateWithShift( new Vector3(0,0,5), new Vector3(0, t, 0));
+
+            surface.Transform.RotateWithShift( new Vector3(0,0,5), new Vector3(0, t, 0));
 
             t += 1f;
             moveCam();

@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 
-namespace CompGraphEngine.Render.OpenGLAPI
+namespace CompGraphEngine.Render
 {
 
     public class VertexBufferLayout
@@ -17,7 +17,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             {
                 this.count = count;
                 this.type = type;
-                normalized = normalize;
+                this.normalized = normalize;
             }
         }
 
@@ -30,20 +30,20 @@ namespace CompGraphEngine.Render.OpenGLAPI
             VertexBufferElement vertexBufferElement = new VertexBufferElement(typeSize, count, !isNormalized);
             Elements.Add(vertexBufferElement);
             Stride += GetSizeOpenGLType(typeSize) * count;
-
-
+            
+            
         }
 
         //TODO Fuck this code
-        private static VertexAttribPointerType GetType<T>()
+        private static VertexAttribPointerType GetType<T>() 
         {
-
+            
             System.Type typeG = typeof(T);
 
             if (typeG == typeof(int))
                 return VertexAttribPointerType.Int;
             if (typeG == typeof(float))
-                return VertexAttribPointerType.Float;
+                return  VertexAttribPointerType.Float;
             throw new System.Exception("Invalid type");
 
         }
@@ -54,11 +54,11 @@ namespace CompGraphEngine.Render.OpenGLAPI
             {
                 case VertexAttribPointerType.Int:
                     return sizeof(int);
-
+                   
                 case VertexAttribPointerType.Float:
                     return sizeof(float);
-
-                default:
+                   
+               default:
                     throw new System.Exception("Error type");
             }
         }

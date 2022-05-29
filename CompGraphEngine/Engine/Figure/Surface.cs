@@ -1,21 +1,23 @@
 ﻿using CompGraphEngine.Render;
-using CompGraphEngine.Render.OpenGLAPI;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CompGraphEngine.Engine.Figure
 {
 
-    internal class Surface : Figure
+    internal class Surface : Figure, IRenderable
     {
 
 
         int[] _indexes;
         IndexBuffer _indexBuffer;
         Matrix4 MVP;
-
+        
         Color4 color = Color4.Red;
 
         public Surface()
@@ -36,27 +38,27 @@ namespace CompGraphEngine.Engine.Figure
 
             _indexes = null;
             base.Init();
-
+            
         }
 
         // this shit
         private void GenerateIndices(int row, int col)
         {
-
+            
 
             List<int> indexes = new List<int>();
-
+            
             int t = -1;
             for (int i = 0; i < row - 1; i++)
             {
                 for (int j = 0; j < col - 1; j++)
                 {
                     indexes.Add(i * col + j);
-                    indexes.Add(i * col + (j + 1));
-                    indexes.Add((i + 1) * col + j);
+                    indexes.Add(i * col + (j + 1) );
+                    indexes.Add((i + 1) * col + j );
 
-                    indexes.Add((i + 1) * col + j);
-                    indexes.Add(i * col + (j + 1));
+                    indexes.Add((i + 1) * col + j );
+                    indexes.Add(i * col + (j + 1) );
                     indexes.Add((i + 1) * col + (j + 1));
 
 
@@ -71,10 +73,10 @@ namespace CompGraphEngine.Engine.Figure
             }
 
             _indexes = indexes.ToArray();
-
+          
         }
 
-        void FillCoordsVertex(int countRowVert, int countColVert)
+        void FillCoordsVertex(int countRowVert,int  countColVert)
         {
             _vertPoints = new float[countRowVert * countColVert, 3];
             int t = 0;
@@ -94,7 +96,7 @@ namespace CompGraphEngine.Engine.Figure
         }
         void FillColorsVertex(int countRowVert, int countColVert)
         {
-            _vertColors = new float[countRowVert * countColVert, 4];
+            _vertColors= new float[countRowVert * countColVert, 4];
             int count = 0;
 
             for (int i = 0; i < countRowVert; i++)
@@ -107,7 +109,7 @@ namespace CompGraphEngine.Engine.Figure
                     _vertColors[count, 3] = color.A;
                     count++;
                 }
-
+                
             }
 
         }
@@ -122,11 +124,12 @@ namespace CompGraphEngine.Engine.Figure
             MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
 
             _shader.SetMatrix4("aMVP", MVP);
+            
+            
             _shader.Use();
-
             _vertexArray.Bind();
             _indexBuffer.Bind();
-
+           
             GL.DrawElements(PrimitiveType.Triangles, _indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
         }
     }

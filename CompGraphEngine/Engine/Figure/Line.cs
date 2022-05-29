@@ -5,11 +5,11 @@ using OpenTK.Mathematics;
 namespace CompGraphEngine.Engine.Figure
 
 {
-    public class Line: GameObject
+    public class Line : Figure, IRenderable
     {
         private Vector3 point1;
         private Vector3 point2;
-        
+        Matrix4 MVP;
         Color4 color = new Color4(255, 255, 255, 255);
         public Vector3 Point1
         {
@@ -41,14 +41,14 @@ namespace CompGraphEngine.Engine.Figure
 
         public Line(Vector3 point1, Vector3 point2)
         {
-            
+            Transform = new Transform();
             this.point1 = point1;
             this.point2 = point2;
            
         }
         public Line(Vector3 point1, Vector3 point2, Color4 color)
         {
-            
+            Transform = new Transform();
             this.point1 = point1;
             this.point2 = point2;
             this.color = color;
@@ -58,9 +58,12 @@ namespace CompGraphEngine.Engine.Figure
             FillCoordsVertex();
             FillColorsVertex();
 
-            _shader = new Shader("Shaders/line.glsl");
+            
 
-           
+            _shader = new Shader("Shaders/line.glsl");
+            
+            
+            base.Init();
         }
 
         void FillCoordsVertex()
@@ -84,24 +87,30 @@ namespace CompGraphEngine.Engine.Figure
             }
         }
 
-        public void Draw() 
+        public void Draw(Camera camera) // todo delete this shit
         {
- 
+
             MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
             _shader.SetMatrix4("aMVP", MVP);
 
             _shader.Use();
             _vertexArray.Bind();
 
-
+            GL.Enable(EnableCap.LineSmooth);
            GL.DrawArrays(PrimitiveType.Lines, 0, _pointBuffer.CountVertex);
-           
+           GL.Disable(EnableCap.LineSmooth);
             
         }
-
         public override void Update()
         {
-           
+         
+            
+            
+
+            base.Update(); 
         }
+
+
+
     }
 }

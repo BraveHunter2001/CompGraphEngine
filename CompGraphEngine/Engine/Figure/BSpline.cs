@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    internal class BSpline : Figure
+    internal class BSpline : Figure, IRenderable
     {
 
         Matrix4 MVP;
