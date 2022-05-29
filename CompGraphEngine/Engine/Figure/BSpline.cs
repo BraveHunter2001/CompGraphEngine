@@ -6,10 +6,10 @@ using System.Collections.Generic;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    internal class BSpline : Figure, IRenderable
+    internal class BSpline :GameObject
     {
 
-        Matrix4 MVP;
+        
         Color4 color = Color4.White;
 
         List<int> Knots;
@@ -31,31 +31,26 @@ namespace CompGraphEngine.Engine.Figure
         public override void Init()
         {
             
-            FillCoordsVertex(degree,controlSize,offset);
-            FillColorsVertex(Knots[degree + controlSize] * offset);
+       
 
-            _shader = new Shader("Shaders/line.glsl");
-            base.Init();
+            
+
+            var points = FillCoordsVertex(degree, controlSize, offset);
+            var colors = FillColorsVertex(Knots[degree + controlSize] * offset);
+
+            renderObject = new RenderObjectArrays(points, colors,
+                new Render.OpenGLAPI.Shader("Shaders/line.glsl"),
+                Transform.Model);
+
+            renderObject.Init();
         }
 
 
-        public void Draw(Camera camera)
+
+        float[,] FillCoordsVertex(int degree, int controlSize, int offset)
         {
-            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
-            _shader.SetMatrix4("aMVP", MVP);
 
-            _shader.Use();
-            _vertexArray.Bind();
-
-            GL.Enable(EnableCap.LineSmooth);
-            GL.DrawArrays(PrimitiveType.LineStrip, 0, _vertPoints.GetLength(0));
-            GL.Disable(EnableCap.LineSmooth);
-        }
-
-        void FillCoordsVertex(int degree, int controlSize, int offset)
-        {
-           
-            _vertPoints = new float[Knots[degree + controlSize] * offset, 3];
+            float[,] _vertPoints = new float[Knots[degree + controlSize] * offset, 3];
 
             for (int t = 0; t < Knots[degree + controlSize] * offset; t++)
             {
@@ -68,13 +63,13 @@ namespace CompGraphEngine.Engine.Figure
 
             }
 
-
+            return _vertPoints;
 
         }
-        void FillColorsVertex(int size)
+        float[,] FillColorsVertex(int size)
         {
 
-            _vertColors = new float[size, 4];
+            float[,] _vertColors = new float[size, 4];
            
 
             for (int i = 0; i < size; i++)
@@ -89,7 +84,7 @@ namespace CompGraphEngine.Engine.Figure
 
             }
 
-
+            return _vertColors;
         }
 
         private float GenerateN(int degree, int control, List<int> knots, float t)
@@ -158,6 +153,11 @@ namespace CompGraphEngine.Engine.Figure
                 res.Add(c);
             }
             return res;
+        }
+
+        public override void Update()
+        {
+            renderObject.Model = Transform.Model;
         }
     }
 }

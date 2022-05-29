@@ -3,7 +3,7 @@ using System;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    public class Figure : GameObject
+    public class RenderObject
     {
 
         protected float[,] _vertPoints;
@@ -62,7 +62,9 @@ namespace CompGraphEngine.Engine.Figure
             }
             return res;
         }
-
+        
+        public virtual void Draw()
+        {
 
 
     }

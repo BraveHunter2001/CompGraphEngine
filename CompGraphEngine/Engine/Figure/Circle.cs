@@ -5,11 +5,11 @@ using System;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    public class Circle : Figure, IRenderable
+    public class Circle : GameObject
     {
         int[] _indices = { 0, 1, 3, 1, 2, 3 };
-        IndexBuffer _indexBuffer;
-        public Matrix4 MVP;
+        
+     
 
         // this fucking local data
         // dont touch this shit
@@ -37,20 +37,20 @@ namespace CompGraphEngine.Engine.Figure
 
         public override void Init()
         {
-            FillCoordsVertex();
-            FillColorsVertex();
+            
+            var points = FillCoordsVertex();
+            var colors = FillColorsVertex();
 
-            _indexBuffer = new IndexBuffer(_indices, _indices.Length);
+            renderObject = new RenderObjectsElements(points, colors,
+                new Render.OpenGLAPI.Shader("Shaders/circle.glsl"),
+                Transform.Model,_indices);
 
-            _shader = new Shader("Shaders/circle.glsl");
-
-
-            base.Init();
+            renderObject.Init();
         }
 
-        void FillCoordsVertex()
+        float[,] FillCoordsVertex()
         {
-            _vertPoints = new float[4, 3];
+            float[,] _vertPoints = new float[4, 3];
 
             //vertex - 0
             _vertPoints[0, 0] = center.X - radius;
@@ -71,12 +71,12 @@ namespace CompGraphEngine.Engine.Figure
             _vertPoints[3, 0] = center.X + radius;
             _vertPoints[3, 1] = center.Y - radius;
             _vertPoints[3, 2] = center.Z;
-
+            return _vertPoints;
         }
-        void FillColorsVertex()
+        float[,] FillColorsVertex()
         {
             //color
-            _vertColors = new float[4, 4];
+            float[,] _vertColors = new float[4, 4];
             for (int i = 0; i < 4; i++)
             {
                 _vertColors[0, i] = ((Vector4)color)[i];
@@ -84,25 +84,11 @@ namespace CompGraphEngine.Engine.Figure
                 _vertColors[2, i] = ((Vector4)color)[i];
                 _vertColors[3, i] = ((Vector4)color)[i];
             }
+            return _vertColors;
         }
 
 
-        public void Draw(Camera camera)
-        {
-           
         
-            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
-
-            _shader.SetMatrix4("aMVP", MVP);
-            _shader.SetFloat("aThickness",thickness);
-
-            _shader.Use();
-            _vertexArray.Bind();
-            _indexBuffer.Bind();
-            
-            GL.DrawElements(PrimitiveType.Triangles,_indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
-           
-        }
 
         public bool isContain(float xOnWindow, float yOnWindow, Camera cam)
         {
@@ -120,6 +106,11 @@ namespace CompGraphEngine.Engine.Figure
             if (pos1.X <= xOnWindow && pos3.X >= xOnWindow && pos1.Y >= yOnWindow && pos3.Y <= yOnWindow)
                 return true;
             return false;
+        }
+
+        public override void Update()
+        {
+            renderObject.Model = Transform.Model;
         }
     }
 }

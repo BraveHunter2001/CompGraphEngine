@@ -10,14 +10,23 @@ namespace CompGraphEngine.SceneF
     {
         public readonly Window window;
 
-        public Renderer Renderer  = new Renderer();
+        public Renderer Renderer;
+
         private List<GameObject> GameObjects = new List<GameObject>();
         public Camera Camera { get; set; } = new Camera();
-        public Scene(Window window) { this.window = window; }
+        public Scene(Window window) { this.window = window; ; }
         public Scene(Window window, List<GameObject> objects)
         {
             this.window = window;
-            Renderer = new Renderer();
+           
+            foreach (GameObject o in objects)
+                AddObjectToScene(o);
+        }
+        public Scene(Window window, List<GameObject> objects, Renderer renderer)
+        {
+            this.window = window;
+            Renderer = renderer;
+            renderer.Camera = Camera;
             foreach (GameObject o in objects)
                 AddObjectToScene(o);
         }
@@ -25,9 +34,12 @@ namespace CompGraphEngine.SceneF
         public virtual void Init()
         {
 
-            foreach(GameObject obj in GameObjects)
-                if(obj != null && !obj.IsInited)
+            foreach (GameObject obj in GameObjects)
+                if (obj != null && !obj.IsInited)
+                {
                     obj.Init();
+                    obj.IsInited = true;
+                }
         }
 
         public virtual void Update()
@@ -42,8 +54,8 @@ namespace CompGraphEngine.SceneF
         public void Render()
         {
             foreach (GameObject obj in GameObjects)
-                if (obj != null && obj.IsInited && obj is IRenderable renderable)
-                    Renderer.Draw(renderable, Camera);
+                if (obj != null && obj.IsInited)
+                    Renderer.Draw(obj.renderObject);
             
         }
 

@@ -20,8 +20,8 @@ namespace CompGraphEngine
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
           
-           // scene = new TestScene(this);
-            surface = new SurfaceScene(this);
+          // scene = new TestScene(this);
+           surface = new SurfaceScene(this);
         }
 
         protected override void OnLoad()
