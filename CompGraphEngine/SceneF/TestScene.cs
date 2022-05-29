@@ -18,14 +18,17 @@ namespace CompGraphEngine.SceneF
 
         public TestScene(Window window) : base(window)
         {
-            
+            Renderer = new Render.Renderer3D();
+            Camera = new Camera();
+            Renderer.Camera = Camera;
         }
 
         public override void Init()
         {
 
-            Camera = new Camera();
-            Camera.Position = new Vector3(0f, 0, 0);
+            
+            
+            Camera.Position = new Vector3(10f, 10, 10);
             Camera.Speed = 10f;
 
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
@@ -38,11 +41,14 @@ namespace CompGraphEngine.SceneF
         public override void Update()
         {
 
+          
+
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
-            
-           
+            Camera.Yaw = 90 + x / 10f;
+            Camera.Pitch = (-1) * y / 10f;
+
 
 
             //t += 0.001f;

@@ -10,6 +10,9 @@ namespace CompGraphEngine.SceneF
     {
         public SurfaceScene(Window window) : base(window)
         {
+            Renderer = new Render.Renderer3D();
+            Camera = new Camera();
+            Renderer.Camera = Camera;
         }
 
         BSurface surface;
@@ -19,7 +22,7 @@ namespace CompGraphEngine.SceneF
         public override void Init()
         {
             
-            Camera = new Camera();
+           
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
 
@@ -74,7 +77,7 @@ namespace CompGraphEngine.SceneF
 
            
 
-            //surface.Transform.RotateWithShift( new Vector3(0,0,5), new Vector3(0, t, 0));
+            surface.Transform.RotateWithShift( new Vector3(0,0,5), new Vector3(0, t, 0));
 
             t += 1f;
             moveCam();

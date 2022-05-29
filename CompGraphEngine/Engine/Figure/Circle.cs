@@ -111,7 +111,7 @@ namespace CompGraphEngine.Engine.Figure
 
         public override void Update()
         {
-            
+            renderObject.Model = Transform.Model;
         }
     }
 }
