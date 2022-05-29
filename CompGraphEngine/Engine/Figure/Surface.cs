@@ -10,14 +10,12 @@ using System.Threading.Tasks;
 namespace CompGraphEngine.Engine.Figure
 {
 
-    internal class Surface : Figure, IRenderable
+    internal class Surface : GameObject
     {
 
 
-        int[] _indexes;
-        IndexBuffer _indexBuffer;
-        Matrix4 MVP;
-        
+       
+
         Color4 color = Color4.Red;
 
         public Surface()
@@ -27,22 +25,21 @@ namespace CompGraphEngine.Engine.Figure
         public override void Init()
         {
             int row = 10, col = 10;
-            FillCoordsVertex(row, col);
-            FillColorsVertex(row, col);
-
-            GenerateIndices(row, col);
-
-
-            _indexBuffer = new IndexBuffer(_indexes, _indexes.Length);
-            _shader = new Shader("Shaders/surface.glsl");
-
-            _indexes = null;
-            base.Init();
             
+            var points = FillCoordsVertex(row, col);
+            var colors = FillColorsVertex(row, col);
+
+            renderObject = new RenderObjectsElements(points, colors,
+                new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
+                Transform.Model,
+                GenerateIndices(row, col));
+
+            renderObject.Init();
+
         }
 
         // this shit
-        private void GenerateIndices(int row, int col)
+        private int[] GenerateIndices(int row, int col)
         {
             
 
@@ -72,13 +69,13 @@ namespace CompGraphEngine.Engine.Figure
                 }
             }
 
-            _indexes = indexes.ToArray();
-          
+            return indexes.ToArray();
+
         }
 
-        void FillCoordsVertex(int countRowVert,int  countColVert)
+        float[,] FillCoordsVertex(int countRowVert, int countColVert)
         {
-            _vertPoints = new float[countRowVert * countColVert, 3];
+            float[,] _vertPoints = new float[countRowVert * countColVert, 3];
             int t = 0;
             int si = 0;
             for (int i = 0; i < countRowVert; i++)
@@ -92,11 +89,11 @@ namespace CompGraphEngine.Engine.Figure
                 }
                 si++;
             }
-
+            return _vertPoints;
         }
-        void FillColorsVertex(int countRowVert, int countColVert)
+        float[,] FillColorsVertex(int countRowVert, int countColVert)
         {
-            _vertColors= new float[countRowVert * countColVert, 4];
+            float[,] _vertColors = new float[countRowVert * countColVert, 4];
             int count = 0;
 
             for (int i = 0; i < countRowVert; i++)
@@ -111,26 +108,12 @@ namespace CompGraphEngine.Engine.Figure
                 }
                 
             }
-
+            return _vertColors;
         }
 
-        public void updateTime(float time)
+        public override void Update()
         {
-            _shader.SetFloat("vTime", time);
-        }
-
-        public void Draw(Camera camera)
-        {
-            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
-
-            _shader.SetMatrix4("aMVP", MVP);
-            
-            
-            _shader.Use();
-            _vertexArray.Bind();
-            _indexBuffer.Bind();
            
-            GL.DrawElements(PrimitiveType.Triangles, _indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
         }
     }
 }

@@ -20,8 +20,8 @@ namespace CompGraphEngine
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
           
-           // scene = new TestScene(this);
-            surface = new SurfaceScene(this);
+           scene = new TestScene(this);
+            //surface = new SurfaceScene(this);
         }
 
         protected override void OnLoad()
@@ -34,8 +34,8 @@ namespace CompGraphEngine
             GL.Enable(EnableCap.DepthTest);
            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
-            //scene.Init();
-            surface.Init();
+            scene.Init();
+            //surface.Init();
         }
         protected override void OnRenderFrame(FrameEventArgs args)
         {
@@ -43,8 +43,8 @@ namespace CompGraphEngine
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
 
             
-            //scene.Render();
-            surface.Render();
+            scene.Render();
+            //surface.Render();
             SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -56,8 +56,8 @@ namespace CompGraphEngine
             {
                 Close();
             }
-            //scene.Update();
-            surface.Update();
+            scene.Update();
+            //surface.Update();
             base.OnUpdateFrame(args);
         }
 
