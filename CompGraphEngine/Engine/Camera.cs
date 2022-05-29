@@ -1,13 +1,7 @@
 ﻿using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompGraphEngine.Engine
 {
-    // TODO 
     public class Camera
     {
         public enum CameraMovement
@@ -35,13 +29,14 @@ namespace CompGraphEngine.Engine
 
         float zoom = ZOOM;
 
-        public float Zoom {
+        public float Zoom
+        {
             get { return zoom; }
-            set 
-            { 
+            set
+            {
                 if (value > ZOOM)
                     zoom = ZOOM;
-                else if ( value < 1)
+                else if (value < 1)
                     zoom = 1.0f;
                 else
                     zoom = value;
@@ -52,25 +47,25 @@ namespace CompGraphEngine.Engine
             get { return pitch; }
             set
             {
-                
-                    pitch = value;
-                
+
+                pitch = value;
+
             }
         }
-        public float Yaw 
+        public float Yaw
         {
             get { return yaw; }
-            set { yaw = value;}
+            set { yaw = value; }
         }
 
         public Camera()
         {
-            Position = new Vector3(0,0,0);
+            Position = new Vector3(0, 0, 0);
             WorldUp = new Vector3(0, 1, 0);
             updateCumeraVectors();
         }
-        public Camera(Vector3 position,Vector3 up,Vector3 front)
-        {           
+        public Camera(Vector3 position, Vector3 up, Vector3 front)
+        {
             Position = position;
             Front = front;
             Up = up;
@@ -79,8 +74,8 @@ namespace CompGraphEngine.Engine
 
         public Matrix4 GetViewMatrix()
         {
-           updateCumeraVectors();
-            Matrix4 view =  Matrix4.LookAt(Position, Position + Front, Up);
+            updateCumeraVectors();
+            Matrix4 view = Matrix4.LookAt(Position, Position + Front, Up);
             view.Transpose();
             return view;
         }
@@ -104,7 +99,7 @@ namespace CompGraphEngine.Engine
         private void updateCumeraVectors()
         {
             Vector3 front = new Vector3();
-            front.X = (float)MathHelper.Cos(MathHelper.DegreesToRadians(yaw)) 
+            front.X = (float)MathHelper.Cos(MathHelper.DegreesToRadians(yaw))
                 * (float)MathHelper.Cos(MathHelper.DegreesToRadians(pitch));
 
             front.Y = (float)MathHelper.Sin(MathHelper.DegreesToRadians(pitch));
