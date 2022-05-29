@@ -1,12 +1,12 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 
-namespace CompGraphEngine.Render
+namespace CompGraphEngine.Render.OpenGLAPI
 {
     public class VertexBuffer
     {
         private readonly int id;
-        public int CountVertex { get;private set; }
-        public VertexBuffer( float[] data, int size)
+        public int CountVertex { get; private set; }
+        public VertexBuffer(float[] data, int size)
         {
             CountVertex = data.Length;
 
@@ -34,7 +34,7 @@ namespace CompGraphEngine.Render
         public void BufferSubData(float[] data)
         {
             Bind();
-            GL.BufferSubData<float>(BufferTarget.ArrayBuffer, System.IntPtr.Zero, data.Length*sizeof(float), data);
+            GL.BufferSubData(BufferTarget.ArrayBuffer, System.IntPtr.Zero, data.Length * sizeof(float), data);
             UnBind();
         }
     }
