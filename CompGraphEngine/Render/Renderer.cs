@@ -5,10 +5,10 @@ using OpenTK.Mathematics;
 
 namespace CompGraphEngine.Render
 {
-    abstract class Renderer
+    public abstract class Renderer
     {
-        internal Camera Camera { get; set; }
-        internal abstract void Draw(RenderObject ro);
+        public Camera Camera { get; set; }
+        public abstract void Draw(RenderObject ro);
     
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Render
 {
-    internal class Renderer3D : Renderer 
+    public class Renderer3D : Renderer 
     {
-        internal override void Draw(RenderObject ro)
+        public override void Draw(RenderObject ro)
         {
             ro._shader.SetMatrix4("aMVP", Camera.GetProjection3D() * Camera.GetViewMatrix() * ro.Model);
             ro.Draw();

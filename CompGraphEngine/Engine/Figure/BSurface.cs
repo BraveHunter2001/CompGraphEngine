@@ -8,11 +8,9 @@ using System.Diagnostics;
 
 namespace CompGraphEngine.Engine.Figure
 {
-    internal class BSurface : Figure
+    internal class BSurface : GameObject
     {
-        int[] _indexes;
-        IndexBuffer _indexBuffer;
-        Matrix4 MVP;
+        
         Color4 color = Color4.White;
 
         List<int> KnotsT;
@@ -107,36 +105,32 @@ namespace CompGraphEngine.Engine.Figure
             shiftU = KnotsU[0] * offset;
 
 
-            FillCoordsVertex();
-            FillColorsVertex();
-            GenerateIndices(KnotsT[degreeT + controlSizeT] * offset - shiftT + 1, KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
+            var points = FillCoordsVertex();
+            var colors = FillColorsVertex();
+            var indeces = GenerateIndices(KnotsT[degreeT + controlSizeT] * offset - shiftT + 1, KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
            
 
-            _indexBuffer = new IndexBuffer(_indexes, _indexes.Length);
-            _shader = new Shader("Shaders/surface.glsl");
+            
+            
 
-            _indexes = null;
+            
             KnotsT = null;
             KnotsU = null;
-            
-            base.Init();
+
+           
+
+            renderObject = new RenderObjectsElements(points, colors,
+                new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
+                Transform.Model,
+                indeces);
+
+            renderObject.Init();
         }
 
 
-        public void Draw(Camera camera)
-        {
-            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
-
-            _shader.SetMatrix4("aMVP", MVP);
-
-
-            _shader.Use();
-            _vertexArray.Bind();
-            _indexBuffer.Bind();
-
-            GL.DrawElements(PrimitiveType.Triangles, _indexBuffer.GetCount(), DrawElementsType.UnsignedInt, 0);
-        }
-        private void GenerateIndices(int row, int col)
+      
+        
+        private int[] GenerateIndices(int row, int col)
         {
 
 
@@ -160,15 +154,15 @@ namespace CompGraphEngine.Engine.Figure
                 }
             }
 
-            _indexes = indexes.ToArray();
+            return indexes.ToArray();
 
         }
-       
-        void FillCoordsVertex()
+
+        float[,]  FillCoordsVertex()
         {
             int size = (KnotsT[degreeT + controlSizeT] * offset - shiftT + 1)
                 * (KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
-            _vertPoints = new float[size, 3];
+            float[,] _vertPoints = new float[size, 3];
             int shift = 0;
             float coef = 0;
 
@@ -197,13 +191,13 @@ namespace CompGraphEngine.Engine.Figure
                 }
 
             }
-
+            return _vertPoints;
         }
-        void FillColorsVertex()
+        float[,]  FillColorsVertex()
         {
             int size = (KnotsT[degreeT + controlSizeT] * offset - shiftT)
                 * (KnotsU[degreeU + controlSizeU] * offset - shiftU);
-            _vertColors = new float[size, 4];
+            float[,] _vertColors = new float[size, 4];
             int count = 0;
 
             for (int i = 0; i < KnotsT[degreeT + controlSizeT] * offset - shiftT; i++)
@@ -218,7 +212,7 @@ namespace CompGraphEngine.Engine.Figure
                 }
 
             }
-
+            return _vertColors;
         }
 
 
@@ -407,6 +401,11 @@ namespace CompGraphEngine.Engine.Figure
                 res.Add(resT);
             }
             return res;
+        }
+
+        public override void Update()
+        {
+            
         }
     }
 }

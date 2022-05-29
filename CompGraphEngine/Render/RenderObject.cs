@@ -4,7 +4,7 @@ using System;
 
 namespace CompGraphEngine.Render
 {
-    internal class RenderObject
+    public class RenderObject
     {
         internal Matrix4 Model;
         protected float[,] _vertPoints;
@@ -56,7 +56,7 @@ namespace CompGraphEngine.Render
             return res;
         }
         
-        internal void Draw()
+        public virtual void Draw()
         {
 
         }

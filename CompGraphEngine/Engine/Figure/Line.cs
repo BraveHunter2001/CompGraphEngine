@@ -5,11 +5,11 @@ using OpenTK.Mathematics;
 namespace CompGraphEngine.Engine.Figure
 
 {
-    public class Line: GameObject
+    public class Line : GameObject
     {
         private Vector3 point1;
         private Vector3 point2;
-        
+
         Color4 color = new Color4(255, 255, 255, 255);
         public Vector3 Point1
         {
@@ -21,7 +21,7 @@ namespace CompGraphEngine.Engine.Figure
             set
             {
                 point1 = value;
-                
+
             }
         }
         public Vector3 Point2
@@ -34,74 +34,64 @@ namespace CompGraphEngine.Engine.Figure
             set
             {
                 point2 = value;
-                
+
 
             }
         }
 
         public Line(Vector3 point1, Vector3 point2)
         {
-            
+            Transform = new Transform();
             this.point1 = point1;
             this.point2 = point2;
-           
+
         }
         public Line(Vector3 point1, Vector3 point2, Color4 color)
         {
-            
+            Transform = new Transform();
             this.point1 = point1;
             this.point2 = point2;
             this.color = color;
         }
         public override void Init()
         {
-            FillCoordsVertex();
-            FillColorsVertex();
+           var points = FillCoordsVertex();
+           var colors = FillColorsVertex();
 
-            _shader = new Shader("Shaders/line.glsl");
+            renderObject = new RenderObjectArrays(points, colors,
+                new Render.OpenGLAPI.Shader("Shaders/line.glsl"),
+                Transform.Model);
 
-           
+            renderObject.Init();
         }
 
-        void FillCoordsVertex()
+        float[,] FillCoordsVertex()
         {
-            _vertPoints = new float[2, 3];
+            float[,] _vertPoints = new float[2, 3];
             for (int i = 0; i < 3; i++)
             {
                 _vertPoints[0, i] = point1[i];
                 _vertPoints[1, i] = point2[i];
             }
-
+            return _vertPoints;
         }
 
-        void FillColorsVertex()
+        float[,] FillColorsVertex()
         {
-            _vertColors = new float[2, 4];
+            float[,] _vertColors = new float[2, 4];
             for (int i = 0; i < 4; i++)
             {
                 _vertColors[0, i] = ((Vector4)color)[i];
                 _vertColors[1, i] = ((Vector4)color)[i];
             }
+            return _vertColors;
         }
 
-        public void Draw() 
-        {
- 
-            MVP = camera.GetProjection3D() * camera.GetViewMatrix() * Transform.Model;
-            _shader.SetMatrix4("aMVP", MVP);
-
-            _shader.Use();
-            _vertexArray.Bind();
-
-
-           GL.DrawArrays(PrimitiveType.Lines, 0, _pointBuffer.CountVertex);
-           
-            
-        }
+      
 
         public override void Update()
         {
-           
+
         }
     }
 }

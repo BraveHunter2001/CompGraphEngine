@@ -2,7 +2,7 @@
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    internal class IndexBuffer
+    public class IndexBuffer
     {
         private readonly int id;
         private readonly int count = 0;
@@ -20,18 +20,18 @@ namespace CompGraphEngine.Render.OpenGLAPI
             GL.DeleteBuffer(id);
         }
 
-        internal void Bind()
+        public void Bind()
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id);
         }
 
-        internal void UnBind()
+        public void UnBind()
         {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
-        internal int GetId() => id;
+        public  int GetId() => id;
 
-        internal int GetCount() => count;
+        public  int GetCount() => count;
     }
 }
