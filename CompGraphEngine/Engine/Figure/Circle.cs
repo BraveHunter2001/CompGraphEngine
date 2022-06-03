@@ -42,7 +42,7 @@ namespace CompGraphEngine.Engine.Figure
             renderObject = new RenderObjectsElements(points, colors,
                 new Render.OpenGLAPI.Shader("Shaders/circle.glsl"),
                 Transform.Model,_indices);
-
+            renderObject._shader.SetFloat("aThickness", thickness);
             renderObject.Init();
         }
 

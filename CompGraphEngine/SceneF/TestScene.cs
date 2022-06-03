@@ -18,23 +18,25 @@ namespace CompGraphEngine.SceneF
 
         public TestScene(Window window) : base(window)
         {
-            Renderer = new Render.Renderer3D();
+            Renderer = new Render.Renderer2D();
             Camera = new Camera();
             Renderer.Camera = Camera;
+           // window.
         }
 
         public override void Init()
         {
 
-            circle = new Circle();
-            
-            Camera.Position = new Vector3(10f, 10, 10);
+            circle = new Circle(new Vector3(0,0,0));
+            circle.Transform.Scale = new Vector3(10,10,10);
+            Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
 
+            AddObjectToScene(circle);
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
-            AddObjectToScene(circle);
+            
            
             base.Init();
         }
@@ -43,8 +45,8 @@ namespace CompGraphEngine.SceneF
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
-            Camera.Yaw = 90 + x / 10f;
-            Camera.Pitch = (-1) * y / 10f;
+            //Camera.Yaw = 90 + x / 10f;
+           // Camera.Pitch = (-1) * y / 10f;
 
 
 
@@ -59,22 +61,22 @@ namespace CompGraphEngine.SceneF
             if (state.IsKeyDown(Keys.W))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.FORWARD, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed W");
+                
             }
             if (state.IsKeyDown(Keys.A))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.LEFT, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed A");
+                
             }
             if (state.IsKeyDown(Keys.S))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.BACKWARD, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed S");
+                
             }
             if (state.IsKeyDown(Keys.D))
             {
                 Camera.ProcessKeyboard(Camera.CameraMovement.RIGHT, (float)window.UpdateTime);
-                System.Console.WriteLine("Pressed D");
+               
             }
 
         }
@@ -106,6 +108,11 @@ namespace CompGraphEngine.SceneF
                 def.Y *= -1;
                 circle.Transform.Translate(def);
             }
+        }
+
+        void InputControlPoint()
+        {
+
         }
     }
 }

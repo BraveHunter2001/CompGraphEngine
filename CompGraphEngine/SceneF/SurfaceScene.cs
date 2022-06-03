@@ -153,7 +153,7 @@ namespace CompGraphEngine.SceneF
 
         void InputFullCoord()
         {
-            surface =  new BSurface(3, 3, 10, InputCoord());
+            surface =  new BSurface(2, 2, 10, InputCoord());
         }
        
         void InputCirclePolygonByX()
