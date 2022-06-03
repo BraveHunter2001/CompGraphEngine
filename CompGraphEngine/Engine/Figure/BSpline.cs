@@ -31,9 +31,6 @@ namespace CompGraphEngine.Engine.Figure
         public override void Init()
         {
             
-       
-
-            
 
             var points = FillCoordsVertex(degree, controlSize, offset);
             var colors = FillColorsVertex(Knots[degree + controlSize] * offset);

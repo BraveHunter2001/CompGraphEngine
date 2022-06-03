@@ -17,46 +17,49 @@ namespace CompGraphEngine.SceneF
         }
 
         BSurface surface;
-        BSurface surface1;
+        List<Circle> controlPolygon;
+
 
         float x, y, t;
         public override void Init()
         {
-            
-           
+
+
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
 
-            List<Circle> controlPolygon = new List<Circle>();
+            controlPolygon = new List<Circle>();
 
-            for (int i = 0; i < 9; i++)
-            {
-                Vector3 center = new Vector3();
-                center.X = 0;
-                center.Y = (float)MathHelper.Cos(i * MathHelper.Pi / 4);
-                center.Z = (float)MathHelper.Sin(i * MathHelper.Pi / 4);
-                Circle c = new Circle(center);
+            //for (int i = 0; i < 9; i++)
+            //{
+            //    Vector3 center = new Vector3();
+            //    center.X = 0;
+            //    center.Y = (float)MathHelper.Cos( i * MathHelper.Pi / 4);
+            //    center.Z = (float)MathHelper.Sin( i * MathHelper.Pi / 4);
+            //    Circle c = new Circle(center);
 
-                controlPolygon.Add(c);
-            }
+            //    controlPolygon.Add(c);
+            //}
 
 
-            surface = new BSurface(3,3, 10, BSurface.GeneratedPolygon(5, 5));
-           
+
+
+            surface = new BSurface(3, 3, 10, InputCoord());
+
 
             foreach (var l in surface.ControlPoints)
             {
                 foreach (var c in l)
                 {
-                    //c.Transform.Scale = new Vector3(0.01f);
+                    c.Transform.Scale = new Vector3(0.01f);
                     c.color = Color4.Red;
 
-                    //AddObjectToScene(c);
+                    AddObjectToScene(c);
                 }
             }
 
             AddObjectToScene(surface);
-            AddObjectToScene(surface1);
+
 
 
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
@@ -78,7 +81,7 @@ namespace CompGraphEngine.SceneF
 
 
 
-            surface.Transform.RotateWithShift( new Vector3(0,0,5), new Vector3(0, t, 0));
+            surface.Transform.RotateWithShift(new Vector3(0, 0, 5), new Vector3(0,0 , t));
 
             t += 1f;
             moveCam();
@@ -109,6 +112,38 @@ namespace CompGraphEngine.SceneF
 
             }
 
+        }
+
+        List<List<Circle>> InputCoord()
+        {
+            List<List<Circle>> result = new List<List<Circle>>();
+            Console.WriteLine("Input control points betwen space.");
+
+            Console.WriteLine("Input count point by T - param");
+            int t = Int32.Parse(Console.ReadLine());
+            Console.WriteLine("Input count point by U - param");
+            int u = Int32.Parse(Console.ReadLine());
+            int countPoint = 0;
+            for (int i = 0; i < t; i++)
+            {
+                List < Circle > circles = new List<Circle>();
+                for (int j = 0; j < u; j++)
+                {
+                    Console.WriteLine($"Point {countPoint} X Y Z:");
+                    string[] strXYZ = Console.ReadLine().Split(' ');
+
+                    Vector3 center = new Vector3();
+                    center.X = Int32.Parse(strXYZ[0]);
+                    center.Y = Int32.Parse(strXYZ[1]);
+                    center.Z = Int32.Parse(strXYZ[2]);
+                    Circle c = new Circle(center);
+
+                    circles.Add(c);
+                    countPoint++;
+                }
+                result.Add(circles);
+            }
+            return result;
         }
 
     }
