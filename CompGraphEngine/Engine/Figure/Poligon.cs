@@ -23,7 +23,7 @@ namespace CompGraphEngine.Engine.Figure
             var indexs = GenerateIndices(); 
 
             renderObject = new RenderObjectsElements(points, colors,
-                new Render.OpenGLAPI.Shader("Shaders/circle.glsl"),
+                new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
                 Transform.Model, indexs);
 
             renderObject.Init();
