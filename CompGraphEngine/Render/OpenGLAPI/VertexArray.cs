@@ -29,7 +29,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             vb.Bind();
 
             var elem = layout.Elements[0];
-            GL.VertexAttribPointer(index, elem.count, elem.type, elem.normalized, 0, 0);
+            GL.VertexAttribPointer(index, elem.count, elem.type, true, 0, 0);
             GL.EnableVertexAttribArray(index);
 
 

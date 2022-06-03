@@ -294,7 +294,7 @@ namespace CompGraphEngine.Engine.Figure
                 {
                     Vector3 center = new Vector3();
                     center.X = (j + 1) * 5;
-                    center.Y = new Random().Next(-20, 20) * 0.1f;
+                    center.Y = new Random().Next(-20, 200) * 0.1f;
                     center.Z = (i + 1) * 5;
                     Circle c = new Circle(center);
 
@@ -367,7 +367,7 @@ namespace CompGraphEngine.Engine.Figure
                 {
                     Vector3 center = new Vector3();
                     center.X = ControlPointPolygon[j].Transform.Position.X ;
-                    center.Y = ControlPointPolygon[j].Transform.Position.Y +shift;
+                    center.Y = ControlPointPolygon[j].Transform.Position.Y + shift;
                     center.Z = ControlPointPolygon[j].Transform.Position.Z;
                     Circle c = new Circle(center);
 

@@ -1,5 +1,6 @@
 ﻿using CompGraphEngine.Engine;
 using CompGraphEngine.Engine.Figure;
+using CompGraphEngine.Engine.Menu;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
@@ -14,11 +15,20 @@ namespace CompGraphEngine.SceneF
             Renderer = new Render.Renderer3D();
             Camera = new Camera();
             Renderer.Camera = Camera;
+
+            MenuItem randSurface = new MenuItem(RandomSurface, "Random surface");
+            MenuItem inputFullCoord = new MenuItem(InputFullCoord, "Input full coord");
+            MenuItem InputPipeBYX = new MenuItem(InputCirclePolygonByX, "Input pipe-surface by x");
+            MenuItem InputPipeBYY = new MenuItem(InputCirclePolygonByY, "Input pipe-surface by y");
+            MenuItem InputPipeBYZ = new MenuItem(InputCirclePolygonByZ, "Input pipe-surface by z");
+
+            MenuItem[] menuItems = { randSurface, inputFullCoord, InputPipeBYX, InputPipeBYY, InputPipeBYZ };
+             menu = new Menu("Create surface", menuItems);
         }
 
         BSurface surface;
         List<Circle> controlPolygon;
-
+        Menu menu;
 
         float x, y, t;
         public override void Init()
@@ -27,24 +37,13 @@ namespace CompGraphEngine.SceneF
 
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
-
-            controlPolygon = new List<Circle>();
-
-            //for (int i = 0; i < 9; i++)
-            //{
-            //    Vector3 center = new Vector3();
-            //    center.X = 0;
-            //    center.Y = (float)MathHelper.Cos( i * MathHelper.Pi / 4);
-            //    center.Z = (float)MathHelper.Sin( i * MathHelper.Pi / 4);
-            //    Circle c = new Circle(center);
-
-            //    controlPolygon.Add(c);
-            //}
+            menu.Select();
+            
 
 
 
 
-            surface = new BSurface(3, 3, 10, InputCoord());
+
 
 
             foreach (var l in surface.ControlPoints)
@@ -81,7 +80,7 @@ namespace CompGraphEngine.SceneF
 
 
 
-            surface.Transform.RotateWithShift(new Vector3(0, 0, 5), new Vector3(0,0 , t));
+            surface.Transform.RotateWithShift(new Vector3(0, 0, 5), new Vector3(0,t , 0));
 
             t += 1f;
             moveCam();
@@ -144,6 +143,66 @@ namespace CompGraphEngine.SceneF
                 result.Add(circles);
             }
             return result;
+        }
+
+
+        void RandomSurface()
+        {
+            surface = new BSurface(3, 3, 10, 10,10);
+        }
+
+        void InputFullCoord()
+        {
+            surface =  new BSurface(3, 3, 10, InputCoord());
+        }
+       
+        void InputCirclePolygonByX()
+        {
+            controlPolygon = new List<Circle>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                Vector3 center = new Vector3();
+                center.X = 0;
+                center.Y = (float)MathHelper.Cos(i * MathHelper.Pi / 4);
+                center.Z = (float)MathHelper.Sin(i * MathHelper.Pi / 4);
+                Circle c = new Circle(center);
+
+                controlPolygon.Add(c);
+            }
+            surface = new BSurface(3, 3, 10, BSurface.GeneratedPolygonByX(controlPolygon, 5, 5));
+        }
+        void InputCirclePolygonByY()
+        {
+            controlPolygon = new List<Circle>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                Vector3 center = new Vector3();
+                center.X = (float)MathHelper.Cos(i * MathHelper.Pi / 4);
+                center.Y = 0;
+                center.Z = (float)MathHelper.Sin(i * MathHelper.Pi / 4);
+                Circle c = new Circle(center);
+
+                controlPolygon.Add(c);
+            }
+            surface = new BSurface(3, 3, 10, BSurface.GeneratedPolygonByY(controlPolygon, 5, 5));
+        }
+        void InputCirclePolygonByZ()
+        {
+            controlPolygon = new List<Circle>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                Vector3 center = new Vector3();
+                center.X = (float)MathHelper.Cos(i * MathHelper.Pi / 4);
+                center.Y = (float)MathHelper.Sin(i * MathHelper.Pi / 4);
+                center.Z =0 ;
+                Circle c = new Circle(center);
+
+                controlPolygon.Add(c);
+            }
+            surface = new BSurface(3, 3, 10, BSurface.GeneratedPolygonByZ(controlPolygon, 5, 5));
         }
 
     }
