@@ -62,6 +62,8 @@ namespace CompGraphEngine.SceneF
         public void AddObjectToScene(GameObject obj)
         {
             GameObjects.Add(obj);
+            obj.Init();
+            obj.IsInited = true;
         }
 
         public void RemoveObjectFromScene(GameObject obj)

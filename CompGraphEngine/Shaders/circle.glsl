@@ -43,6 +43,8 @@ void main()
 
     outputColor = vec4(color, 1.0 );
     outputColor *= fColor;
+    if(outputColor.rgb == vec3(0,0,0))
+        discard;
 
 }
 
