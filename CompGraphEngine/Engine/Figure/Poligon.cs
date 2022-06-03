@@ -56,9 +56,9 @@ namespace CompGraphEngine.Engine.Figure
             float[,] _vertColors = new float[ControlPoints.Count, 4];
             for (int i = 0; i < ControlPoints.Count; i++)
             {
-                _vertColors[i, 0] = 1.0f;
-                _vertColors[i, 1] = 0.0f;
-                _vertColors[i, 2] = 0.0f;
+                _vertColors[i, 0] = color.R;
+                _vertColors[i, 1] = color.G;
+                _vertColors[i, 2] = color.B;
                 _vertColors[i, 3] = 0.5f;
             }
             
@@ -66,11 +66,11 @@ namespace CompGraphEngine.Engine.Figure
         }
         private int[] GenerateIndices()
         {
-            int current = 1;
+            int current = 0;
             List<int> indexes = new List<int>();
             for (int i = 0; i < ControlPoints.Count - 2; i++)
             {
-                indexes.Add(1);
+                indexes.Add(0);
                 indexes.Add(current + 1);
                 indexes.Add(current + 2);
                 current++;
