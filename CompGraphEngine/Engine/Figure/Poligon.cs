@@ -20,11 +20,11 @@ namespace CompGraphEngine.Engine.Figure
         {
             var points = FillCoordsVertex();
             var colors = FillColorsVertex();
-            var indexs = GenerateIndices(); 
+            var indexes = GenerateIndices(); 
 
             renderObject = new RenderObjectsElements(points, colors,
                 new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
-                Transform.Model, indexs);
+                Transform.Model, indexes);
 
             renderObject.Init();
         }
@@ -32,23 +32,41 @@ namespace CompGraphEngine.Engine.Figure
 
         float[,] FillCoordsVertex()
         {
-            float[,] _vertPoints = new float[4, 3];
+            float[,] _vertPoints = new float[ControlPoints.Count, 3];
+            for(int i = 0; i < ControlPoints.Count; i++)
+            {
+                _vertPoints[i, 0] = ControlPoints[i].X;
+                _vertPoints[i, 0] = ControlPoints[i].Y;
+                _vertPoints[i, 0] = ControlPoints[i].Z;
+            }
 
             return _vertPoints;
         }
         float[,] FillColorsVertex()
         {
             //color
-            float[,] _vertColors = new float[4, 4];
+            float[,] _vertColors = new float[ControlPoints.Count, 4];
+            for (int i = 0; i < ControlPoints.Count; i++)
+            {
+                _vertColors[i, 0] = 1.0f;
+                _vertColors[i, 0] = 0.0f;
+                _vertColors[i, 0] = 0.0f;
+                _vertColors[i, 0] = 0.5f;
+            }
             
             return _vertColors;
         }
         private int[] GenerateIndices()
         {
-
-
+            int current = 1;
             List<int> indexes = new List<int>();
-
+            for (int i = 0; i < ControlPoints.Count - 2; i++)
+            {
+                indexes.Add(1);
+                indexes.Add(current + 1);
+                indexes.Add(current + 2);
+                current++;
+            }
             
            
 
