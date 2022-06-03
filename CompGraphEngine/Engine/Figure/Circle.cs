@@ -8,8 +8,6 @@ namespace CompGraphEngine.Engine.Figure
     public class Circle : GameObject
     {
         int[] _indices = { 0, 1, 3, 1, 2, 3 };
-        
-     
 
         // this fucking local data
         // dont touch this shit

@@ -26,7 +26,7 @@ namespace CompGraphEngine.SceneF
         public override void Init()
         {
 
-            
+            circle = new Circle();
             
             Camera.Position = new Vector3(10f, 10, 10);
             Camera.Speed = 10f;
@@ -34,15 +34,12 @@ namespace CompGraphEngine.SceneF
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
-
+            AddObjectToScene(circle);
            
             base.Init();
         }
         public override void Update()
         {
-
-          
-
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
@@ -51,7 +48,7 @@ namespace CompGraphEngine.SceneF
 
 
 
-            //t += 0.001f;
+            
             moveCam();
             base.Update();
         }
@@ -83,32 +80,32 @@ namespace CompGraphEngine.SceneF
         }
 
 
-        //Vector2 lastMouse = new Vector2();
-        //void PressedMouse(MouseButtonEventArgs arg)
-        //{
-              
-        //    if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
-        //    {
-        //         System.Console.WriteLine("Pressed");
-        //        Vector2 m = window.MouseState.Position;
-        //        if(circle.isContain(m.X, m.Y, Camera))
-        //        {
-        //            lastMouse = m;
-        //            System.Console.WriteLine("Popal");
-        //        }
-        //    }
-        //}
+        Vector2 lastMouse = new Vector2();
+        void PressedMouse(MouseButtonEventArgs arg)
+        {
 
-        //void Realised(MouseButtonEventArgs arg)
-        //{
-        //    if (arg.Action == InputAction.Release && arg.Button == MouseButton.Left)
-        //    {
-        //         System.Console.WriteLine("Relize");
-        //        Vector2 m = window.MouseState.Position;
-        //        Vector3 def = new Vector3(m - lastMouse) / 100f;
-        //        def.Y *= -1;
-        //        circle.Transform.Translate(def);
-        //    }
-        //}
+            if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
+            {
+                System.Console.WriteLine("Pressed"); 
+                Vector2 m = window.MouseState.Position;
+                if (circle.isContain(m.X, m.Y, Camera))
+                {
+                    lastMouse = m;
+                    System.Console.WriteLine("Popal");
+                }
+            }
+        }
+
+        void Realised(MouseButtonEventArgs arg)
+        {
+            if (arg.Action == InputAction.Release && arg.Button == MouseButton.Left)
+            {
+                System.Console.WriteLine("Relize");
+                Vector2 m = window.MouseState.Position;
+                Vector3 def = new Vector3(m - lastMouse) / 100f;
+                def.Y *= -1;
+                circle.Transform.Translate(def);
+            }
+        }
     }
 }
