@@ -19,8 +19,8 @@ namespace CompGraphEngine
 
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
-            surface = new SurfaceScene(this);
-            //ploigons4lab = new TestScene(this);
+            //surface = new SurfaceScene(this);
+            ploigons4lab = new TestScene(this);
 
 
         }
@@ -32,10 +32,16 @@ namespace CompGraphEngine
             base.OnLoad();
             
             GL.ClearColor(0f, 0f, 0f, 1.0f);
-            GL.Enable(EnableCap.DepthTest);
-           GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-           //ploigons4lab.Init();
-           surface.Init();
+
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            //GL.Enable(EnableCap.DepthTest);
+          
+
+           //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+           ploigons4lab.Init();
+           //surface.Init();
 
         }
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -44,8 +50,8 @@ namespace CompGraphEngine
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
 
 
-            surface.Render();
-            //ploigons4lab.Render();
+            //surface.Render();
+            ploigons4lab.Render();
 
             SwapBuffers();
         }
@@ -60,8 +66,8 @@ namespace CompGraphEngine
             }
             
 
-           surface.Update();
-           // ploigons4lab.Update();
+           //surface.Update();
+           ploigons4lab.Update();
 
             base.OnUpdateFrame(args);
         }

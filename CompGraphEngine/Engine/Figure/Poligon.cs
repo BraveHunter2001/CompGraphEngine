@@ -1,4 +1,5 @@
 ﻿using CompGraphEngine.Render;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace CompGraphEngine.Engine.Figure
 {
     public class Poligon : GameObject
     {
+        Color4 color = Color4.Blue;
         List<Vector3> ControlPoints; 
         public Poligon(List<Vector3> controlPoints)
         {
@@ -22,13 +24,19 @@ namespace CompGraphEngine.Engine.Figure
             var colors = FillColorsVertex();
             var indexes = GenerateIndices(); 
 
-            renderObject = new RenderObjectsElements(points, colors,
+            renderObject = new RenderObjectArrays(points, colors,
                 new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
                 Transform.Model, indexes);
 
             renderObject.Init();
         }
 
+        public Poligon(List<Vector3> controlPoints, Color4 color)
+        {
+            Transform = new Transform();
+            ControlPoints = controlPoints;
+            this.color = color;
+        }
 
         float[,] FillCoordsVertex()
         {

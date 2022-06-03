@@ -11,18 +11,28 @@ namespace CompGraphEngine.Render
 {
     public class RenderObjectArrays : RenderObject
     {
+        private PrimitiveType type;
         public RenderObjectArrays(float[,] Points, float[,] Colors, Shader shader, Matrix4 model)
         {
             _vertPoints = Points;
             _vertColors = Colors;
             _shader = shader;
             Model = model;
+            type = PrimitiveType.Lines;
+        }
+        public RenderObjectArrays(float[,] Points, float[,] Colors, Shader shader, Matrix4 model, PrimitiveType type)
+        {
+            _vertPoints = Points;
+            _vertColors = Colors;
+            _shader = shader;
+            Model = model;
+            this.type = type;
         }
 
         public override void Draw()
         {
             _vertexArray.Bind();
-            GL.DrawArrays(PrimitiveType.Lines, 0, _pointBuffer.CountVertex);
+            GL.DrawArrays(type, 0, _pointBuffer.CountVertex);
         }
         
     }

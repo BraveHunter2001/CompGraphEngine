@@ -4,6 +4,9 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
+using System.Collections.Generic;
+
 namespace CompGraphEngine.SceneF
 {
     internal class TestScene : Scene
@@ -13,15 +16,21 @@ namespace CompGraphEngine.SceneF
         Surface surface;
         Circle circle;
         BSpline bSpline;
-
+        Random random;
         float x = 0, y = 0, t = 0;
+        bool isPrintCircle = false;
+
+        List<Vector3> pointsForPoligon;
 
         public TestScene(Window window) : base(window)
         {
             Renderer = new Render.Renderer2D();
             Camera = new Camera();
             Renderer.Camera = Camera;
-           // window.
+            window.MouseDown += PressedMouse;
+            window.KeyDown += PressedKey;
+            random = new Random();
+            pointsForPoligon = new List<Vector3>();
         }
 
         public override void Init()
@@ -32,7 +41,7 @@ namespace CompGraphEngine.SceneF
             Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
 
-            AddObjectToScene(circle);
+            //AddObjectToScene(circle);
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
@@ -46,11 +55,11 @@ namespace CompGraphEngine.SceneF
             y = window.MouseState.Y;
 
             //Camera.Yaw = 90 + x / 10f;
-           // Camera.Pitch = (-1) * y / 10f;
-
+            // Camera.Pitch = (-1) * y / 10f;
 
 
             
+
             moveCam();
             base.Update();
         }
@@ -82,33 +91,59 @@ namespace CompGraphEngine.SceneF
         }
 
 
-        Vector2 lastMouse = new Vector2();
+        
         void PressedMouse(MouseButtonEventArgs arg)
         {
 
             if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
             {
-                System.Console.WriteLine("Pressed"); 
-                Vector2 m = window.MouseState.Position;
-                if (circle.isContain(m.X, m.Y, Camera))
+                System.Console.WriteLine("Pressed");
+                if (isPrintCircle)
                 {
-                    lastMouse = m;
-                    System.Console.WriteLine("Popal");
+
+                    float x = window.MouseState.X - Constants.Width / 2;
+                    float y = (-1) * (window.MouseState.Y - Constants.Height / 2);
+                    pointsForPoligon.Add(new Vector3(x, y, 0));
+                    DrawHelperPointsAndLine(x, y);
+                    foreach (var point in pointsForPoligon)
+                        Console.WriteLine(point);
                 }
             }
         }
 
-        void Realised(MouseButtonEventArgs arg)
+        void DrawHelperPointsAndLine(float x, float y )
         {
-            if (arg.Action == InputAction.Release && arg.Button == MouseButton.Left)
+            var c = new Circle(new Vector3(x, y, 0));
+
+            float r = random.Next(0, 255) * 1f / 255;
+            float g = random.Next(0, 255) * 1f / 255;
+            float b = random.Next(0, 255) * 1f / 255;
+            c.color = new Color4(r, g, b, 0.5f);
+            Console.WriteLine(c.color);
+            c.Transform.Scale = new Vector3(10, 10, 10);
+            AddObjectToScene(c);
+        }
+        void PressedKey(KeyboardKeyEventArgs arg)
+        {
+            if (arg.Key == Keys.Space)
             {
-                System.Console.WriteLine("Relize");
-                Vector2 m = window.MouseState.Position;
-                Vector3 def = new Vector3(m - lastMouse) / 100f;
-                def.Y *= -1;
-                circle.Transform.Translate(def);
+                isPrintCircle = !isPrintCircle;
+                if(isPrintCircle)
+                    System.Console.WriteLine("You can input points");
+                else
+                {
+                    System.Console.WriteLine("You cant input points");
+                    float r = random.Next(0, 255) * 1f / 255;
+                    float g = random.Next(0, 255) * 1f / 255;
+                    float b = random.Next(0, 255) * 1f / 255;
+                    Color4 color = new Color4(r, g, b, 0.5f);
+                    Poligon poligon = new Poligon(pointsForPoligon, color);
+                    AddObjectToScene(poligon);
+                }
+                    
             }
         }
+       
 
         void InputControlPoint()
         {
