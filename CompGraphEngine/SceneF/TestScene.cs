@@ -41,7 +41,7 @@ namespace CompGraphEngine.SceneF
             Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
 
-            AddObjectToScene(circle);
+            //AddObjectToScene(circle);
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
@@ -131,7 +131,16 @@ namespace CompGraphEngine.SceneF
                 if(isPrintCircle)
                     System.Console.WriteLine("You can input points");
                 else
+                {
                     System.Console.WriteLine("You cant input points");
+                    float r = random.Next(0, 255) * 1f / 255;
+                    float g = random.Next(0, 255) * 1f / 255;
+                    float b = random.Next(0, 255) * 1f / 255;
+                    Color4 color = new Color4(r, g, b, 0.5f);
+                    Poligon poligon = new Poligon(pointsForPoligon, color);
+                    AddObjectToScene(poligon);
+                }
+                    
             }
         }
        

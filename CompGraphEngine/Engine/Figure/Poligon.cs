@@ -1,4 +1,5 @@
 ﻿using CompGraphEngine.Render;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace CompGraphEngine.Engine.Figure
 {
     public class Poligon : GameObject
     {
+        Color4 color = Color4.Blue;
         List<Vector3> ControlPoints; 
         public Poligon(List<Vector3> controlPoints)
         {
@@ -20,42 +22,47 @@ namespace CompGraphEngine.Engine.Figure
         {
             var points = FillCoordsVertex();
             var colors = FillColorsVertex();
-            var indexs = GenerateIndices(); 
 
-            renderObject = new RenderObjectsElements(points, colors,
+            renderObject = new RenderObjectArrays(points, colors,
                 new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
-                Transform.Model, indexs);
+                Transform.Model, PrimitiveType.TriangleFan);
 
             renderObject.Init();
         }
 
+        public Poligon(List<Vector3> controlPoints, Color4 color)
+        {
+            Transform = new Transform();
+            ControlPoints = controlPoints;
+            this.color = color;
+        }
 
         float[,] FillCoordsVertex()
         {
-            float[,] _vertPoints = new float[4, 3];
+            float[,] _vertPoints = new float[ControlPoints.Count, 3];
+            for (int i = 0; i < ControlPoints.Count; i++)
+            {
+                _vertPoints[i, 0] = ControlPoints[i].X;
+                _vertPoints[i, 1] = ControlPoints[i].Y;
+                _vertPoints[i, 2] = ControlPoints[i].Z;
+            }
 
             return _vertPoints;
         }
         float[,] FillColorsVertex()
         {
-            //color
-            float[,] _vertColors = new float[4, 4];
-            
+            float[,] _vertColors = new float[ControlPoints.Count, 4];
+            for (int i = 0; i < ControlPoints.Count; i++)
+            {
+                _vertColors[i, 0] = color.R;
+                _vertColors[i, 1] = color.G;
+                _vertColors[i, 2] = color.B;
+                _vertColors[i, 3] = 0.5f;
+            }
+
             return _vertColors;
         }
-        private int[] GenerateIndices()
-        {
-
-
-            List<int> indexes = new List<int>();
-
-            
-           
-
-            return indexes.ToArray();
-
-        }
-
+        
         public override void Update()
         {
             renderObject.Model = Transform.Model;
