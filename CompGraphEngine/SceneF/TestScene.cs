@@ -36,8 +36,8 @@ namespace CompGraphEngine.SceneF
         public override void Init()
         {
 
-            circle = new Circle(new Vector3(0,0,0));
-            circle.Transform.Scale = new Vector3(10,10,10);
+            //circle = new Circle(new Vector3(0,0,0));
+            //circle.Transform.Scale = new Vector3(10,10,10);
             Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
 

@@ -24,8 +24,8 @@ namespace CompGraphEngine.Engine.Figure
             var colors = FillColorsVertex();
             var indexes = GenerateIndices(); 
 
-            renderObject = new RenderObjectArrays(points, colors,
-                new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
+            renderObject = new RenderObjectsElements(points, colors,
+                new Render.OpenGLAPI.Shader("Shaders/rectangle.glsl"),
                 Transform.Model, indexes);
 
             renderObject.Init();
@@ -44,8 +44,8 @@ namespace CompGraphEngine.Engine.Figure
             for(int i = 0; i < ControlPoints.Count; i++)
             {
                 _vertPoints[i, 0] = ControlPoints[i].X;
-                _vertPoints[i, 0] = ControlPoints[i].Y;
-                _vertPoints[i, 0] = ControlPoints[i].Z;
+                _vertPoints[i, 1] = ControlPoints[i].Y;
+                _vertPoints[i, 2] = ControlPoints[i].Z;
             }
 
             return _vertPoints;
@@ -57,9 +57,9 @@ namespace CompGraphEngine.Engine.Figure
             for (int i = 0; i < ControlPoints.Count; i++)
             {
                 _vertColors[i, 0] = 1.0f;
-                _vertColors[i, 0] = 0.0f;
-                _vertColors[i, 0] = 0.0f;
-                _vertColors[i, 0] = 0.5f;
+                _vertColors[i, 1] = 0.0f;
+                _vertColors[i, 2] = 0.0f;
+                _vertColors[i, 3] = 0.5f;
             }
             
             return _vertColors;
