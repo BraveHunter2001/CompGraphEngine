@@ -37,7 +37,7 @@ namespace CompGraphEngine.SceneF
 
         public override void Init()
         {
-
+            Console.WriteLine("Space - switching between point input and polygon rendering. ");
             
             Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
@@ -151,7 +151,7 @@ namespace CompGraphEngine.SceneF
                     float r = random.Next(0, 255) * 1f / 255;
                     float g = random.Next(0, 255) * 1f / 255;
                     float b = random.Next(0, 255) * 1f / 255;
-                    Color4 color = new Color4(r, g, b, 0.5f);
+                    Color4 color = new Color4(r, g, b, 1f);
                     Poligon poligon = new Poligon(pointsForPoligon, color);
                     AddObjectToScene(poligon);
                 }

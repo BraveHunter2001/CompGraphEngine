@@ -26,7 +26,7 @@ namespace CompGraphEngine.Engine.Figure
         {
             Transform = new Transform();
             Transform.Position = center;
-            Console.WriteLine("Create");
+            
         }
         public Circle(Transform transform)
         {
