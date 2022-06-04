@@ -37,7 +37,8 @@ namespace CompGraphEngine.SceneF
 
         public override void Init()
         {
-            Console.WriteLine("Space - switching between point input and polygon rendering. ");
+            Console.WriteLine("Spacebar - switching between point input and polygon rendering. ");
+            Console.WriteLine("Press spacebar...");
             
             Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
@@ -98,7 +99,7 @@ namespace CompGraphEngine.SceneF
 
             if (arg.Action == InputAction.Press && arg.Button == MouseButton.Left)
             {
-                System.Console.WriteLine("Pressed");
+                
                 if (isPrintCircle)
                 {
 
@@ -108,8 +109,7 @@ namespace CompGraphEngine.SceneF
 
                     DrawHelperPointsAndLine(x, y);
 
-                    foreach (var point in pointsForPoligon)
-                        Console.WriteLine(point);
+                 
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace CompGraphEngine.SceneF
             float g = random.Next(0, 255) * 1f / 255;
             float b = random.Next(0, 255) * 1f / 255;
             c.color = new Color4(r, g, b, 0.5f);
-            Console.WriteLine(c.color);
+            
             c.Transform.Scale = new Vector3(10, 10, 10);
             pointsC.Add(c);
             AddObjectToScene(c);
