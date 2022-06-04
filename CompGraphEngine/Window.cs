@@ -10,7 +10,7 @@ namespace CompGraphEngine
     public class Window : GameWindow
     {
       
-        Scene ploigons4lab, surface, depSur;
+        Scene ploigons4lab, surface, depSur, light5Lab;
         
       
         public Window GetWindow()
@@ -22,7 +22,8 @@ namespace CompGraphEngine
         {
             //surface = new SurfaceScene(this);
             // ploigons4lab = new TestScene(this);
-           depSur = new DepthTestSurface(this);
+            //depSur = new DepthTestSurface(this);
+            light5Lab = new LightScene(this);
 
 
         }
@@ -38,7 +39,8 @@ namespace CompGraphEngine
 
             //ploigons4lab.Init();
             //surface.Init();
-            depSur.Init();
+            //depSur.Init();
+            light5Lab.Init();
 
         }
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -49,8 +51,8 @@ namespace CompGraphEngine
 
             //surface.Render();
             //ploigons4lab.Render();
-            depSur.Render();
-
+            // depSur.Render();
+            light5Lab.Render();
             SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -62,12 +64,12 @@ namespace CompGraphEngine
             {
                 Close();
             }
-            
 
-           //surface.Update();
-           //ploigons4lab.Update();
-           depSur.Update();
-
+            /// Scens
+            //surface.Update();
+            //ploigons4lab.Update();
+            //depSur.Update();
+            light5Lab.Update();
             base.OnUpdateFrame(args);
         }
 

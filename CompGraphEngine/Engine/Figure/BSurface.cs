@@ -166,7 +166,7 @@ namespace CompGraphEngine.Engine.Figure
             float[,] _vertPoints = new float[size, 3];
             int shift = 0;
             float coef = 0;
-
+           // int p = 0;
             for (int t = 0; t < KnotsT[degreeT + controlSizeT] * offset - shiftT + 1; t++)
             {
                 for (int u = 0; u < KnotsU[degreeU + controlSizeU] * offset - shiftU + 1; u++)
@@ -184,10 +184,10 @@ namespace CompGraphEngine.Engine.Figure
                                 * coef;
                             _vertPoints[shift, 2] += ControlPoints[controlT][controlU].Transform.Position.Z
                                 * coef;
-
+                            //p++;
                         }
                     }
-                    // Console.WriteLine($"Calc coef ({coef})| {p}/{size * controlSizeT * controlSizeU} ");
+                     //Console.WriteLine($"Calc coef ({coef})| {p}/{size * controlSizeT * controlSizeU} ");
                     shift++;
                 }
 

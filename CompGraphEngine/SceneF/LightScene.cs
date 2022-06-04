@@ -1,44 +1,75 @@
 ﻿using CompGraphEngine.Engine;
 using CompGraphEngine.Engine.Figure;
+using CompGraphEngine.Render.OpenGLAPI;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CompGraphEngine.SceneF
 {
-    internal class DepthTestSurface : Scene
+    internal class LightScene : Scene
     {
-        BSurface surface;
         float x, y;
-        public DepthTestSurface(Window window) : base(window)
+        
+        Cube cube;
+        Cube cube1;
+        Cube lightcube;
+        Vector3 lightPos;
+        public LightScene(Window window) : base(window)
         {
             Renderer = new Render.Renderer3D();
             Camera = new Camera();
             Renderer.Camera = Camera;
+            
         }
+
         public override void Init()
         {
 
             GL.Enable(EnableCap.DepthTest);
-           //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+           
+            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             Camera.Position = new Vector3(20f, 10, 0);
             Camera.Speed = 50f;
 
-            surface = new BSurface(3, 3, 10, BSurface.GeneratedPolygon(8,8));
-            surface.sh = new Render.OpenGLAPI.Shader("Shaders/surfaceWithDepth.glsl");
-            Camera.Yaw = 180;
-            Camera.Pitch = -40;
-
-            AddObjectToScene(surface);
             
+            cube = new Cube();
+            cube.color = Color4.Coral;
+            
+
+            cube1 = new Cube();
+            cube1.color = Color4.Purple;
+            cube1.Transform.Position = new Vector3(0, 1, 10);
+
+            lightPos = new Vector3(5, 0, 5);
+
+            lightcube = new Cube();
+            lightcube.color = Color4.White;
+            lightcube.sh = new Shader("Shaders/light_cube.glsl");
+            lightcube.Transform = new Transform(lightPos, new Vector3(1,1,1), new Vector3(0,0,0));
+            
+            lightcube.Transform.Scale = new Vector3(0.5f);
+
+            
+            AddObjectToScene(cube);
+            AddObjectToScene(cube1);
+            AddObjectToScene(lightcube);
+
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
 
             base.Init();
-        }
 
+           
+        }
+        float t = 0;
         public override void Update()
         {
             x = window.MouseState.X;
@@ -46,24 +77,32 @@ namespace CompGraphEngine.SceneF
 
             Camera.Yaw = 90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
-            
+
+            // lightcube.Transform.RotateWithShift(new Vector3(0,0,5), new Vector3(0,t,0));
+            cube.sh.SetMatrix4("Model", cube.renderObject.Model);
+            cube1.sh.SetMatrix4("Model", cube1.renderObject.Model);
+
+            cube.sh.SetVector3("lightPos", lightPos);
+            cube.sh.SetVector3("viewPos", Camera.Position);
+            Vector4 color = (Vector4)lightcube.color;
+            cube.sh.SetVector3("lightColor", color.Xyz);
+
+
+            cube1.sh.SetVector3("lightPos", lightPos);
+            cube1.sh.SetVector3("viewPos", Camera.Position);
+            cube1.sh.SetVector3("lightColor", color.Xyz);
+
+            t += 1f;
             moveCam();
             base.Update();
         }
-        bool t = false;
+
         public override void Render()
         {
-            
-           
-            GameObjects.Remove(surface);
-            foreach (GameObject obj in GameObjects)
-                if (obj != null && obj.IsInited)
-                    Renderer.Draw(obj.renderObject);
-           
-                Renderer.Draw(surface.renderObject);
-         
-           
+            base.Render();
 
+           
+           
         }
 
         void moveCam()

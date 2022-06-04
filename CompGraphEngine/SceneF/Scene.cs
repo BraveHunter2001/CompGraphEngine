@@ -12,7 +12,7 @@ namespace CompGraphEngine.SceneF
 
         public Renderer Renderer;
 
-        private List<GameObject> GameObjects = new List<GameObject>();
+        public List<GameObject> GameObjects = new List<GameObject>();
         public Camera Camera { get; set; } = new Camera();
         public Scene(Window window) { this.window = window;}
         
@@ -54,7 +54,7 @@ namespace CompGraphEngine.SceneF
             //Camera.updateCumeraVectors();
         }
 
-        public void Render()
+        public virtual void Render()
         {
             foreach (GameObject obj in GameObjects)
                 if (obj != null && obj.IsInited)

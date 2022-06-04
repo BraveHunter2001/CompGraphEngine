@@ -39,6 +39,10 @@ namespace CompGraphEngine.Engine.Figure
                 new Render.OpenGLAPI.Shader("Shaders/line.glsl"),
                 Transform.Model);
 
+            ControlPoints = null;
+            Knots = null;
+            coefs = null;
+            GC.Collect();
             renderObject.Init();
         }
 

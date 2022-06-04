@@ -127,7 +127,7 @@ namespace CompGraphEngine.Engine
         public void RotateWithShift(Vector3 shift, Vector3 rotation)
         {
             Rotate(rotation);
-            TranslatePosition(shift);
+            Position = shift;
 
             model =  RotateZM * RotateYM * RotateXM *  TranslateMatrix * ScaleMatrix * Matrix4.Identity;
         }
@@ -182,6 +182,10 @@ namespace CompGraphEngine.Engine
             model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
         }
 
+        public Vector4 GetWorldPos()
+        {
+            return model * PositionVec4;
+        }
        
         
 

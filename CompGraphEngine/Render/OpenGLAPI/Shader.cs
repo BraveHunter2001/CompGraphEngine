@@ -15,6 +15,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
         {
             public string vertexSource;
             public string fragmentSource;
+            public string geometrySource;
         }
 
         public Shader(string filePath)
@@ -39,17 +40,21 @@ namespace CompGraphEngine.Render.OpenGLAPI
             GL.ShaderSource(fragmentShader, shaderProgramSource.fragmentSource);
             CompileShader(fragmentShader);
 
+          
+
             Handle = GL.CreateProgram();
             GL.AttachShader(Handle, vertexShader);
             GL.AttachShader(Handle, fragmentShader);
-
+           
             LinkProgram(Handle);
 
             GL.DetachShader(Handle, vertexShader);
             GL.DetachShader(Handle, fragmentShader);
+            
 
             GL.DeleteShader(fragmentShader);
             GL.DeleteShader(vertexShader);
+            
 
             GL.GetProgram(Handle, GetProgramParameterName.ActiveUniforms, out var numberOfUniforms);
 
@@ -65,10 +70,62 @@ namespace CompGraphEngine.Render.OpenGLAPI
             }
         }
 
+        public Shader(string filePath, bool geometry)
+        {
 
+            ShaderProgramSource shaderProgramSource = ParserShader(filePath);
+
+            //Console.WriteLine("Fragment:");
+            //Console.WriteLine(shaderProgramSource.fragmentSource);
+            //Console.WriteLine("Vertex:");
+            //Console.WriteLine(shaderProgramSource.vertexSource);
+
+            // load and compile vertex shader;
+
+            var vertexShader = GL.CreateShader(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader);
+            GL.ShaderSource(vertexShader, shaderProgramSource.vertexSource);
+            CompileShader(vertexShader);
+
+            // load and compile fragment shader;
+
+            var fragmentShader = GL.CreateShader(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader);
+            GL.ShaderSource(fragmentShader, shaderProgramSource.fragmentSource);
+            CompileShader(fragmentShader);
+
+            var geometryShader = GL.CreateShader(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
+            GL.ShaderSource(geometryShader, shaderProgramSource.geometrySource);
+            CompileShader(geometryShader);
+
+            Handle = GL.CreateProgram();
+            GL.AttachShader(Handle, vertexShader);
+            GL.AttachShader(Handle, fragmentShader);
+            GL.AttachShader(Handle, geometryShader);
+            LinkProgram(Handle);
+
+            GL.DetachShader(Handle, vertexShader);
+            GL.DetachShader(Handle, fragmentShader);
+            GL.DetachShader(Handle, geometryShader);
+
+            GL.DeleteShader(fragmentShader);
+            GL.DeleteShader(vertexShader);
+            GL.DeleteShader(geometryShader);
+
+            GL.GetProgram(Handle, GetProgramParameterName.ActiveUniforms, out var numberOfUniforms);
+
+
+            _uniformLocations = new Dictionary<string, int>();
+
+            for (var i = 0; i < numberOfUniforms; i++)
+            {
+                var key = GL.GetActiveUniform(Handle, i, out _, out _);
+                var location = GL.GetUniformLocation(Handle, key);
+
+                _uniformLocations.Add(key, location);
+            }
+        }
         private enum ShaderType
         {
-            VertexShader, FragmentShader, None
+            VertexShader, FragmentShader, geometryShader, None
         }
         private static ShaderProgramSource ParserShader(string filePath)
         {
@@ -77,6 +134,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
 
             programSource.vertexSource = "";
             programSource.fragmentSource = "";
+            programSource.geometrySource = ""; 
 
             using (var stream = new StreamReader(filePath))
             {
@@ -94,6 +152,10 @@ namespace CompGraphEngine.Render.OpenGLAPI
                     {
                         type = ShaderType.FragmentShader;
                     }
+                    else if (line.Equals("#type geometry"))
+                    {
+                        type = ShaderType.geometryShader;
+                    }
                     else
                     {
                         if (type == ShaderType.VertexShader)
@@ -103,6 +165,10 @@ namespace CompGraphEngine.Render.OpenGLAPI
                         else if (type == ShaderType.FragmentShader)
                         {
                             programSource.fragmentSource += line + "\n";
+                        }
+                        else if (type == ShaderType.geometryShader)
+                        {
+                            programSource.geometrySource += line + "\n";
                         }
                     }
                 }
