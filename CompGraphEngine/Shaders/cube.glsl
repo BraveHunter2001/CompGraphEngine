@@ -70,7 +70,7 @@ vec4 calcDirectionalLight(vec3 normal, vec3 fragmentToCamera, DirectionalLight l
 
   float specularFactor = pow(max(0.0, dot(fragmentToCamera, lightReflect)), 2);
 
-  vec4 specularColor = light.specularIntensity * vec4(light.color, 1) * 0.1 * specularFactor;
+  vec4 specularColor = light.specularIntensity * vec4(light.color, 1)  * specularFactor;
 
                        return ambientColor + diffuseColor + specularColor;
 }
@@ -97,7 +97,7 @@ void main()
   vec3 normal = normalize(fNormal);
   vec3 fragmentToCamera = normalize(viewPos - fCoord);
 
-  PointLight pointLight = PointLight(lightPos,lightColor, 1,10, 32);
+  PointLight pointLight = PointLight(lightPos,lightColor, 1,10, 1.0);
 
   
   vec4 pointColor = calcPointLight(normal, fragmentToCamera, pointLight);

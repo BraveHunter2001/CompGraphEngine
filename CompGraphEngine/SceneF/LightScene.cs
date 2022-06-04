@@ -21,6 +21,7 @@ namespace CompGraphEngine.SceneF
         Cube lightcube;
         Cube graund;
         Vector3 lightPos;
+        BSurface bSur;
         public LightScene(Window window) : base(window)
         {
             Renderer = new Render.Renderer3D();
@@ -52,7 +53,7 @@ namespace CompGraphEngine.SceneF
 
             cube1 = new Cube();
             cube1.color = Color4.Purple;
-            cube1.Transform.Position = new Vector3(0, 0, -5);
+            cube1.Transform.Position = new Vector3(0, 0, -7);
 
             lightPos = new Vector3(5, 0, -5);
 
@@ -63,10 +64,17 @@ namespace CompGraphEngine.SceneF
             
             lightcube.Transform.Scale = new Vector3(0.5f);
 
+            bSur = new BSurface(3, 3, 10, 15, 15);
+            bSur.color = Color4.GreenYellow;
+            bSur.Transform.Position = new Vector3(-10,-5, -10);
+            bSur.Transform.Scale = new Vector3(0.5f);
+
+
             
             AddObjectToScene(cube);
             AddObjectToScene(cube1);
             AddObjectToScene(lightcube);
+            AddObjectToScene(bSur);
             AddObjectToScene(graund);
 
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
@@ -110,6 +118,11 @@ namespace CompGraphEngine.SceneF
             graund.sh.SetVector3("lightColor", color.Xyz);
             graund.sh.SetVector3("lightPos", ligthPos.Xyz);
             graund.sh.SetVector3("viewPos", Camera.Position);
+
+            bSur.sh.SetMatrix4("Model", bSur.Transform.Model);
+            bSur.sh.SetVector3("lightColor", color.Xyz);
+            bSur.sh.SetVector3("lightPos", ligthPos.Xyz);
+            bSur.sh.SetVector3("viewPos", Camera.Position);
 
             t += 0.5f;
             moveCam();

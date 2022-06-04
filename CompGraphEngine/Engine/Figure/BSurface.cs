@@ -11,13 +11,13 @@ namespace CompGraphEngine.Engine.Figure
     internal class BSurface : GameObject
     {
         
-        Color4 color = Color4.White;
+        public Color4 color = Color4.White;
 
         List<int> KnotsT;
         List<int> KnotsU;
 
         public readonly List<List<Circle>> ControlPoints;
-        public Shader sh = new Shader("Shaders/surfaceWithDepth.glsl");
+        public Shader sh = new Shader("Shaders/cube.glsl");
 
         private int degreeT = 1, degreeU = 1, controlSizeT = 8, controlSizeU = 4, offset = 0;
         private int shiftT = 0, shiftU = 0;
@@ -109,12 +109,12 @@ namespace CompGraphEngine.Engine.Figure
             var points = FillCoordsVertex();
             var colors = FillColorsVertex();
             var indeces = GenerateIndices(KnotsT[degreeT + controlSizeT] * offset - shiftT + 1, KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
-           
+            var normals = CalculateVertexNormals(points, indeces);
 
-            
-            
 
-            
+
+
+
             KnotsT = null;
             KnotsU = null;
 
@@ -123,7 +123,7 @@ namespace CompGraphEngine.Engine.Figure
             renderObject = new RenderObjectsElements(points, colors,
                 sh,
                 Transform.Model,
-                indeces);
+                indeces,normals);
 
             renderObject.Init();
         }
@@ -407,6 +407,45 @@ namespace CompGraphEngine.Engine.Figure
         public override void Update()
         {
             renderObject.Model = Transform.Model;
+        }
+
+        float[,] CalculateVertexNormals(float[,] vertexPos, int[] triangleIndices)
+        {
+            Vector3[] vertexNormals = new Vector3[vertexPos.GetLength(0)];
+            Vector3[] vertexPositions = Helper.ToVector3(vertexPos);
+            // Zero-out our normal buffer to start from a clean slate.
+            for (int vertex = 0; vertex < vertexPositions.Length; vertex++)
+                vertexNormals[vertex] = Vector3.Zero;
+
+            // For each face, compute the face normal, and accumulate it into each vertex.
+            for (int index = 0; index < triangleIndices.Length; index += 3)
+            {
+                int vertexA = triangleIndices[index];
+                int vertexB = triangleIndices[index + 1];
+                int vertexC = triangleIndices[index + 2];
+
+                var edgeAB = vertexPositions[vertexB] - vertexPositions[vertexA];
+                var edgeAC = vertexPositions[vertexC] - vertexPositions[vertexA];
+
+                // The cross product is perpendicular to both input vectors (normal to the plane).
+                // Flip the argument order if you need the opposite winding.    
+                var areaWeightedNormal = Vector3.Cross(edgeAB, edgeAC);
+
+                // Don't normalize this vector just yet. Its magnitude is proportional to the
+                // area of the triangle (times 2), so this helps ensure tiny/skinny triangles
+                // don't have an outsized impact on the final normal per vertex.
+
+                // Accumulate this cross product into each vertex normal slot.
+                vertexNormals[vertexA] += areaWeightedNormal;
+                vertexNormals[vertexB] += areaWeightedNormal;
+                vertexNormals[vertexC] += areaWeightedNormal;
+            }
+
+            // Finally, normalize all the sums to get a unit-length, area-weighted average.
+            for (int vertex = 0; vertex < vertexPositions.Length; vertex++)
+                vertexNormals[vertex].Normalize();
+
+            return Helper.ToFloatArr(vertexNormals);
         }
     }
 }
