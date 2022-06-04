@@ -92,11 +92,13 @@ namespace CompGraphEngine.SceneF
             cube.sh.SetVector3("viewPos", Camera.Position);
             Vector4 color = (Vector4)lightcube.color;
             cube.sh.SetVector3("lightColor", color.Xyz);
+            cube.sh.SetMatrix4("Model", cube.renderObject.Model);
 
 
             cube1.sh.SetVector3("lightPos", lightcube.Transform.GetWorldPos().Xyz);
             cube1.sh.SetVector3("viewPos", Camera.Position);
             cube1.sh.SetVector3("lightColor", color.Xyz);
+            cube1.sh.SetMatrix4("Model", cube.renderObject.Model);
 
             graund.sh.SetVector3("lightPos", lightcube.Transform.GetWorldPos().Xyz);
             graund.sh.SetVector3("viewPos", Camera.Position);

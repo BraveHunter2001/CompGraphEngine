@@ -17,7 +17,7 @@ namespace CompGraphEngine.Engine.Figure
         List<int> KnotsU;
 
         public readonly List<List<Circle>> ControlPoints;
-        public Shader sh = new Shader("Shaders/surface.glsl");
+        public Shader sh = new Shader("Shaders/surfaceWithDepth.glsl");
 
         private int degreeT = 1, degreeU = 1, controlSizeT = 8, controlSizeU = 4, offset = 0;
         private int shiftT = 0, shiftU = 0;
