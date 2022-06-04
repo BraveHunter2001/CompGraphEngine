@@ -22,8 +22,8 @@ namespace CompGraphEngine
         {
             //surface = new SurfaceScene(this);
             // ploigons4lab = new TestScene(this);
-            depSur = new DepthTestSurface(this);
-            //light5Lab = new LightScene(this);
+            //depSur = new DepthTestSurface(this);
+            light5Lab = new LightScene(this);
 
 
         }
@@ -39,8 +39,8 @@ namespace CompGraphEngine
 
             //ploigons4lab.Init();
             //surface.Init();
-            depSur.Init();
-            //light5Lab.Init();
+            //depSur.Init();
+            light5Lab.Init();
 
         }
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -51,8 +51,8 @@ namespace CompGraphEngine
 
             //surface.Render();
             //ploigons4lab.Render();
-            depSur.Render();
-            //light5Lab.Render();
+            //depSur.Render();
+            light5Lab.Render();
             SwapBuffers();
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -68,8 +68,8 @@ namespace CompGraphEngine
             /// Scens
             //surface.Update();
             //ploigons4lab.Update();
-            depSur.Update();
-            //light5Lab.Update();
+            //depSur.Update();
+            light5Lab.Update();
             base.OnUpdateFrame(args);
         }
 
