@@ -1,4 +1,5 @@
 ﻿using CompGraphEngine.Render;
+using CompGraphEngine.Render.OpenGLAPI;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
@@ -16,6 +17,7 @@ namespace CompGraphEngine.Engine.Figure
         List<int> KnotsU;
 
         public readonly List<List<Circle>> ControlPoints;
+        public Shader sh = new Shader("Shaders/surface.glsl");
 
         private int degreeT = 1, degreeU = 1, controlSizeT = 8, controlSizeU = 4, offset = 0;
         private int shiftT = 0, shiftU = 0;
@@ -119,7 +121,7 @@ namespace CompGraphEngine.Engine.Figure
            
 
             renderObject = new RenderObjectsElements(points, colors,
-                new Render.OpenGLAPI.Shader("Shaders/surface.glsl"),
+                sh,
                 Transform.Model,
                 indeces);
 

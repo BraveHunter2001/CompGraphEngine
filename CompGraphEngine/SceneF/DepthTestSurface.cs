@@ -20,14 +20,16 @@ namespace CompGraphEngine.SceneF
         {
 
             GL.Enable(EnableCap.DepthTest);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+           // GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
 
-            surface = new BSurface(3, 3, 3, 5,5);
+            surface = new BSurface(3, 3, 3, 10,10);
+            surface.sh = new Render.OpenGLAPI.Shader("Shaders/surfaceWithDepth.glsl");
 
             AddObjectToScene(surface);
+           
             AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
             AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
