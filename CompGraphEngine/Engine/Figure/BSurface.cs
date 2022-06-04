@@ -194,14 +194,14 @@ namespace CompGraphEngine.Engine.Figure
         }
         float[,]  FillColorsVertex()
         {
-            int size = (KnotsT[degreeT + controlSizeT] * offset - shiftT)
-                * (KnotsU[degreeU + controlSizeU] * offset - shiftU);
+            int size = (KnotsT[degreeT + controlSizeT] * offset - shiftT + 1)
+                * (KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
             float[,] _vertColors = new float[size, 4];
             int count = 0;
 
-            for (int i = 0; i < KnotsT[degreeT + controlSizeT] * offset - shiftT; i++)
+            for (int i = 0; i < KnotsT[degreeT + controlSizeT] * offset - shiftT + 1; i++)
             {
-                for (int j = 0; j < KnotsU[degreeU + controlSizeU] * offset - shiftU; j++)
+                for (int j = 0; j < KnotsU[degreeU + controlSizeU] * offset - shiftU + 1; j++)
                 {
                     _vertColors[count, 0] = color.R;
                     _vertColors[count, 1] = color.G;

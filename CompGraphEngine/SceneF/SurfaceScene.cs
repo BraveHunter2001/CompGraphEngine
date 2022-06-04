@@ -1,6 +1,7 @@
 ﻿using CompGraphEngine.Engine;
 using CompGraphEngine.Engine.Figure;
 using CompGraphEngine.Engine.Menu;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
@@ -33,18 +34,15 @@ namespace CompGraphEngine.SceneF
         float x, y, t;
         public override void Init()
         {
+            
 
+            GL.Enable(EnableCap.DepthTest);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             Camera.Position = new Vector3(20f, 10, 10);
             Camera.Speed = 10f;
             menu.Select();
             
-
-
-
-
-
-
 
             foreach (var l in surface.ControlPoints)
             {

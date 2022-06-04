@@ -28,8 +28,6 @@ namespace CompGraphEngine.SceneF
             Renderer = new Render.Renderer2D();
             Camera = new Camera();
             Renderer.Camera = Camera;
-            window.MouseDown += PressedMouse;
-            window.KeyDown += PressedKey;
             random = new Random();
             pointsForPoligon = new List<Vector3>();
             pointsC = new List<Circle>();
@@ -37,6 +35,15 @@ namespace CompGraphEngine.SceneF
 
         public override void Init()
         {
+            window.MouseDown += PressedMouse;
+            window.KeyDown += PressedKey;
+
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
+
+            //GL.Enable(EnableCap.DepthTest);
+            // GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+
             Console.WriteLine("Spacebar - switching between point input and polygon rendering. ");
             Console.WriteLine("Press spacebar...");
             
@@ -159,10 +166,5 @@ namespace CompGraphEngine.SceneF
             }
         }
        
-
-        void InputControlPoint()
-        {
-
-        }
     }
 }
