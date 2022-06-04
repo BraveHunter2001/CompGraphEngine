@@ -38,33 +38,23 @@ namespace CompGraphEngine.SceneF
 
             base.Init();
         }
-
+        float t  = 0;
         public override void Update()
         {
             x = window.MouseState.X;
             y = window.MouseState.Y;
 
+            surface.Transform.RotateWithShift(new Vector3(5,5,5), new Vector3(t,t,0));
+
             Camera.Yaw = 90 + x / 10f;
             Camera.Pitch = (-1) * y / 10f;
-            
+
+            t += 1f;
             moveCam();
             base.Update();
         }
-        bool t = false;
-        public override void Render()
-        {
-            
-           
-            GameObjects.Remove(surface);
-            foreach (GameObject obj in GameObjects)
-                if (obj != null && obj.IsInited)
-                    Renderer.Draw(obj.renderObject);
-           
-                Renderer.Draw(surface.renderObject);
-         
-           
-
-        }
+        
+  
 
         void moveCam()
         {

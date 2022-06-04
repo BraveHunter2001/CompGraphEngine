@@ -49,7 +49,7 @@ namespace CompGraphEngine.Render
 
             _vertPoints = null;
             _vertColors = null;
-            _normalBuffer = null;
+            
 
         GC.Collect();
         }

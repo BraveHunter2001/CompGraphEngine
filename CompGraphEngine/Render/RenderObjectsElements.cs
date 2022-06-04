@@ -36,10 +36,10 @@ namespace CompGraphEngine.Render
         public override void Init()
         {
             base.Init();
-            _layoutNorm = new VertexBufferLayout();
-            _normalBuffer = new VertexBuffer(Make1DArray(_vertNormals), sizeof(float) * _vertNormals.Length);
-            _layoutNorm.Push<float>(_vertNormals.GetLength(1), false);
-            _vertexArray.AddLayout(ref _normalBuffer, ref _layoutNorm, 2);
+            //_layoutNorm = new VertexBufferLayout();
+            //_normalBuffer = new VertexBuffer(Make1DArray(_vertNormals), sizeof(float) * _vertNormals.Length);
+            //_layoutNorm.Push<float>(_vertNormals.GetLength(1), false);
+            //_vertexArray.AddLayout(ref _normalBuffer, ref _layoutNorm, 2);
         }
         public override void Draw()
         {
