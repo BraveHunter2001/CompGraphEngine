@@ -21,6 +21,7 @@ namespace CompGraphEngine.SceneF
         bool isPrintCircle = false;
 
         List<Vector3> pointsForPoligon;
+        List<Circle> pointsC;
 
         public TestScene(Window window) : base(window)
         {
@@ -31,20 +32,20 @@ namespace CompGraphEngine.SceneF
             window.KeyDown += PressedKey;
             random = new Random();
             pointsForPoligon = new List<Vector3>();
+            pointsC = new List<Circle>();
         }
 
         public override void Init()
         {
 
-            //circle = new Circle(new Vector3(0,0,0));
-            //circle.Transform.Scale = new Vector3(10,10,10);
+            
             Camera.Position = new Vector3(0, 0, 1);
             Camera.Speed = 10f;
 
             //AddObjectToScene(circle);
-            AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
-            AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
-            AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
+            //AddObjectToScene(new Line(new Vector3(0), new Vector3(10, 0, 0), Color4.Red));
+            //AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 10, 0), Color4.Yellow));
+            //AddObjectToScene(new Line(new Vector3(0), new Vector3(0, 0, 10), Color4.Blue));
             
            
             base.Init();
@@ -104,7 +105,9 @@ namespace CompGraphEngine.SceneF
                     float x = window.MouseState.X - Constants.Width / 2;
                     float y = (-1) * (window.MouseState.Y - Constants.Height / 2);
                     pointsForPoligon.Add(new Vector3(x, y, 0));
+
                     DrawHelperPointsAndLine(x, y);
+
                     foreach (var point in pointsForPoligon)
                         Console.WriteLine(point);
                 }
@@ -121,6 +124,7 @@ namespace CompGraphEngine.SceneF
             c.color = new Color4(r, g, b, 0.5f);
             Console.WriteLine(c.color);
             c.Transform.Scale = new Vector3(10, 10, 10);
+            pointsC.Add(c);
             AddObjectToScene(c);
         }
         void PressedKey(KeyboardKeyEventArgs arg)
@@ -128,8 +132,19 @@ namespace CompGraphEngine.SceneF
             if (arg.Key == Keys.Space)
             {
                 isPrintCircle = !isPrintCircle;
-                if(isPrintCircle)
+                if (isPrintCircle)
+                {
                     System.Console.WriteLine("You can input points");
+                    if(pointsForPoligon.Count !=0)
+                    {
+                        foreach(var c in pointsC)
+                        {
+                            RemoveObjectFromScene(c);
+                        }
+                        pointsC.Clear();
+                        pointsForPoligon.Clear();
+                    }
+                }
                 else
                 {
                     System.Console.WriteLine("You cant input points");

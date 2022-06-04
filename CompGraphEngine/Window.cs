@@ -34,7 +34,7 @@ namespace CompGraphEngine
             GL.ClearColor(0f, 0f, 0f, 1.0f);
 
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
 
             //GL.Enable(EnableCap.DepthTest);
           

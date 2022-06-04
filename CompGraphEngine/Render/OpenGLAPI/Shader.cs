@@ -7,7 +7,7 @@ using System.IO;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    public class Shader
+    public class Shader : IDisposable
     {
         public readonly int Handle;
         private Dictionary<string, int> _uniformLocations;
@@ -65,11 +65,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             }
         }
 
-        ~Shader()
-        {
-            GL.DeleteProgram(Handle);
 
-        }
         private enum ShaderType
         {
             VertexShader, FragmentShader, None
@@ -204,5 +200,11 @@ namespace CompGraphEngine.Render.OpenGLAPI
             GL.Uniform2(_uniformLocations[name], data);
         }
 
+        public void Dispose()
+        {
+
+            GL.DeleteProgram(Handle);
+
+        }
     }
 }

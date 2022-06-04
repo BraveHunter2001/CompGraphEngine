@@ -1,8 +1,9 @@
 ﻿using OpenTK.Graphics.OpenGL4;
+using System;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    public class VertexBuffer
+    public class VertexBuffer : IDisposable
     {
         private readonly int id;
         public int CountVertex { get; private set; }
@@ -16,10 +17,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
                 size,
                 data, BufferUsageHint.DynamicDraw);
         }
-        ~VertexBuffer()
-        {
-            GL.DeleteBuffer(id);
-        }
+        
 
         public void Bind()
         {
@@ -35,6 +33,13 @@ namespace CompGraphEngine.Render.OpenGLAPI
         {
             Bind();
             GL.BufferSubData(BufferTarget.ArrayBuffer, System.IntPtr.Zero, data.Length * sizeof(float), data);
+            UnBind();
+        }
+
+        public void Dispose()
+        {
+            Bind();
+            GL.DeleteBuffer(id);
             UnBind();
         }
     }

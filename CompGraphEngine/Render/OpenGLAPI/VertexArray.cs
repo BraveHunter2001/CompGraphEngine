@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    public class VertexArray
+    public class VertexArray: IDisposable
     {
         private readonly int id;
         public VertexArray()
@@ -15,10 +15,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             id = GL.GenVertexArray();
 
         }
-        ~VertexArray()
-        {
-            GL.DeleteVertexArray(id);
-        }
+        
         /// <summary>
         /// Add layout into buffer without offset
         /// </summary>
@@ -55,6 +52,13 @@ namespace CompGraphEngine.Render.OpenGLAPI
         public void Bind()
         {
             GL.BindVertexArray(id);
+        }
+
+        public void Dispose()
+        {
+            Bind();
+            GL.DeleteVertexArray(id);
+            UnBind();
         }
 
         public void UnBind()

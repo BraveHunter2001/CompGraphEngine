@@ -59,7 +59,7 @@ namespace CompGraphEngine.Engine.Figure
                 _vertColors[i, 0] = color.R;
                 _vertColors[i, 1] = color.G;
                 _vertColors[i, 2] = color.B;
-                _vertColors[i, 3] = 0.5f;
+                _vertColors[i, 3] = 1f;
             }
             
             return _vertColors;

@@ -38,6 +38,6 @@ void main()
    
 
     outputColor = fColor;
-    outputColor.rg = uv + 0.5;
+  
 
 }

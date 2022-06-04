@@ -1,8 +1,9 @@
 ﻿using OpenTK.Graphics.OpenGL4;
+using System;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    public class IndexBuffer
+    public class IndexBuffer : IDisposable
     {
         private readonly int id;
         private readonly int count = 0;
@@ -15,10 +16,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
                 count * sizeof(int),
                 data, BufferUsageHint.StaticDraw);
         }
-        ~IndexBuffer()
-        {
-            GL.DeleteBuffer(id);
-        }
+        
 
         public void Bind()
         {
@@ -33,5 +31,12 @@ namespace CompGraphEngine.Render.OpenGLAPI
         public int GetId() => id;
 
         public int GetCount() => count;
+
+        public void Dispose()
+        {
+            Bind();
+            GL.DeleteBuffer(id);
+            UnBind();
+        }
     }
 }
