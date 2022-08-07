@@ -137,7 +137,7 @@ namespace CompGraphEngine.Engine
             ScaleMatrix.M11 = scale.X;
             ScaleMatrix.M22 = scale.Y;
             ScaleMatrix.M33 = scale.Z;
-            model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * Matrix4.Identity;
+            model = TranslateMatrix * RotateZM * RotateYM * RotateXM * ScaleMatrix * model;
         }
 
         private void RotateX(float angle)

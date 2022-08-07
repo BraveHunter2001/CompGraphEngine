@@ -107,6 +107,7 @@ namespace CompGraphEngine.Engine.Figure
 
 
             var points = FillCoordsVertex();
+            points = Normalize(points);
             var colors = FillColorsVertex();
             var indeces = GenerateIndices(KnotsT[degreeT + controlSizeT] * offset - shiftT + 1, KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
             var normals = CalculateVertexNormals(points, indeces);
@@ -216,7 +217,32 @@ namespace CompGraphEngine.Engine.Figure
             return _vertColors;
         }
 
+        float[,] Normalize(float[,] arr)
+        {
+            float[,] res = new float[arr.GetLength(0), 3];
 
+            float MaxX = arr[0, 0], MaxY = arr[0, 1], MaxZ = arr[0, 2];
+
+            for (int j = 0; j < arr.GetLength(0); j++)
+            {
+                if (arr[j, 0] > MaxX)
+                    MaxX = arr[j, 0];
+                if (arr[j, 1] > MaxY)
+                    MaxY = arr[j, 1];
+                if (arr[j, 2] > MaxZ)
+                    MaxZ = arr[j, 2];
+
+            }
+
+            for (int j = 0; j < arr.GetLength(0); j++)
+            {
+                res[j, 0] = arr[j, 0] - MaxX / 2;
+                res[j, 1] = arr[j, 1] - MaxY / 2;
+                res[j, 2] = arr[j, 2] - MaxZ / 2;
+            }
+
+            return res;
+        }
         private float GenerateN(int degree, int control, List<int> knots, float t)
         {
             if (degree == 0)
@@ -296,7 +322,7 @@ namespace CompGraphEngine.Engine.Figure
                 {
                     Vector3 center = new Vector3();
                     center.X = (j + 1) * 5;
-                    center.Y = new Random().Next(-20, 200) * 0.1f;
+                    center.Y = new Random().Next(-20, 250) * 0.1f;
                     center.Z = (i + 1) * 5;
                     Circle c = new Circle(center);
 

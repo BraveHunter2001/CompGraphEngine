@@ -43,7 +43,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             for (int i = 0; i < layout.Elements.Count; i++)
             {
                 var elem = layout.Elements[i];
-                GL.VertexAttribPointer(i, elem.count, elem.type, elem.normalized, layout.Stride, offset);
+                GL.VertexAttribPointer(i, elem.count, elem.type, true, layout.Stride, offset);
                 GL.EnableVertexAttribArray(i);
                 offset += elem.count * VertexBufferLayout.GetSizeOpenGLType(elem.type);
             }
