@@ -17,7 +17,7 @@ namespace CompGraphEngine.Engine.Figure
         List<int> KnotsU;
 
         public readonly List<List<Circle>> ControlPoints;
-        public Shader sh = new Shader("Shaders/cube.glsl");
+        public Shader sh = new Shader("Shaders/surface.glsl");
 
         private int degreeT = 1, degreeU = 1, controlSizeT = 8, controlSizeU = 4, offset = 0;
         private int shiftT = 0, shiftU = 0;
@@ -106,7 +106,7 @@ namespace CompGraphEngine.Engine.Figure
             shiftU = KnotsU[0] * offset;
 
 
-            var points = FillCoordsVertex();
+            var points = Normalize( FillCoordsVertex());
             var colors = FillColorsVertex();
             var indeces = GenerateIndices(KnotsT[degreeT + controlSizeT] * offset - shiftT + 1, KnotsU[degreeU + controlSizeU] * offset - shiftU + 1);
             var normals = CalculateVertexNormals(points, indeces);
@@ -118,19 +118,50 @@ namespace CompGraphEngine.Engine.Figure
             KnotsT = null;
             KnotsU = null;
 
-           
+            float[,] TextCoords = { { 1.0f, 1.0f },
+                { 1.0f, 0.0f },
+                { 0.0f, 0.0f },
+                { 0.0f, 1.0f },
+            };
+
+
 
             renderObject = new RenderObjectsElements(points, colors,
                 sh,
                 Transform.Model,
-                indeces,normals);
+                indeces,TextCoords);
 
             renderObject.Init();
         }
 
+        float[,] Normalize(float[,] arr)
+        {
+            float[,] ans = new float[arr.GetLength(0), arr.GetLength(1)];
 
-      
-        
+            float[] arr_one_dem = RenderObject.Make1DArray(arr);
+            float max = arr_one_dem[0];
+
+            foreach(var v in arr_one_dem)
+            {
+                if (v > max)
+                    max = v;
+            }
+            
+
+            for (int i=0; i < ans.GetLength(0); i++)
+            {
+                ans[i, 0] = arr_one_dem[3*i] / max;
+                ans[i, 1] = arr_one_dem[3*i + 1] / max;
+                ans[i, 2] = arr_one_dem[3*i + 2] / max;
+
+            }
+
+
+
+            return ans;
+        }
+     
+
         private int[] GenerateIndices(int row, int col)
         {
 

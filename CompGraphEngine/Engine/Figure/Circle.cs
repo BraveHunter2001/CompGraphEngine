@@ -39,10 +39,15 @@ namespace CompGraphEngine.Engine.Figure
             
             var points = FillCoordsVertex();
             var colors = FillColorsVertex();
+            float[,] TextCoords = { { 1.0f, 1.0f },
+                { 1.0f, 0.0f },
+                { 0.0f, 0.0f },
+                { 0.0f, 1.0f },
+            };
 
             renderObject = new RenderObjectsElements(points, colors,
                 new Render.OpenGLAPI.Shader("Shaders/circle.glsl"),
-                Transform.Model,_indices);
+                Transform.Model,_indices, TextCoords);
             renderObject._shader.SetFloat("aThickness", thickness);
             renderObject.Init();
         }

@@ -23,7 +23,7 @@ namespace CompGraphEngine
             //surface = new SurfaceScene(this);
             // ploigons4lab = new TestScene(this);
             //depSur = new DepthTestSurface(this);
-            light5Lab = new LightScene(this);
+            light5Lab = new TextScene(this);
 
 
         }

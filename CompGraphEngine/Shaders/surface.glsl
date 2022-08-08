@@ -3,10 +3,11 @@
 
 layout(location = 0) in vec3 aPosition;
 layout(location = 1) in vec4 aColor;
+layout(location = 2) in vec2 aTexCoord;
 
 uniform mat4 aMVP;
 //uniform float vTime;
-
+out vec2 fTexCoord;
 out vec4 fColor;
 out vec3 fCoord;
 
@@ -19,7 +20,7 @@ void main(void)
 {
      fColor = aColor;
      fCoord = aPosition;
-    
+    fTexCoord = aTexCoord;
     //fCoord.y *= sin(vTime);
     //fCoord.z *= cos(vTime);
     
@@ -34,14 +35,14 @@ void main(void)
 in vec4 fColor;
 in vec3 fCoord;
 
-
+in vec2 fTexCoord;
 out vec4 outputColor;
-
+uniform sampler2D ourTexture;
 
 void main()
 {
 
-    outputColor = fColor;
+    outputColor = fColor * texture(ourTexture, fTexCoord);
 
 }
 
