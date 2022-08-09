@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    public class VertexArray: IDisposable
+    public class VertexArray: IDisposable 
     {
         private readonly int id;
         public VertexArray()
@@ -26,7 +26,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             vb.Bind();
 
             var elem = layout.Elements[0];
-            GL.VertexAttribPointer(index, elem.count, elem.type, true, 0, 0);
+            GL.VertexAttribPointer(index, elem.count, elem.type, elem.normalized, 0, 0);
             GL.EnableVertexAttribArray(index);
 
 
@@ -43,7 +43,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             for (int i = 0; i < layout.Elements.Count; i++)
             {
                 var elem = layout.Elements[i];
-                GL.VertexAttribPointer(i, elem.count, elem.type, true, layout.Stride, offset);
+                GL.VertexAttribPointer(i, elem.count, elem.type, elem.normalized, layout.Stride, offset);
                 GL.EnableVertexAttribArray(i);
                 offset += elem.count * VertexBufferLayout.GetSizeOpenGLType(elem.type);
             }

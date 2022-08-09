@@ -3,17 +3,17 @@ using System;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    public class VertexBuffer<T> : IDisposable where T :struct
+    public class VertexBuffer: IDisposable 
     {
         private readonly int id;
          
-        public VertexBuffer(T[] data, int size) 
+        public VertexBuffer(float[] data, int size) 
         {
             
 
             id = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, id);
-            GL.BufferData<T>(BufferTarget.ArrayBuffer,
+            GL.BufferData(BufferTarget.ArrayBuffer,
                 size,
                 data, BufferUsageHint.StaticDraw);
         }
