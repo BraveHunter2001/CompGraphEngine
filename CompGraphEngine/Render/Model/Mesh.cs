@@ -45,7 +45,7 @@ namespace CompGraphEngine.Render.Model
         {
             int diffuseNr = 1;
             int specularNr = 1;
-           
+            shader.Use();
             for (int i = 0; i < textures.Count; i++)
             {
                 GL.ActiveTexture(TextureUnit.Texture0 + i);
@@ -67,11 +67,11 @@ namespace CompGraphEngine.Render.Model
             
             _vertexArray.Bind();
             _indexBuffer.Bind();
-            shader.Use();
+           
             GL.DrawElements(PrimitiveType.Triangles, indices.Count, DrawElementsType.UnsignedInt, 0);
             _vertexArray.UnBind();
             _indexBuffer.UnBind();
-            
+            shader.Unuse();
 
         }
 

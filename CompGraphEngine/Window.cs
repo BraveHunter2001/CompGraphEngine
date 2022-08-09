@@ -113,10 +113,7 @@ namespace CompGraphEngine
         Camera Camera;
 
 
-        public Window GetWindow()
-        {
-            return this;
-        }
+        
 
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
@@ -134,10 +131,11 @@ namespace CompGraphEngine
             meshes.Add(mesh);
 
             m = new Model(meshes);
+            m.TextureFromFile();
 
             shader = new Shader(@"./Shaders/shader.glsl");
             Camera = new Camera();
-            Camera.Position = new Vector3(3, 3, 3);
+            Camera.Position = new Vector3(0, 0, 10);
         }
 
         protected override void OnLoad()
@@ -155,7 +153,16 @@ namespace CompGraphEngine
         {
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
+
+            shader.Use();
+            shader.SetMatrix4("projection", Camera.GetProjection3D());
+            shader.SetMatrix4("view", Camera.GetViewMatrix());
+            shader.SetMatrix4("model", Matrix4.Identity);
+
+            m.Draw(shader);
+            
             SwapBuffers();
         }
 
@@ -168,19 +175,15 @@ namespace CompGraphEngine
             {
                 Close();
             }
-            shader.Use();
-            shader.SetMatrix4("projection", Camera.GetProjection3D());
-            shader.SetMatrix4("view", Camera.GetViewMatrix());
-            shader.SetMatrix4("model", Matrix4.Identity);
 
-            m.Draw(shader);
+
 
 
             x = MouseState.X;
             y = MouseState.Y;
 
             Camera.Yaw = 90 + x / 10f;
-            Camera.Pitch = (-1) * y / 10f;
+           Camera.Pitch = (-1) * y / 10f;
 
 
 
