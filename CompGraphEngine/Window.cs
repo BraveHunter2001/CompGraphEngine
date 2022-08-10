@@ -127,7 +127,7 @@ namespace CompGraphEngine
 
             Mesh mesh = ImportObj.ImportMesh(@"C:\Users\Ilya\Desktop\3MODEL\untitled.obj");
 
-
+            //Title =  mesh.name;
             List<Mesh> meshes = new List<Mesh>();
 
             meshes.Add(mesh);
@@ -156,6 +156,7 @@ namespace CompGraphEngine
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            GL.Enable(EnableCap.DepthTest);
 
 
             shader.Use();
@@ -171,7 +172,7 @@ namespace CompGraphEngine
         float x, y;
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            this.Title = (1 / UpdateTime).ToString();
+           // this.Title = (1 / UpdateTime).ToString();
             
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {
@@ -184,8 +185,8 @@ namespace CompGraphEngine
             x = MouseState.X;
             y = MouseState.Y;
 
-            Camera.Yaw = 90 + x / 10f;
-           Camera.Pitch = (-1) * y / 10f;
+            Camera.Yaw = 90 + x / 5f;
+           Camera.Pitch = (-1) * y / 5f;
 
 
 

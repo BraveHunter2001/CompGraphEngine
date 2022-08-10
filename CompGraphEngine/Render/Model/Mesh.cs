@@ -20,14 +20,14 @@ namespace CompGraphEngine.Render.Model
        
     }
 
-    struct Face
+    
+     struct Face
     {
-        public int vertexIndex;
-        public int normalIndex;
+        public int positionIndex;
         public int textureIndex;
+        public int normalIndex;
     }
-    
-    
+
 
     internal class Mesh
     {
@@ -51,25 +51,7 @@ namespace CompGraphEngine.Render.Model
             setupMesh();
         }
 
-        public Mesh(List<Vertex> vertices, List<int> vertexIndecies, List<Texture> textures)
-        {
-            this.vertices = vertices;
-            this.textures = textures;
-
-            faces = new List<Face>();
-
-            foreach (var vind in vertexIndecies)
-            {
-                Face face = new Face();
-                face.vertexIndex = vind;
-                face.normalIndex = 0;
-                face.textureIndex = 0;
-                faces.Add(face);
-            }
-           
-
-            setupMesh();
-        }
+       
 
         public void Draw(Shader shader)
         {
@@ -97,8 +79,9 @@ namespace CompGraphEngine.Render.Model
             
             _vertexArray.Bind();
             _indexBuffer.Bind();
-           
-            GL.DrawElements(PrimitiveType.Triangles, faces.Count, DrawElementsType.UnsignedInt, 0);
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count);
+            //GL.DrawElements(BeginMode.Triangles, GetArrayPositionIndeces(faces).Length, DrawElementsType.UnsignedInt, 0);
             _vertexArray.UnBind();
             _indexBuffer.UnBind();
             shader.Unuse();
@@ -108,7 +91,7 @@ namespace CompGraphEngine.Render.Model
         private void setupMesh()
         {
             var arr = toArrayFromListVertex(vertices);
-            var arrVertexIndex = GetArrayVertexIndex(faces);
+            var arrVertexIndex = GetArrayPositionIndeces(faces);
 
             _vertexBuffer = new VertexBuffer(arr, arr.Length * sizeof(float));
             _indexBuffer = new IndexBuffer(arrVertexIndex, arrVertexIndex.Length);
@@ -117,9 +100,9 @@ namespace CompGraphEngine.Render.Model
             
             _vertexBufferLayout = new VertexBufferLayout();
 
-            _vertexBufferLayout.Push<float>(3, false); // Position
-            _vertexBufferLayout.Push<float>(3, false); // Normalies
-            _vertexBufferLayout.Push<float>(2, false); // TexCoord
+            _vertexBufferLayout.Push<float>(3, true); // Position
+            _vertexBufferLayout.Push<float>(3, true); // Normalies
+            _vertexBufferLayout.Push<float>(2, true); // TexCoord
 
             _vertexArray.AddLayouts(ref _vertexBuffer, ref _vertexBufferLayout);
 
@@ -156,18 +139,16 @@ namespace CompGraphEngine.Render.Model
             return result;
         }
 
-        private int[] GetArrayVertexIndex(List<Face> faces)
+       
+        private int[] GetArrayPositionIndeces(List<Face> faces)
         {
-            int [] result = new int[faces.Count];
-            int c = 0;
-            foreach (Face face in faces)
-            {
-                result[c++] = face.vertexIndex;
-            }
+            int[] result = new int[faces.Count];
+
+            for (int i = 0; i < result.Length; i++)
+                result[i] = faces[i].positionIndex;
 
             return result;
         }
-
        
     }
 }
