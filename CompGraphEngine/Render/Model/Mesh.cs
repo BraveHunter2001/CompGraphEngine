@@ -40,6 +40,7 @@ namespace CompGraphEngine.Render.Model
         public List<Vertex> vertices;
         public List<Face> faces;
         public List<Texture> textures;
+        public string name;
 
         public Mesh(List<Vertex> vertices, List<Face> faces, List<Texture> textures)
         {

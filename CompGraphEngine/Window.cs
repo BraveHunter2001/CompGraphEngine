@@ -122,10 +122,10 @@ namespace CompGraphEngine
           
 
             List<Vertex> vertices = FillCoordsVertex();
-            List<int> inds = GenerateIndices(); 
+            List<int> inds = GenerateIndices();
 
 
-            Mesh mesh = new Mesh(vertices,inds,tex);
+            Mesh mesh = ImportObj.ImportMesh(@"C:\Users\Ilya\Desktop\3MODEL\untitled.obj");
 
 
             List<Mesh> meshes = new List<Mesh>();
