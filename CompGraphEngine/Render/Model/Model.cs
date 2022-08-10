@@ -33,7 +33,7 @@ namespace CompGraphEngine.Render.Model
 
         }
 
-        public int TextureFromFile (string path)
+        public static int TextureFromFile (string path)
         {
             int id;
             id = GL.GenTexture();

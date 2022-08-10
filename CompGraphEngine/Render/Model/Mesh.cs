@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CompGraphEngine.Render.Model
 {
-    internal struct Texture
+    struct Texture
     {
         public int id;
         public string type;
@@ -20,6 +20,15 @@ namespace CompGraphEngine.Render.Model
        
     }
 
+    struct Face
+    {
+        public int vertexIndex;
+        public int normalIndex;
+        public int textureIndex;
+    }
+    
+    
+
     internal class Mesh
     {
         protected VertexBuffer _vertexBuffer;
@@ -29,14 +38,34 @@ namespace CompGraphEngine.Render.Model
 
 
         public List<Vertex> vertices;
-        public List<int> indices;
+        public List<Face> faces;
         public List<Texture> textures;
 
-        public Mesh(List<Vertex> vertices, List<int> indices, List<Texture> textures)
+        public Mesh(List<Vertex> vertices, List<Face> faces, List<Texture> textures)
         {
             this.vertices = vertices;
-            this.indices = indices;
+            this.faces = faces;
             this.textures = textures;
+
+            setupMesh();
+        }
+
+        public Mesh(List<Vertex> vertices, List<int> vertexIndecies, List<Texture> textures)
+        {
+            this.vertices = vertices;
+            this.textures = textures;
+
+            faces = new List<Face>();
+
+            foreach (var vind in vertexIndecies)
+            {
+                Face face = new Face();
+                face.vertexIndex = vind;
+                face.normalIndex = 0;
+                face.textureIndex = 0;
+                faces.Add(face);
+            }
+           
 
             setupMesh();
         }
@@ -68,7 +97,7 @@ namespace CompGraphEngine.Render.Model
             _vertexArray.Bind();
             _indexBuffer.Bind();
            
-            GL.DrawElements(PrimitiveType.Triangles, indices.Count, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(PrimitiveType.Triangles, faces.Count, DrawElementsType.UnsignedInt, 0);
             _vertexArray.UnBind();
             _indexBuffer.UnBind();
             shader.Unuse();
@@ -78,9 +107,10 @@ namespace CompGraphEngine.Render.Model
         private void setupMesh()
         {
             var arr = toArrayFromListVertex(vertices);
+            var arrVertexIndex = GetArrayVertexIndex(faces);
 
             _vertexBuffer = new VertexBuffer(arr, arr.Length * sizeof(float));
-            _indexBuffer = new IndexBuffer(indices.ToArray(), indices.Count);
+            _indexBuffer = new IndexBuffer(arrVertexIndex, arrVertexIndex.Length);
 
             _vertexArray = new VertexArray();
             
@@ -121,6 +151,18 @@ namespace CompGraphEngine.Render.Model
             }
 
             
+
+            return result;
+        }
+
+        private int[] GetArrayVertexIndex(List<Face> faces)
+        {
+            int [] result = new int[faces.Count];
+            int c = 0;
+            foreach (Face face in faces)
+            {
+                result[c++] = face.vertexIndex;
+            }
 
             return result;
         }

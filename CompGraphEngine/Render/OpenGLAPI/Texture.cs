@@ -38,7 +38,7 @@ namespace CompGraphEngine.Render.OpenGLAPI
             this.height = image.Height;
 
             image.CopyPixelDataTo(pixels);
-
+            
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
         }
 

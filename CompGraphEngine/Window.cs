@@ -7,7 +7,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Collections.Generic;
-
+using Texture = CompGraphEngine.Render.Model.Texture;
 
 namespace CompGraphEngine
 {
@@ -118,7 +118,9 @@ namespace CompGraphEngine
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
 
-            List<Render.Model.Texture> tex = new List<Render.Model.Texture>();
+            List<Texture> tex = new List<Texture>();
+          
+
             List<Vertex> vertices = FillCoordsVertex();
             List<int> inds = GenerateIndices(); 
 
@@ -131,11 +133,11 @@ namespace CompGraphEngine
             meshes.Add(mesh);
 
             m = new Model(meshes);
-            m.TextureFromFile();
+           
 
             shader = new Shader(@"./Shaders/shader.glsl");
             Camera = new Camera();
-            Camera.Position = new Vector3(0, 0, 10);
+            Camera.Position = new Vector3(5, 5, 5);
         }
 
         protected override void OnLoad()
