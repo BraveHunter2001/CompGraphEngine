@@ -10,17 +10,16 @@ namespace CompGraphEngine.Render.Model
     internal class Model
     {
         List<Mesh> meshes;
-        string directory;
+        string name;
 
-        public Model(string path)
-        {
-            LoadModel(path);
-        }
+      
 
-        public Model(List<Mesh> meshes)
+        public Model(List<Mesh> meshes, string name = "")
         {
             this.meshes = meshes;
+            this.name = name;
         }
+
 
         public void Draw(Shader shader)
         {
@@ -28,10 +27,7 @@ namespace CompGraphEngine.Render.Model
                 meshes[i].Draw(shader);
         }
 
-        private void LoadModel(string path)
-        {
-
-        }
+        
 
         public static int TextureFromFile (string path)
         {
@@ -59,6 +55,23 @@ namespace CompGraphEngine.Render.Model
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
             return id;
+        }
+
+
+
+        public void Display()
+        {
+            System.Console.WriteLine($"Model: \"{name}\"");
+            System.Console.WriteLine("Meshes");
+
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                if (i != meshes.Count - 1)
+                    System.Console.WriteLine($"|- {meshes[i]}");
+                else
+                    System.Console.WriteLine($"∟ {meshes[i]}");
+
+            }
         }
     }
 }

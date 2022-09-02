@@ -16,8 +16,6 @@ namespace CompGraphEngine.Render.Model
         public Vector3 Position;
         public Vector3 Normal;
         public Vector2 TexCoords;
-
-       
     }
 
     
@@ -26,6 +24,13 @@ namespace CompGraphEngine.Render.Model
         public int positionIndex;
         public int textureIndex;
         public int normalIndex;
+
+       public Face(int i)
+        {
+            positionIndex = i;
+            textureIndex = i;
+            normalIndex = i;
+        }
     }
 
 
@@ -42,22 +47,48 @@ namespace CompGraphEngine.Render.Model
         public List<Texture> textures;
         public string name;
 
-        public Mesh(List<Vertex> vertices, List<Face> faces, List<Texture> textures)
+        public Mesh(string name, List<Vertex> vertices, List<Face> faces, List<Texture> textures = null)
         {
             this.vertices = vertices;
             this.faces = faces;
             this.textures = textures;
+            this.name = name;
 
             setupMesh();
+            //vertices.Clear();
         }
 
-       
 
         public void Draw(Shader shader)
         {
+
+            shader.Use();
+
+            InitTextures(shader);
+
+            //draw mesh
+
+            _vertexArray.Bind();
+            // _indexBuffer.Bind();
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count);
+            //GL.DrawElements(BeginMode.Triangles, GetArrayPositionIndeces(faces).Length, DrawElementsType.UnsignedInt, 0);
+            _vertexArray.UnBind();
+
+            // _indexBuffer.UnBind();
+
+            shader.Unuse();
+
+        }
+
+        private void InitTextures(Shader shader)
+        {
             int diffuseNr = 1;
             int specularNr = 1;
-            shader.Use();
+
+            if (textures == null || textures.Count == 0)
+                return;
+
             for (int i = 0; i < textures.Count; i++)
             {
                 GL.ActiveTexture(TextureUnit.Texture0 + i);
@@ -70,31 +101,20 @@ namespace CompGraphEngine.Render.Model
                 else if (name == "texture_specular")
                     number = (specularNr++).ToString();
 
-                shader.SetInt("material." + name + number, i);
+                //shader.SetInt("material." + name + number, i);
+                shader.SetInt(name + number, i);
                 GL.BindTexture(TextureTarget.Texture2D, textures[i].id);
             }
             GL.ActiveTexture(TextureUnit.Texture0);
-
-            //draw mesh
-            
-            _vertexArray.Bind();
-            _indexBuffer.Bind();
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count);
-            //GL.DrawElements(BeginMode.Triangles, GetArrayPositionIndeces(faces).Length, DrawElementsType.UnsignedInt, 0);
-            _vertexArray.UnBind();
-            _indexBuffer.UnBind();
-            shader.Unuse();
-
         }
 
         private void setupMesh()
         {
             var arr = toArrayFromListVertex(vertices);
-            var arrVertexIndex = GetArrayPositionIndeces(faces);
+           // var arrVertexIndex = GetArrayPositionIndeces(faces);
 
             _vertexBuffer = new VertexBuffer(arr, arr.Length * sizeof(float));
-            _indexBuffer = new IndexBuffer(arrVertexIndex, arrVertexIndex.Length);
+           // _indexBuffer = new IndexBuffer(arrVertexIndex, arrVertexIndex.Length);
 
             _vertexArray = new VertexArray();
             
@@ -107,8 +127,8 @@ namespace CompGraphEngine.Render.Model
             _vertexArray.AddLayouts(ref _vertexBuffer, ref _vertexBufferLayout);
 
             _vertexArray.UnBind();
+            
         }
-
 
         private float[] toArrayFromListVertex(List<Vertex> vertices)
         {
@@ -129,9 +149,9 @@ namespace CompGraphEngine.Render.Model
                 result[shift * i + 6] = vertices[i].TexCoords.X;
                 result[shift * i + 7] = vertices[i].TexCoords.Y;
 
-                System.Console.WriteLine($"{result[shift * i]} {result[shift * i + 1]} {result[shift * i + 2]}|" +
-                    $" {result[shift * i + 3]} {result[shift * i + 4]} {result[shift * i + 5]}|" +
-                    $"{result[shift * i + 6]} {result[shift * i + 7]}");
+               // System.Console.WriteLine($"{result[shift * i]} {result[shift * i + 1]} {result[shift * i + 2]}|" +
+                //    $" {result[shift * i + 3]} {result[shift * i + 4]} {result[shift * i + 5]}|" +
+                //    $"{result[shift * i + 6]} {result[shift * i + 7]}");
             }
 
             
@@ -149,6 +169,11 @@ namespace CompGraphEngine.Render.Model
 
             return result;
         }
-       
+
+        public override string ToString()
+        {
+            return $"{name} - poligons: {vertices.Count / 3}";
+        }
+
     }
 }

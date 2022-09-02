@@ -8,136 +8,45 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Collections.Generic;
 using Texture = CompGraphEngine.Render.Model.Texture;
+using TextureBuffer = CompGraphEngine.Render.OpenGLAPI.Texture;
 
 namespace CompGraphEngine
 {
     public class Window : GameWindow
     {
-        private List<int> GenerateIndices()
-        {
-
-            List<int> inds_l = new List<int>();
-            int[] inds = new int[] {2, 3, 4,
-            8, 7, 6,
-            5, 6, 2,
-            6, 7, 3,
-            3, 7, 8,
-            1, 4, 8,
-            1, 2, 4,
-            5, 8, 6,
-            1, 5, 2,
-            2, 6, 3,
-            4, 3, 8,
-            5, 1, 8};
-
-
-            for (int i = 0; i < inds.Length; i++)
-                inds[i] -= 1;
-
-            for (int i = 0; i < inds.Length; i++)
-                inds_l.Add(inds[i]);
-
-            return inds_l;
-
-        }
-
-        List<Vertex> FillCoordsVertex()
-        {
-            List<Vertex> vertices = new List<Vertex>();
-            
-            Vertex v1 = new Vertex();
-            v1.Position = new Vector3(1.0f, -1.0f, -1.0f);
-            v1.TexCoords = new Vector2(0f);
-            v1.Normal = new Vector3(0f);
-            vertices.Add(v1);
-
-            Vertex v2 = new Vertex();
-            v2.Position = new Vector3(1.0f, -1.0f, 1.0f);
-            v2.TexCoords = new Vector2(0f);
-            v2.Normal = new Vector3(0f);
-            vertices.Add(v2);
-
-            Vertex v3 = new Vertex();
-            v3.Position = new Vector3(-1.0f, -1.0f, 1.0f);
-            v3.TexCoords = new Vector2(0f);
-            v3.Normal = new Vector3(0f);
-            vertices.Add(v3);
-
-
-            Vertex v4 = new Vertex();
-            v4.Position = new Vector3(-1.0f, -1.0f, -1.0f);
-            v4.TexCoords = new Vector2(0f);
-            v4.Normal = new Vector3(0f);
-            vertices.Add(v4);
-
-            
-
-            Vertex v5 = new Vertex();
-            v5.Position = new Vector3(1.0f, 1.0f, -1.0f);
-            v5.TexCoords = new Vector2(0f);
-            v5.Normal = new Vector3(0f);
-            vertices.Add(v5);
-
-            
-
-            Vertex v6 = new Vertex();
-            v6.Position = new Vector3(1.0f, 1.0f, 1.0f);
-            v6.TexCoords = new Vector2(0f);
-            v6.Normal = new Vector3(0f);
-            vertices.Add(v6);
-
-            
-
-            Vertex v7 = new Vertex();
-            v7.Position = new Vector3(-1.0f, 1.0f, 1.0f);
-            v7.TexCoords = new Vector2(0f);
-            v7.Normal = new Vector3(0f);
-            vertices.Add(v7);
-
-            
-
-            Vertex v8 = new Vertex();
-            v8.Position = new Vector3(-1.0f, 1.0f, -1.0f);
-            v8.TexCoords = new Vector2(0f);
-            v8.Normal = new Vector3(0f);
-            vertices.Add(v8);
-
-
-            return vertices;
-        }
-
+        
        
 
         Model m;
         Shader shader;
         Camera Camera;
+       
+        Transform transform = new Transform();
+        Transform lightPos = new Transform();
 
 
-        
 
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
 
             List<Texture> tex = new List<Texture>();
-          
 
-            List<Vertex> vertices = FillCoordsVertex();
-            List<int> inds = GenerateIndices();
+         
 
 
-            Mesh mesh = ImportObj.ImportMesh(@"C:\Users\Ilya\Desktop\3MODEL\untitled.obj");
 
-            //Title =  mesh.name;
-            List<Mesh> meshes = new List<Mesh>();
-
-            meshes.Add(mesh);
-
-            m = new Model(meshes);
+            m =  ImportObj.ImportModel(@"C:\Users\Ilya\Desktop\3dmodels\girl\girl.obj");
+            m.Display();
+           
            
 
             shader = new Shader(@"./Shaders/shader.glsl");
             Camera = new Camera();
             Camera.Position = new Vector3(5, 5, 5);
+            Camera.Speed = 20f;
+            
+            //transform.Rotate(x = -90f);
+            //lightPos.Translate(3, 0, 0);
         }
 
         protected override void OnLoad()
@@ -155,24 +64,46 @@ namespace CompGraphEngine
         {
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.DepthBufferBit|ClearBufferMask.ColorBufferBit);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+           //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             GL.Enable(EnableCap.DepthTest);
 
 
             shader.Use();
+
+            Vector3 lightColor = new Vector3();
+            lightColor.X = (float)MathHelper.Sin(z *0.2);
+            lightColor.Y = (float)MathHelper.Sin( z *0.7);
+            lightColor.Z = (float)MathHelper.Sin(z* 1.3);
+
+            Vector3 diffuseColor = lightColor * 0.5f;
+            Vector3 ambientColor = diffuseColor * 0.2f;
+
+            shader.SetVector3("light.position", lightPos.GetWorldPos().Xyz);
+            shader.SetVector3("light.ambient", ambientColor);
+            shader.SetVector3("light.diffuse", diffuseColor);
+            shader.SetVector3("light.specular", new Vector3(1.0f));
+
+            shader.SetVector3("material.ambient", new Vector3(1.0f, 0.5f, 0.31f));
+            shader.SetVector3("material.diffuse", new Vector3(1.0f, 0.5f, 0.31f));
+            shader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+            shader.SetFloat("material.shininess", 32.0f);
+
             shader.SetMatrix4("projection", Camera.GetProjection3D());
             shader.SetMatrix4("view", Camera.GetViewMatrix());
-            shader.SetMatrix4("model", Matrix4.Identity);
+            shader.SetMatrix4("model", transform.Model);
+            shader.SetVector3("viewPos", Camera.Position);
 
+           
             m.Draw(shader);
             
             SwapBuffers();
         }
 
         float x, y;
+        float z = 0;
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
-           // this.Title = (1 / UpdateTime).ToString();
+           this.Title = (1 / UpdateTime).ToString();
             
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {
@@ -188,14 +119,16 @@ namespace CompGraphEngine
             Camera.Yaw = 90 + x / 5f;
            Camera.Pitch = (-1) * y / 5f;
 
+            float tr = (float) (MathHelper.Sin(z));
 
+            transform.Position = new Vector3(0, 0, 0);
 
-
-
+            //lightPos.RotateWithShift(new Vector3(2, 3, 0), new Vector3(0, z, 0));
 
 
 
             moveCam();
+            z+= 0.01f;
             base.OnUpdateFrame(args);
         }
 

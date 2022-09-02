@@ -54,7 +54,10 @@ namespace CompGraphEngine.Render.OpenGLAPI
             GL.BindTexture(TextureTarget.Texture2D, id);
         }
 
-
+        public int GetId()
+        {
+            return id;
+        }
 
         public void UnBind()
         {
