@@ -55,11 +55,13 @@ struct Light {
 
 out vec4 outputColor;
 uniform Light light;
-uniform Material material;
+uniform Material material0;
 uniform vec3 viewPos;
 
 void main()
 {
+
+    Material material = material0;
     // ambient
     vec3 ambient = light.ambient * material.ambient;
   	

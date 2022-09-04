@@ -6,10 +6,16 @@ using System.Collections.Generic;
 
 namespace CompGraphEngine.Render.Model
 {
+    enum TextureType
+    {
+        ambient,
+        diffuse,
+        specular,
+    }
     struct Texture
     {
         public int id;
-        public string type;
+        public TextureType type;
     }
     struct Vertex
     {
@@ -17,9 +23,7 @@ namespace CompGraphEngine.Render.Model
         public Vector3 Normal;
         public Vector2 TexCoords;
     }
-
-    
-     struct Face
+    struct Face
     {
         public int positionIndex;
         public int textureIndex;
@@ -31,6 +35,15 @@ namespace CompGraphEngine.Render.Model
             textureIndex = i;
             normalIndex = i;
         }
+    }
+
+    struct Material
+    {
+        public string name;
+        public Vector3 ambient;
+        public Vector3 diffuse;
+        public Vector3 specular;
+        public float shininess;
     }
 
 
@@ -45,6 +58,8 @@ namespace CompGraphEngine.Render.Model
         public List<Vertex> vertices;
         public List<Face> faces;
         public List<Texture> textures;
+        public List<Material> materials;
+
         public string name;
 
         public Mesh(string name, List<Vertex> vertices, List<Face> faces, List<Texture> textures = null)
@@ -65,7 +80,7 @@ namespace CompGraphEngine.Render.Model
             shader.Use();
 
             InitTextures(shader);
-
+            InitMaterail(shader);
             //draw mesh
 
             _vertexArray.Bind();
@@ -94,7 +109,7 @@ namespace CompGraphEngine.Render.Model
                 GL.ActiveTexture(TextureUnit.Texture0 + i);
 
                 string number = "";
-                string name = textures[i].type;
+                string name = textures[i].type.ToString();
 
                 if (name == "texture_diffuse")
                     number = (diffuseNr++).ToString();
@@ -106,6 +121,24 @@ namespace CompGraphEngine.Render.Model
                 GL.BindTexture(TextureTarget.Texture2D, textures[i].id);
             }
             GL.ActiveTexture(TextureUnit.Texture0);
+        }
+
+        private void InitMaterail(Shader shader)
+        {
+            if (materials == null || materials.Count == 0)
+                return;
+
+            for (int i = 0; i < materials.Count; i++)
+            {
+                string name = materials[i].name;
+
+                shader.SetVector3($"material{i}.ambient", materials[i].ambient);
+                shader.SetVector3($"material{i}.diffuse", materials[i].diffuse);
+                shader.SetVector3($"material{i}.specular", materials[i].specular);
+                shader.SetFloat($"material{i}.shininess", materials[i].shininess);
+            }
+
+           
         }
 
         private void setupMesh()
@@ -172,7 +205,10 @@ namespace CompGraphEngine.Render.Model
 
         public override string ToString()
         {
-            return $"{name} - poligons: {vertices.Count / 3}";
+            string s = "";
+            foreach (var n in materials)
+                s += n.name + "|";
+            return $"{name} - poligons: {vertices.Count / 3} [{s}] ";
         }
 
     }

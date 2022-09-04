@@ -29,13 +29,9 @@ namespace CompGraphEngine
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
 
-            List<Texture> tex = new List<Texture>();
-
-         
-
-
-
-            m =  ImportObj.ImportModel(@"C:\Users\Ilya\Desktop\3dmodels\girl\girl.obj");
+            
+           
+            m =  ImportObj.ImportModel(@"C:\Users\Ilya\Desktop\3dmodels\blades\blades.obj");
             m.Display();
            
            
@@ -71,9 +67,9 @@ namespace CompGraphEngine
             shader.Use();
 
             Vector3 lightColor = new Vector3();
-            lightColor.X = (float)MathHelper.Sin(z *0.2);
-            lightColor.Y = (float)MathHelper.Sin( z *0.7);
-            lightColor.Z = (float)MathHelper.Sin(z* 1.3);
+            lightColor.X = 1;
+            lightColor.Y = 1;
+            lightColor.Z = 1;
 
             Vector3 diffuseColor = lightColor * 0.5f;
             Vector3 ambientColor = diffuseColor * 0.2f;
@@ -83,10 +79,7 @@ namespace CompGraphEngine
             shader.SetVector3("light.diffuse", diffuseColor);
             shader.SetVector3("light.specular", new Vector3(1.0f));
 
-            shader.SetVector3("material.ambient", new Vector3(1.0f, 0.5f, 0.31f));
-            shader.SetVector3("material.diffuse", new Vector3(1.0f, 0.5f, 0.31f));
-            shader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
-            shader.SetFloat("material.shininess", 32.0f);
+          
 
             shader.SetMatrix4("projection", Camera.GetProjection3D());
             shader.SetMatrix4("view", Camera.GetViewMatrix());
