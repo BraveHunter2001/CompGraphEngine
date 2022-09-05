@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace CompGraphEngine.Render.OpenGLAPI
 {
-    internal class Texture : IDisposable
+    internal class TextureBuffer : IDisposable
     {
         private readonly int id;
         private readonly int width;
         private readonly int height;
         private readonly string path;
-        public Texture(string path)
+        public TextureBuffer(string path)
         {
             id = GL.GenTexture();
             this.path = path;

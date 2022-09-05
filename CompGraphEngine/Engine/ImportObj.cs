@@ -1,4 +1,5 @@
 ﻿using CompGraphEngine.Render.Model;
+using CompGraphEngine.Render.OpenGLAPI;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace CompGraphEngine.Engine
     {
         static Face MaxFace;
         static Face prevMaxFace;
+        static string AbsFilePath;
 
 
         public static Model ImportModel(string path)
@@ -21,8 +23,9 @@ namespace CompGraphEngine.Engine
 
             List<Mesh> meshes = new List<Mesh>();
             List<Material> materials = new List<Material>();
+            List<Texture> textures = new List<Texture>();
             
-
+            AbsFilePath = path;
 
             using (StreamReader sr = new StreamReader(path))
             {
@@ -34,7 +37,7 @@ namespace CompGraphEngine.Engine
                     
                     string[] parts = ParseLine(line);
 
-                    if (parts[0].Equals("#"))
+                    if (parts == null || parts[0].Equals("#"))
                         continue;
 
                     if (parts[0].Equals("mtllib"))
@@ -89,7 +92,6 @@ namespace CompGraphEngine.Engine
         public static List<Material> ImportMTL(string path)
         {
             List<Material> materials = new List<Material>();
-            
             using (StreamReader sr = new StreamReader(path))
             {
                 string line;
@@ -129,6 +131,8 @@ namespace CompGraphEngine.Engine
         public static Material ImportMaterial(string[] blockOfObjFile)
         {
             Material material = new Material();
+            List<Texture> tempTex = new List<Texture>();
+
             foreach (string line in blockOfObjFile)
             {
                 var parts = ParseLine(line);
@@ -157,14 +161,29 @@ namespace CompGraphEngine.Engine
                     case "Ks":
                         material.specular = ParseVertex3(parts);
                         break;
+                    case "map_Kd":
+                        string path = GetPathToTextureFolder(AbsFilePath, parts[1]);
+                        Console.WriteLine(path);
+                        var TexBuf = new TextureBuffer(path);
+                        tempTex.Add(new Texture(TexBuf.GetId(), TextureType.diffuse));
+                        break;
 
                     default: break;
                 }
 
             }
+            material.Textures = tempTex;
             return material;
         }
 
+        private static string GetPathToTextureFolder(string pathObj, string namefile)
+        {
+            
+            int ind = pathObj.LastIndexOf('\\');
+            string path = pathObj.Substring(0, ind) + "\\" + "textures\\" + namefile;
+
+            return path;
+        }
         private static Mesh ImportMesh(string[] blockOfObjFile)
         {
             Mesh mesh = null;
@@ -219,8 +238,8 @@ namespace CompGraphEngine.Engine
            
             var vertices = FillVertex(faces, position, texCoord, normals);
 
-            mesh = new Mesh(name, vertices, faces);
-            mesh.materials = materials; 
+            mesh = new Mesh(name, vertices, faces, materials);
+          
 
             return mesh;
         }

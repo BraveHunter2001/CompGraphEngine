@@ -6,9 +6,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using System.Collections.Generic;
-using Texture = CompGraphEngine.Render.Model.Texture;
-using TextureBuffer = CompGraphEngine.Render.OpenGLAPI.Texture;
+
 
 namespace CompGraphEngine
 {
@@ -29,9 +27,9 @@ namespace CompGraphEngine
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
 
-            
-           
-            m =  ImportObj.ImportModel(@"C:\Users\Ilya\Desktop\3dmodels\blades\blades.obj");
+
+            string path = System.Console.ReadLine();
+            m =  ImportObj.ImportModel(path);
             m.Display();
            
            

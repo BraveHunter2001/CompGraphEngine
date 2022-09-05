@@ -16,6 +16,12 @@ namespace CompGraphEngine.Render.Model
     {
         public int id;
         public TextureType type;
+
+        public Texture(int id, TextureType type)
+        {
+            this.id = id;
+            this.type = type;
+        }
     }
     struct Vertex
     {
@@ -44,6 +50,8 @@ namespace CompGraphEngine.Render.Model
         public Vector3 diffuse;
         public Vector3 specular;
         public float shininess;
+        public List<Texture> Textures;
+
     }
 
 
@@ -62,14 +70,16 @@ namespace CompGraphEngine.Render.Model
 
         public string name;
 
-        public Mesh(string name, List<Vertex> vertices, List<Face> faces, List<Texture> textures = null)
+        public Mesh(string name, List<Vertex> vertices, List<Face> faces, List<Material> materials = null)
         {
             this.vertices = vertices;
             this.faces = faces;
             this.textures = textures;
             this.name = name;
+            this.materials = materials;
 
             setupMesh();
+       
             //vertices.Clear();
         }
 
@@ -98,6 +108,12 @@ namespace CompGraphEngine.Render.Model
 
         private void InitTextures(Shader shader)
         {
+            this.textures = new List<Texture>();
+
+            foreach (var mat in this.materials)
+                this.textures.AddRange(mat.Textures);
+
+
             int diffuseNr = 1;
             int specularNr = 1;
 
@@ -111,13 +127,13 @@ namespace CompGraphEngine.Render.Model
                 string number = "";
                 string name = textures[i].type.ToString();
 
-                if (name == "texture_diffuse")
+                if (name == "diffuse")
                     number = (diffuseNr++).ToString();
-                else if (name == "texture_specular")
+                else if (name == "specular")
                     number = (specularNr++).ToString();
 
-                //shader.SetInt("material." + name + number, i);
-                shader.SetInt(name + number, i);
+                name = "texture_" + name;
+                shader.SetInt($"material{i}." + name, i);
                 GL.BindTexture(TextureTarget.Texture2D, textures[i].id);
             }
             GL.ActiveTexture(TextureUnit.Texture0);
